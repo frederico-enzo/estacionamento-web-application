@@ -16,41 +16,28 @@ public class ModeloController {
     @Autowired
     private ModeloRepository modeloRepository;
 
-    /* Sem usar Autowired
-    public ModeloController(ModeloRepository modeloRepository){
-        this.modeloRepository = modeloRepository;
-    }
-     */
-
-    /** http://localhost:8080/api/modelo/1 */
     @GetMapping("/{id}")
     public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id){
         final Modelo modelo = this.modeloRepository.findById(id).orElse(null);
 
         return modelo == null
-                ? ResponseEntity.badRequest().body("Nenhum valor encontrado.")
-                : ResponseEntity.ok(modelo);
-    }
-
-    /** http://localhost:8080/api/modelo?id=1 */
-    @GetMapping
-    public ResponseEntity<?> findByIdRequest(@RequestParam("id") final Long id){
-        final Modelo modelo = this.modeloRepository.findById(id).orElse(null);
-
-        return modelo == null
-                ? ResponseEntity.badRequest().body("Nenhum valor encontrado.")
+                ? ResponseEntity.badRequest().body("Modelo não encontrado")
                 : ResponseEntity.ok(modelo);
     }
 
     @GetMapping("/lista")
     public ResponseEntity<?> findAll(){
-        final List<Modelo> modelo = this.modeloRepository.findAll();
+        final  List<Modelo> modelos = this.modeloRepository.findAll();
+        return ResponseEntity.ok(modelos);
+    }
 
-        return ResponseEntity.ok(modelo);
+    @GetMapping("/ativos")
+    public ResponseEntity<?> getEntidadesAtivas(){
+        return  modeloRepository.finByAtivoTrue();
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Modelo modelo){
+    public ResponseEntity<?> editar(@RequestParam final Modelo modelo){
         try{
             this.modeloRepository.save(modelo);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
@@ -81,5 +68,19 @@ public class ModeloController {
         }
     }
 
-//    @DeleteMapping
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletar(@PathVariable final Long id) {
+        try {
+            final Modelo modeloBanco = this.modeloRepository.findById(id).orElse(null);
+
+            if (modeloBanco == null) {
+                return ResponseEntity.notFound().build();
+            }
+
+            this.modeloRepository.delete(modeloBanco);
+            return ResponseEntity.ok("Registro excluído com sucesso");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Erro ao excluir registro: " + e.getMessage());
+        }
+    }
 }
