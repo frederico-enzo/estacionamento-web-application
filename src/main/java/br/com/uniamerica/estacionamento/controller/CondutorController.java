@@ -15,6 +15,23 @@ import java.util.Optional;
 @RequestMapping(value = "/api/condutor")
 public class CondutorController {
 
+    /*
+
+      @Autowired = Usado para acessar outras Classes
+      @RequestMapping = Mapeia os metodos da controller / Define o URI para  qual o metodo deve responder
+      @GetMapping = é usada para mapear uma solicitação HTTP GET
+      ResponseEntity = usado para enviar informações adicionais no cabeçalho ou corpo da resposta
+      <?> = usada para indicar que um tipo específico pode ser usado, mas que ainda não é conhecido ou não é relevante em um determinado contexto
+      @PathVariable =  é usada para mapear variáveis de caminho de URL em parâmetros de método
+      orElse =   é usado para fornecer um valor padrão quando um valor não está presente
+      badRequest = é usado para criar uma resposta HTTP 400 (Bad Request)
+
+    */
+
+
+
+
+
     @Autowired
     private CondutorRepository condutorRepository;
 

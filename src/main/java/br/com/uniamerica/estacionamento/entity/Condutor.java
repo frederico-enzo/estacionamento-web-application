@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -29,13 +30,6 @@ public class Condutor extends AbstractEntity{
     @Column(name = "tempo_desconto")
     private LocalTime tempoDesconto;
 
-    @Entity
-    @Table(name = "configuracoes", schema = "public")
-    public static class Configuracao  extends AbstractEntity{
-        private int vagasVan;
-        private int vagasCarro;
-        private int vagasMoto;
-        private BigDecimal valorMulta;
-        private boolean desconto;
-    }
+
+
 }
