@@ -35,11 +35,11 @@ public class MarcaController {
     }
 
     @GetMapping("/ativos")
-    public List<Condutor> getEntidadesAtivas() {
+    public ResponseEntity<?> findByAtivo(){
+        final List<Condutor> condutor = this.marcaRepository.findByAtivo(true);
 
-        return marcaRepository.findByAtivoTrue();
+        return ResponseEntity.ok(condutor);
     }
-
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Marca marcas){
         try{

@@ -10,5 +10,6 @@ import java.util.List;
 
 public interface CondutorRepository extends JpaRepository<Condutor, Long> {
 
-     List<Condutor> findByAtivoTrue();
+
+     List<Condutor> findByAtivo(boolean ativo);
 }

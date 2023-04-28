@@ -55,9 +55,10 @@ public class CondutorController {
     }
 
     @GetMapping("/ativos")
-    public List<Condutor> getEntidadesAtivas() {
+    public ResponseEntity<?> findByAtivo(){
+        final List<Condutor> condutor = this.condutorRepository.findByAtivo(true);
 
-        return condutorRepository.findByAtivoTrue();
+        return ResponseEntity.ok(condutor);
     }
 
     @PostMapping
@@ -71,7 +72,7 @@ public class CondutorController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Condutor condutor){
         try{
             final Condutor condutorBanco = this.condutorRepository.findById(id).orElse(null);
@@ -114,3 +115,10 @@ public class CondutorController {
     }
 
 }
+      /*{
+        "nome": "João da ",
+        "cpf": "123.123.789-00",
+        "telefone": "(11) 1233-9999",
+        "cadastro": "2023-04-27T00:00:00",
+        "ativo": true
+        }*/

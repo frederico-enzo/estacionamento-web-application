@@ -12,4 +12,7 @@ import java.util.List;
 public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long> {
 
     boolean existsByCondutor(Condutor condutor);
+
+
+    List<Movimentacao> findBySaidaIsNull();
 }

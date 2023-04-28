@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.controller;
 import br.com.uniamerica.estacionamento.Repository.ModeloRepository;
+import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Modelo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -32,8 +33,10 @@ public class ModeloController {
     }
 
     @GetMapping("/ativos")
-    public ResponseEntity<?> getEntidadesAtivas(){
-        return  modeloRepository.finByAtivoTrue();
+    public ResponseEntity<?> findByAtivo(){
+        final List<Condutor> condutor = this.modeloRepository.findByAtivo(true);
+
+        return ResponseEntity.ok(condutor);
     }
 
     @PostMapping

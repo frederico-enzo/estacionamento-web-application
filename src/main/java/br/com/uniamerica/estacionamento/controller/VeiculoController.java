@@ -8,7 +8,6 @@ import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +44,10 @@ public class VeiculoController {
     }
 
     @GetMapping("/ativos")
-    public List<Condutor> getEntidadesAtivas() {
-        return veiculoRepository.findByAtivoTrue();
+    public ResponseEntity<?> findByAtivo(){
+        final List<Condutor> condutor = this.veiculoRepository.findByAtivo(true);
+
+        return ResponseEntity.ok(condutor);
     }
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Veiculo veiculo){
