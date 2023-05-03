@@ -7,9 +7,9 @@ import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 
 @Entity
-//@Audited
+@Audited
 @Table(name = "modelos", schema = "public")
-//@AuditTable(value = "modelos_audit", schema = "audit")
+@AuditTable(value = "modelos_audit", schema = "audit")
 public class Modelo extends AbstractEntity{
     @Getter @Setter
     @ManyToOne(fetch = FetchType.EAGER)

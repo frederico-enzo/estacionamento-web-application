@@ -8,9 +8,9 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-//Audited
+@Audited
 @Table(name = "veiculos", schema = "public")
-//@AuditTable(value = "veiculo_audit", schema = "audit")
+@AuditTable(value = "veiculo_audit", schema = "audit")
 
 public class Veiculo extends AbstractEntity {
 
