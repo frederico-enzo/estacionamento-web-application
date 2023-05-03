@@ -60,8 +60,8 @@ public class VeiculoController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Veiculo veiculo){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Veiculo veiculo){
         try{
             final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
 

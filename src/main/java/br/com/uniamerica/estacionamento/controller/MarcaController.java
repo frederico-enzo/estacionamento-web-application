@@ -51,8 +51,8 @@ public class MarcaController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Marca marcas){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Marca marcas){
         try{
             final Marca marcaBanco = this.marcaRepository.findById(id).orElse(null);
 

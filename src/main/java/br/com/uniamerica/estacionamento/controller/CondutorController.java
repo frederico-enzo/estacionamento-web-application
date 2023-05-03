@@ -16,7 +16,6 @@ import java.util.Optional;
 public class CondutorController {
 
     /*
-
       @Autowired = Usado para acessar outras Classes
       @RequestMapping = Mapeia os metodos da controller / Define o URI para  qual o metodo deve responder
       @GetMapping = é usada para mapear uma solicitação HTTP GET
@@ -73,7 +72,7 @@ public class CondutorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Condutor condutor){
+    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Condutor condutor){
         try{
             final Condutor condutorBanco = this.condutorRepository.findById(id).orElse(null);
 

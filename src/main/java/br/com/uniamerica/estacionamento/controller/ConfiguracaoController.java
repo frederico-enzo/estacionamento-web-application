@@ -37,8 +37,8 @@ public class ConfiguracaoController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Configuracao configuracao){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Configuracao configuracao){
         try{
             final Configuracao configuracaoBanco = this.configuracaoRepository.findById(id).orElse(null);
 

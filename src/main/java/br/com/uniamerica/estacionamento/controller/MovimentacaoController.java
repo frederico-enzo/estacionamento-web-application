@@ -52,8 +52,8 @@ public class MovimentacaoController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Movimentacao movimentacaos){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Movimentacao movimentacaos){
         try{
             final Movimentacao movimentacaosBanco = this.movimentacaoRepository.findById(id).orElse(null);
 
