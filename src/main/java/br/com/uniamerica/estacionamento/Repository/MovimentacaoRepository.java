@@ -21,4 +21,8 @@ public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long
     List<Movimentacao> findBySaidaIsNull();
 
     boolean existsByveiculo(Veiculo veiculo);
+
+    List<Movimentacao> findByAtivo(boolean b);
+
+    boolean existsByVeiculoAndSaidaIsNull(Veiculo veiculo);
 }

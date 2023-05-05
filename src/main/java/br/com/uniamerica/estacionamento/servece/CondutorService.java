@@ -85,5 +85,4 @@ public class CondutorService {
             throw new IllegalArgumentException("Condutor não encontrado");
         }
     }
-
 }
