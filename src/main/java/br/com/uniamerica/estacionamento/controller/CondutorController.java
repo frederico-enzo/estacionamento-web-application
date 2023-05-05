@@ -46,13 +46,13 @@ public class CondutorController {
 
     @GetMapping("/lista")
     public ResponseEntity<List<Condutor>> findAll() {
-        List<Condutor> condutores = condutorService.findAll();
+        List<Condutor> condutores = this.condutorService.findAll();
         return ResponseEntity.ok(condutores);
     }
 
     @GetMapping("/ativos")
     public ResponseEntity<List<Condutor>> buscarAtivos() {
-        List<Condutor> condutoresAtivos = condutorService.findByAtivo();
+        List<Condutor> condutoresAtivos = this.condutorService.findByAtivo();
         return ResponseEntity.ok(condutoresAtivos);
     }
 
@@ -79,7 +79,7 @@ public class CondutorController {
                 throw new RuntimeException("Não foi possível identificar o registro informado");
             }
 
-            this.condutorService.cadastrar(condutor);
+            this.condutorService.editar(condutor);
             return ResponseEntity.ok("Registro editado com sucesso");
         }catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -95,7 +95,7 @@ public class CondutorController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable final Long id) {
         try {
-            condutorService.delete(id);
+            this.condutorService.delete(id);
             return ResponseEntity.ok("Condutor excluído com sucesso");
         }catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

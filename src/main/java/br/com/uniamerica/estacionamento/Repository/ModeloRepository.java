@@ -9,9 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface ModeloRepository extends JpaRepository<Modelo, Long> {
-    List<Condutor> findByAtivo(boolean b);
 
-//    ResponseEntity<?> finByAtivoTrue();
+
+
+    List<Condutor> findByAtivo(boolean b);
 }

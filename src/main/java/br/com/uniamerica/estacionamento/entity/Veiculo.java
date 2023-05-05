@@ -23,8 +23,8 @@ public class Veiculo extends AbstractEntity {
     private Cor cor;
     @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "modelo", nullable = false)
-    private Modelo modelo;
+    @JoinColumn(name = "modelo_id", nullable = false)
+    private Modelo modeloId;
     @Getter @Setter
     @Column(name = "tipo", length = 20, nullable = false)
     @Enumerated(EnumType.STRING)

@@ -10,8 +10,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 @Repository
 public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
-
-    List<Condutor> findByAtivoTrue();
-
-    List<Condutor> findByAtivo(boolean b);
+    List<Veiculo> findByAtivo(boolean ativo);
 }

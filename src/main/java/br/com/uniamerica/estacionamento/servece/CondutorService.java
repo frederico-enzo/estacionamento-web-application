@@ -3,7 +3,6 @@ import br.com.uniamerica.estacionamento.Repository.CondutorRepository;
 import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
 import br.com.uniamerica.estacionamento.entity.Condutor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +20,12 @@ public class CondutorService {
 
 
     public List<Condutor> findAll() {
-        return condutorRepository.findAll();
+
+        return this.condutorRepository.findAll();
     }
 
     public Condutor findById(Long id) {
-        Optional<Condutor> optionalCondutor = condutorRepository.findById(id);
+        Optional<Condutor> optionalCondutor = this.condutorRepository.findById(id);
         if (optionalCondutor.isPresent()) {
             return optionalCondutor.get();
         } else {
@@ -34,7 +34,8 @@ public class CondutorService {
     }
 
     public List<Condutor> findByAtivo(){
-        return condutorRepository.findByAtivo(true);
+
+        return this.condutorRepository.findByAtivo(true);
     }
 
     @Transactional
@@ -51,7 +52,7 @@ public class CondutorService {
         if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
             throw new IllegalArgumentException("O nome deve conter apenas letras ");
         }
-       return condutorRepository.save(condutor);
+       return this.condutorRepository.save(condutor);
     }
     @Transactional
     public Condutor editar( Condutor condutor){
@@ -67,23 +68,22 @@ public class CondutorService {
         if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
             throw new IllegalArgumentException("O nome deve conter apenas letras ");
         }
-        return condutorRepository.save(condutor);
+        return this.condutorRepository.save(condutor);
     }
 
     @Transactional
     public void delete(Long id) {
-        Optional<Condutor> optionalCondutor = condutorRepository.findById(id);
+        Optional<Condutor> optionalCondutor = this.condutorRepository.findById(id);
         if (optionalCondutor.isPresent()) {
             Condutor condutor = optionalCondutor.get();
-            if (movimentacaoRepository.existsByCondutor(condutor)) {
+            if (this.movimentacaoRepository.existsByCondutor(condutor)) {
                 throw new IllegalArgumentException("O condutor está presente em alguma movimentação e não pode ser excluído.");
             } else {
-                condutorRepository.delete(condutor);
+                this.condutorRepository.delete(condutor);
             }
         } else {
             throw new IllegalArgumentException("Condutor não encontrado");
         }
-
     }
 
 }
