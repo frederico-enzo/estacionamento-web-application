@@ -30,11 +30,11 @@ public class Movimentacao extends AbstractEntity{
     private LocalTime tempoMulta;
     @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "veiculo", nullable = false, unique = true)
+    @JoinColumn(name = "veiculo_id", nullable = false, unique = true)
     private Veiculo veiculo;
     @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "condutor", nullable = false)
+    @JoinColumn(name = "condutor_id", nullable = false)
     private Condutor condutor;
     @Getter @Setter
     @Column(name = "valor_multa", nullable = false)

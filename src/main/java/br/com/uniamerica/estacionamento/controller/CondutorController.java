@@ -2,6 +2,7 @@ package br.com.uniamerica.estacionamento.controller;
 import br.com.uniamerica.estacionamento.Repository.CondutorRepository;
 import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
 import br.com.uniamerica.estacionamento.entity.Condutor;
+import br.com.uniamerica.estacionamento.servece.CondutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -29,44 +30,41 @@ public class CondutorController {
 
 
 
-
+    @Autowired
+    private  CondutorService condutorService;
 
     @Autowired
     private CondutorRepository condutorRepository;
 
-    @Autowired
-    private MovimentacaoRepository movimentacaoRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id) {
-        final Condutor condutor = this.condutorRepository.findById(id).orElse(null);
+        final Condutor condutor = this.condutorService.findById(id);
 
-        return condutor == null
-                ? ResponseEntity.badRequest().body("Nenhum valor encontrado.")
-                : ResponseEntity.ok(condutor);
+        return ResponseEntity.ok(condutor);
     }
 
     @GetMapping("/lista")
-    public ResponseEntity<?> findAll() {
-        final List<Condutor> condutor = this.condutorRepository.findAll();
-
-        return ResponseEntity.ok(condutor);
+    public ResponseEntity<List<Condutor>> findAll() {
+        List<Condutor> condutores = condutorService.findAll();
+        return ResponseEntity.ok(condutores);
     }
 
     @GetMapping("/ativos")
-    public ResponseEntity<?> findByAtivo(){
-        final List<Condutor> condutor = this.condutorRepository.findByAtivo(true);
-
-        return ResponseEntity.ok(condutor);
+    public ResponseEntity<List<Condutor>> buscarAtivos() {
+        List<Condutor> condutoresAtivos = condutorService.findByAtivo();
+        return ResponseEntity.ok(condutoresAtivos);
     }
 
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Condutor condutor){
         try{
-            this.condutorRepository.save(condutor);
+            this.condutorService.cadastrar(condutor);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
         }
-        catch (DataIntegrityViolationException e){
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
         }
     }
@@ -74,17 +72,18 @@ public class CondutorController {
     @PutMapping("/{id}")
     public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Condutor condutor){
         try{
-            final Condutor condutorBanco = this.condutorRepository.findById(id).orElse(null);
+            final Condutor condutorBanco = this.condutorService.findById(id);
 
             if(condutorBanco == null || !condutorBanco.getId().equals(condutor.getId()))
             {
                 throw new RuntimeException("Não foi possível identificar o registro informado");
             }
 
-            this.condutorRepository.save(condutor);
+            this.condutorService.cadastrar(condutor);
             return ResponseEntity.ok("Registro editado com sucesso");
-        }
-        catch (DataIntegrityViolationException e){
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
         }
         catch (RuntimeException e){
@@ -92,32 +91,20 @@ public class CondutorController {
         }
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable final Long id) {
         try {
-            Optional<Condutor> optionalCondutor = condutorRepository.findById(id);
-            if (optionalCondutor.isPresent()) {
-                Condutor condutor = optionalCondutor.get();
-                if (movimentacaoRepository.existsByCondutor(condutor)) {
-                    condutor.setAtivo(true);
-                    condutorRepository.save(condutor);
-                } else {
-                    condutorRepository.delete(condutor);
-                }
-                return ResponseEntity.ok("Condutor excluído com sucesso");
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (RuntimeException e) {
-            return ResponseEntity.internalServerError().body("Erro ao excluir condutor: " + e.getMessage());
+            condutorService.delete(id);
+            return ResponseEntity.ok("Condutor excluído com sucesso");
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (DataIntegrityViolationException e){
+            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
+        } catch (RuntimeException e){
+            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }
     }
-
 }
-      /*{
-        "nome": "João da ",
-        "cpf": "123.123.789-00",
-        "telefone": "(11) 1233-9999",
-        "cadastro": "2023-04-27T00:00:00",
-        "ativo": true
-        }*/
+
+
