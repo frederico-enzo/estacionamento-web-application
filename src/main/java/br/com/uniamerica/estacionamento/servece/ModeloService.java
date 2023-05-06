@@ -29,6 +29,7 @@ public class ModeloService {
             throw new RuntimeException("Condutor não encontrado");
         }
     }
+
     public List<Modelo> findAll() {
 
         return this.modeloRepository.findAll();
@@ -57,10 +58,17 @@ public class ModeloService {
     }
 
 
+    @Transactional
+    public void deletar(Long id){
+        Modelo modelo = modeloRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Modelo não encontrado"));
 
+        List<Veiculo> veiculosComModelo = veiculoRepository.findByModeloId(modelo);
 
-
-
-
-
+        if (!veiculosComModelo.isEmpty()) {
+            throw new IllegalStateException("Não é possível excluir este modelo pois existem veículos cadastrados com ele.");
+        } else {
+            modeloRepository.delete(modelo);
+        }
+    }
 }

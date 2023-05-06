@@ -16,8 +16,5 @@ import java.util.Optional;
 public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
     List<Veiculo> findByAtivo(boolean ativo);
 
-
-    List<Veiculo> findByModelo(Modelo modelo);
-
     List<Veiculo> findByModeloId(Modelo modelo);
 }

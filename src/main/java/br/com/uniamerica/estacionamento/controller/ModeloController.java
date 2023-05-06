@@ -19,10 +19,10 @@ public class ModeloController {
     private ModeloService modeloService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id){
+    public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id) {
         final Modelo modelo = this.modeloService.findById(id);
 
-        return ResponseEntity.ok(modeloService);
+        return ResponseEntity.ok(modelo);
     }
 
     @GetMapping("/lista")
@@ -38,12 +38,14 @@ public class ModeloController {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestParam final Modelo modelo){
+    public ResponseEntity<?> cadastrar(@RequestBody final Modelo modelo){
         try{
             this.modeloService.cadastrar(modelo);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
         }
-        catch (DataIntegrityViolationException e){
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
         }
     }
@@ -53,10 +55,7 @@ public class ModeloController {
         try{
             final Modelo modeloBanco = this.modeloService.findById(id);
 
-            if(modeloBanco == null || !modeloBanco.getId().equals(modelo.getId()))
-            {
-                throw new RuntimeException("Não foi possível identificar o registro informado");
-            }
+
 
             this.modeloService.edicao(modelo);
             return ResponseEntity.ok("Registro editado com sucesso");
@@ -70,16 +69,28 @@ public class ModeloController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable final Long id) {
+    public ResponseEntity<?> deletar(@PathVariable Long id) {
         try {
-            this.condutorService.delete(id);
-            return ResponseEntity.ok("Condutor excluído com sucesso");
-        }catch (IllegalArgumentException e) {
+            modeloService.deletar(id);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
-        } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }
-    }}
+    }
 }
+   /* {
+            "id": 1,
+            "cadastro": "2023-05-06T13:34:57.843843",
+            "atualizacao": "2023-05-06T13:34:57.843843",
+            "ativo": true,
+            "marcaId": {
+            "id": 1,
+            "cadastro": "2023-05-06T13:34:11.595602",
+            "atualizacao": "2023-05-06T13:34:11.595602",
+            "ativo": true,
+            "marca": "Ford"
+            },
+            "modelo": "Panpa"
+            }*/
