@@ -43,6 +43,10 @@ public class ModeloService {
     @Transactional
     public Modelo cadastrar(Modelo modelo) {
         Optional<Modelo> optionalModelo = modeloRepository.findByModeloAndMarcaId(modelo.getModelo(), modelo.getMarcaId());
+        String nome = modelo.getModelo();
+        if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
+            throw new IllegalArgumentException("O nome do modelo deve conter apenas letras ");
+        }
         if (optionalModelo.isPresent()) {
             throw new IllegalArgumentException("Já existe um modelo cadastrado com este nome para esta marca.");
         }

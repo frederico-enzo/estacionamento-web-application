@@ -11,6 +11,5 @@ import java.util.List;
 @Repository
 public interface MarcaRepository extends JpaRepository<Marca, Long> {
 
-
-    List<Condutor> findByAtivo(boolean b);
+    List<Marca> findByAtivo(boolean ativo);
 }

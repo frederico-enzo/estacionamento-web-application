@@ -28,6 +28,7 @@ public class VeiculoService {
     }
 
     public List<Veiculo> findByAtivo(){
+
         return veiculoRepository.findByAtivo(true);
     }
 
