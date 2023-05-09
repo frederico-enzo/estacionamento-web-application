@@ -25,35 +25,44 @@ public class CondutorController {
       @PathVariable =  é usada para mapear variáveis de caminho de URL em parâmetros de método
       orElse =   é usado para fornecer um valor padrão quando um valor não está presente
       badRequest = é usado para criar uma resposta HTTP 400 (Bad Request)
-
     */
 
 
 
     @Autowired
     private  CondutorService condutorService;
-
     @Autowired
     private CondutorRepository condutorRepository;
 
-
     @GetMapping("/{id}")
     public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id) {
-        final Condutor condutor = this.condutorService.findById(id);
+        final Condutor condutor = this.condutorRepository.findById(id).orElse(null);
 
-        return ResponseEntity.ok(condutor);
+        return condutor == null
+                ? ResponseEntity.badRequest().body("Condutor não encontrado")
+                : ResponseEntity.ok(condutor);
     }
 
     @GetMapping("/lista")
-    public ResponseEntity<List<Condutor>> findAll() {
-        List<Condutor> condutores = this.condutorService.findAll();
+    public ResponseEntity<?> findAll() {
+        List<Condutor> condutores = this.condutorRepository.findAll();
         return ResponseEntity.ok(condutores);
     }
 
     @GetMapping("/ativos")
-    public ResponseEntity<List<Condutor>> buscarAtivos() {
-        List<Condutor> condutoresAtivos = this.condutorService.findByAtivo();
-        return ResponseEntity.ok(condutoresAtivos);
+    public ResponseEntity<?> findByAtivo(){
+        List<Condutor> condutores = this.condutorRepository.findByAtivoTrue();
+
+        return ResponseEntity.ok(condutores);
+    }
+
+    @GetMapping("/cpf/{cpf}")
+    public ResponseEntity<?> findByCpf(@PathVariable("cpf") final String cpf){
+        final Condutor condutor = this.condutorRepository.findByCpf(cpf);
+
+        return condutor == null
+                ? ResponseEntity.badRequest().body("Condutor não encontrado")
+                : ResponseEntity.ok(condutor);
     }
 
     @PostMapping
@@ -61,8 +70,7 @@ public class CondutorController {
         try{
             this.condutorService.cadastrar(condutor);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (DataIntegrityViolationException e){
             return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
@@ -70,23 +78,21 @@ public class CondutorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Condutor condutor){
+    public ResponseEntity<?> update(@PathVariable("id") final Long id, @RequestBody final Condutor condutor){
         try{
-            final Condutor condutorBanco = this.condutorService.findById(id);
+            final Condutor condutorBanco = this.condutorRepository.findById(id).orElse(null);
 
             if(condutorBanco == null || !condutorBanco.getId().equals(condutor.getId()))
             {
                 throw new RuntimeException("Não foi possível identificar o registro informado");
             }
+            this.condutorService.update(condutor);
 
-            this.condutorService.editar(condutor);
             return ResponseEntity.ok("Registro editado com sucesso");
-        }catch (IllegalArgumentException e) {
+
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
+        } catch (RuntimeException e){
             return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }
     }
@@ -97,10 +103,8 @@ public class CondutorController {
         try {
             this.condutorService.delete(id);
             return ResponseEntity.ok("Condutor excluído com sucesso");
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
         } catch (RuntimeException e){
             return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }

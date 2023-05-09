@@ -18,31 +18,14 @@ public class CondutorService {
     private MovimentacaoRepository movimentacaoRepository;
 
 
-
-    public List<Condutor> findAll() {
-
-        return this.condutorRepository.findAll();
-    }
-
-    public Condutor findById(Long id) {
-        Optional<Condutor> optionalCondutor = this.condutorRepository.findById(id);
-        if (optionalCondutor.isPresent()) {
-            return optionalCondutor.get();
-        } else {
-            throw new RuntimeException("Condutor não encontrado");
-        }
-    }
-
-    public List<Condutor> findByAtivo(){
-
-        return this.condutorRepository.findByAtivo(true);
-    }
-
     @Transactional
     public Condutor cadastrar( Condutor condutor){
+
         String cpf = condutor.getCpf();
         String telefone = condutor.getTelefone();
         String nome = condutor.getNome();
+
+
         if (cpf == null || !cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")) {
             throw new IllegalArgumentException("O CPF deve estar no formato ___.___.___-__");
         }
@@ -52,22 +35,18 @@ public class CondutorService {
         if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
             throw new IllegalArgumentException("O nome deve conter apenas letras ");
         }
+
        return this.condutorRepository.save(condutor);
     }
+
+
+
+
     @Transactional
-    public Condutor editar( Condutor condutor){
-        String cpf = condutor.getCpf();
-        String telefone = condutor.getTelefone();
-        String nome = condutor.getNome();
-        if (cpf == null || !cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")) {
-            throw new IllegalArgumentException("O CPF deve estar no formato ___.___.___-__");
-        }
-        if (telefone == null || !telefone.matches("\\(\\d{2}\\)\\d{5}-\\d{4}")) {
-            throw new IllegalArgumentException("O telefone deve estar no formato (XX)XXXXX-XXXX");
-        }
-        if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
-            throw new IllegalArgumentException("O nome deve conter apenas letras ");
-        }
+    public Condutor update( Condutor condutor){
+
+
+
         return this.condutorRepository.save(condutor);
     }
 
