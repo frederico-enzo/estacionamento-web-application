@@ -20,13 +20,13 @@ public class Movimentacao extends AbstractEntity{
     @Column(name = "saida", nullable = false)
     private LocalDate saida;
     @Getter @Setter
-    @Column(name = "tempo_desconto", nullable = false)
+    @Column(name = "tempo_desconto")
     private LocalTime tempoDesconto;
     @Getter @Setter
     @Column(name = "tempo", nullable = false)
     private LocalTime tempo;
     @Getter @Setter
-    @Column(name = "tempo_multao", nullable = false)
+    @Column(name = "tempo_multao")
     private LocalTime tempoMulta;
     @Getter @Setter
     @ManyToOne
@@ -34,19 +34,19 @@ public class Movimentacao extends AbstractEntity{
     private Veiculo veiculo;
     @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "configuracao_id", nullable = false, unique = true)
+    @JoinColumn(name = "configuracao_id",  unique = true)
     private Configuracao configuracao;
     @Getter @Setter
     @ManyToOne
     @JoinColumn(name = "condutor_id", nullable = false)
     private Condutor condutor;
     @Getter @Setter
-    @Column(name = "valor_multa", nullable = false)
+    @Column(name = "valor_multa")
     private BigDecimal valorMulta;
     @Getter @Setter
-    @Column(name = "valor_total", nullable = false)
+    @Column(name = "valor_total")
     private BigDecimal valorTotal;
     @Getter @Setter
-    @Column(name = "valor_hora", nullable = false)
+    @Column(name = "valor_hora" )
     private BigDecimal valorHora;
 }

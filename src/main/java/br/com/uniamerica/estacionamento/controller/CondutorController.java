@@ -28,7 +28,6 @@ public class CondutorController {
     */
 
 
-
     @Autowired
     private  CondutorService condutorService;
     @Autowired

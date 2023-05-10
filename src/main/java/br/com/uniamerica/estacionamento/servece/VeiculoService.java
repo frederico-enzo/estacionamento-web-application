@@ -3,6 +3,7 @@ package br.com.uniamerica.estacionamento.servece;
 import br.com.uniamerica.estacionamento.Repository.ModeloRepository;
 import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
 import br.com.uniamerica.estacionamento.Repository.VeiculoRepository;
+import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Modelo;
 import br.com.uniamerica.estacionamento.entity.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,25 +24,14 @@ public class VeiculoService {
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
 
-    public List<Veiculo> findAll(){
-        return veiculoRepository.findAll();
-    }
-
-    public List<Veiculo> findByAtivo(){
-
-        return veiculoRepository.findByAtivo(true);
-    }
-
-    public Veiculo findById(Long id){
-        Optional<Veiculo> bancoVeiculo = this.veiculoRepository.findById(id);
-        if (bancoVeiculo.isPresent()){
-            return bancoVeiculo.get();
-        }else
-            throw new RuntimeException("Veiculo não encontrado");
-    }
 
     @Transactional
     public Veiculo cadastrar (Veiculo veiculo){
+        Optional<Veiculo> nomeJaCadastrado = veiculoRepository.findByPlaca(veiculo.getPlaca());
+
+
+
+
         String placa = veiculo.getPlaca();
 
         Modelo modelo = modeloRepository.findById(veiculo.getId())
