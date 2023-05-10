@@ -58,7 +58,7 @@ public class CondutorController {
 
     @GetMapping("/cpf/{cpf}")
     public ResponseEntity<?> findByCpf(@PathVariable("cpf") final String cpf){
-        final Condutor condutor = this.condutorRepository.findByCpf(cpf);
+        final Optional <Condutor> condutor = this.condutorRepository.findByCpf(cpf);
 
         return condutor == null
                 ? ResponseEntity.badRequest().body("Condutor não encontrado")
