@@ -30,27 +30,22 @@ public class CondutorService {
 
         if (nomeJaCadastrado.isPresent()){
             throw new IllegalArgumentException("Já há um condutor cadastrado com esse nome");
-        }else {
-            if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
-                throw new IllegalArgumentException("O nome deve conter apenas letras ");
-            }
+        }else if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
+            throw new IllegalArgumentException("O nome deve conter apenas letras ");
         }
 
         if (telefoneJaCadastrado.isPresent()){
             throw new IllegalArgumentException("Já há um condutor cadastrado com esse telefone");
-        }else {
-            if (telefone == null || !telefone.matches("\\(\\d{2}\\)\\d{5}-\\d{4}")) {
-                throw new IllegalArgumentException("O telefone deve estar no formato (XX)XXXXX-XXXX");
-            }
+        }else if (telefone == null || !telefone.matches("\\(\\d{2}\\)\\d{5}-\\d{4}")) {
+            throw new IllegalArgumentException("O telefone deve estar no formato (XX)XXXXX-XXXX");
         }
 
         if (cpfJaCadastrado.isPresent()){
             throw new IllegalArgumentException("Já há um condutor cadastrado com esse cpf");
-        }else {
-            if (cpf == null || !cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")) {
-                throw new IllegalArgumentException("O CPF deve estar no formato ___.___.___-__");
-            }
+        }else if (cpf == null || !cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")) {
+            throw new IllegalArgumentException("O CPF deve estar no formato ___.___.___-__");
         }
+
 
        return this.condutorRepository.save(condutor);
     }
@@ -69,25 +64,20 @@ public class CondutorService {
 
         if (nomeJaCadastrado.isPresent() && !nomeJaCadastrado.get().getId().equals(condutor.getId())){
             throw new IllegalArgumentException("Já há um condutor cadastrado com esse nome");
-
-        }else {
-            if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
-                throw new IllegalArgumentException("O nome deve conter apenas letras ");
-            }
+        }else if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
+            throw new IllegalArgumentException("O nome deve conter apenas letras ");
         }
+
         if (telefoneJaCadastrado.isPresent() && !telefoneJaCadastrado.get().getId().equals(condutor.getId())){
             throw new IllegalArgumentException("Já há um condutor cadastrado com esse telefone");
-        }else {
-            if (telefone == null || !telefone.matches("\\(\\d{2}\\)\\d{5}-\\d{4}")) {
-                throw new IllegalArgumentException("O telefone deve estar no formato (XX)XXXXX-XXXX");
-            }
+        }else if (telefone == null || !telefone.matches("\\(\\d{2}\\)\\d{5}-\\d{4}")) {
+            throw new IllegalArgumentException("O telefone deve estar no formato (XX)XXXXX-XXXX");
         }
+
         if (cpfJaCadastrado.isPresent() && !cpfJaCadastrado.get().getId().equals(condutor.getId())){
             throw new IllegalArgumentException("Já há um condutor cadastrado com esse cpf");
-        }else {
-            if (cpf == null || !cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")) {
-                throw new IllegalArgumentException("O CPF deve estar no formato ___.___.___-__");
-            }
+        }else if (cpf == null || !cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")) {
+            throw new IllegalArgumentException("O CPF deve estar no formato XXX.XXX.XXX-XX");
         }
 
         return this.condutorRepository.save(condutor);
