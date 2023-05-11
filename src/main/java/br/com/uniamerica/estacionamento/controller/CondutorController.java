@@ -2,6 +2,7 @@ package br.com.uniamerica.estacionamento.controller;
 import br.com.uniamerica.estacionamento.Repository.CondutorRepository;
 import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
 import br.com.uniamerica.estacionamento.entity.Condutor;
+import br.com.uniamerica.estacionamento.entity.Veiculo;
 import br.com.uniamerica.estacionamento.servece.CondutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -69,30 +70,25 @@ public class CondutorController {
         try{
             this.condutorService.cadastrar(condutor);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
-        } catch (IllegalArgumentException e) {
+        } catch (DataIntegrityViolationException  e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+        } catch (RuntimeException e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable("id") final Long id, @RequestBody final Condutor condutor){
         try{
-            final Condutor condutorBanco = this.condutorRepository.findById(id).orElse(null);
-
-            if(condutorBanco == null || !condutorBanco.getId().equals(condutor.getId()))
-            {
-                throw new RuntimeException("Não foi possível identificar o registro informado");
-            }
+            final Condutor verificacao = this.condutorRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
             this.condutorService.update(condutor);
-
             return ResponseEntity.ok("Registro editado com sucesso");
 
-        } catch (IllegalArgumentException e) {
+        } catch (DataIntegrityViolationException  e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
@@ -102,10 +98,10 @@ public class CondutorController {
         try {
             this.condutorService.delete(id);
             return ResponseEntity.ok("Condutor excluído com sucesso");
-        } catch (IllegalArgumentException e) {
+        }  catch (DataIntegrityViolationException  e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 }

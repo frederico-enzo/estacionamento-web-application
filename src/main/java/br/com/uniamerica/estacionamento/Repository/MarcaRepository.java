@@ -8,8 +8,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface MarcaRepository extends JpaRepository<Marca, Long> {
 
-    List<Marca> findByAtivo(boolean ativo);
+    List<Marca> findByAtivoTrue();
+    Optional<Marca> findByNome(String nome);
 }

@@ -88,13 +88,13 @@ public class VeiculoService {
         return this.veiculoRepository.save(veiculo);
     }
     public void delete(Long id) {
-        final Veiculo verificação = this.veiculoRepository.findById(id)
+        final Veiculo verificacao = this.veiculoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
 
-        if (this.movimentacaoRepository.existsByveiculo(verificação)){
+        if (this.movimentacaoRepository.existsByveiculo(verificacao)){
             throw new IllegalArgumentException("O veiculo esta em Movimentações");
         }else {
-            this.veiculoRepository.delete(verificação);
+            this.veiculoRepository.delete(verificacao);
         }
     }
 

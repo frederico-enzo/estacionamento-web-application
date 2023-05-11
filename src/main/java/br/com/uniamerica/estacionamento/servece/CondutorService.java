@@ -2,6 +2,7 @@ package br.com.uniamerica.estacionamento.servece;
 import br.com.uniamerica.estacionamento.Repository.CondutorRepository;
 import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
 import br.com.uniamerica.estacionamento.entity.Condutor;
+import br.com.uniamerica.estacionamento.entity.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ public class CondutorService {
     private MovimentacaoRepository movimentacaoRepository;
 
     @Transactional
-    public Condutor cadastrar( Condutor condutor){
+    public Condutor cadastrar(Condutor condutor){
 
         Optional<Condutor> nomeJaCadastrado = condutorRepository.findByNome(condutor.getNome());
         Optional<Condutor> telefoneJaCadastrado = condutorRepository.findByTelefone(condutor.getTelefone());
@@ -50,7 +51,7 @@ public class CondutorService {
     }
 
     @Transactional
-    public Condutor update( Condutor condutor){
+    public Condutor update(Condutor condutor){
 
         Optional<Condutor> id = condutorRepository.findById(condutor.getId());
         Optional<Condutor> nomeJaCadastrado = condutorRepository.findByNome(condutor.getNome());
@@ -84,16 +85,14 @@ public class CondutorService {
 
     @Transactional
     public void delete(Long id) {
-        Optional<Condutor> optionalCondutor = this.condutorRepository.findById(id);
-        if (optionalCondutor.isPresent()) {
-            Condutor condutor = optionalCondutor.get();
-            if (this.movimentacaoRepository.existsByCondutor(condutor)) {
+        final Condutor verificacao = this.condutorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
+
+        if (this.movimentacaoRepository.existsByCondutor(verificacao)) {
                 throw new IllegalArgumentException("O condutor está presente em alguma movimentação e não pode ser excluído.");
-            } else {
-                this.condutorRepository.delete(condutor);
-            }
         } else {
-            throw new IllegalArgumentException("Condutor não encontrado");
+                this.condutorRepository.delete(verificacao);
         }
     }
 }
+

@@ -18,5 +18,5 @@ import org.hibernate.envers.Audited;
 public class Marca extends AbstractEntity{
     @Getter @Setter
     @Column(name = "marca", nullable = false, unique = true)
-    private String marca;
+    private String nome;
 }

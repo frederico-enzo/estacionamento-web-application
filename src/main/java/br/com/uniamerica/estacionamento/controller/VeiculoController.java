@@ -68,12 +68,8 @@ public class VeiculoController {
     @PutMapping("/{id}")
     public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final  Veiculo veiculo){
         try{
-            final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
-
-            if(veiculoBanco == null || !veiculoBanco.getId().equals(veiculo.getId()))
-            {
-                throw new RuntimeException("Não foi possível identificar o registro informado");
-            }
+            final Veiculo verificacao = this.veiculoRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
 
             this.veiculoService.editar(veiculo);
             return ResponseEntity.ok("Registro editado com sucesso");
