@@ -31,5 +31,5 @@ public class Veiculo extends AbstractEntity {
     private Tipo tipo;
     @Getter @Setter
     @Column(name = "ano", nullable = false)
-    private LocalDate ano;
+    private int ano;
 }

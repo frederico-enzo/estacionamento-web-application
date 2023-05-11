@@ -58,11 +58,10 @@ public class VeiculoController {
         try{
             this.veiculoService.cadastrar(veiculo);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
-        }
-        catch (IllegalArgumentException e) {
+        } catch (DataIntegrityViolationException  e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+        } catch (RuntimeException e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
@@ -78,13 +77,10 @@ public class VeiculoController {
 
             this.veiculoService.editar(veiculo);
             return ResponseEntity.ok("Registro editado com sucesso");
-        }catch (IllegalArgumentException e) {
+        } catch (DataIntegrityViolationException  e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
+        } catch (RuntimeException e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
@@ -93,12 +89,10 @@ public class VeiculoController {
         try {
             this.veiculoService.delete(id);
             return ResponseEntity.ok("veiculo excluído com sucesso");
-        }catch (IllegalArgumentException e) {
+        } catch (DataIntegrityViolationException  e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
         } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 }
