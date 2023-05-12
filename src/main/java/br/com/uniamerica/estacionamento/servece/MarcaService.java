@@ -2,16 +2,15 @@ package br.com.uniamerica.estacionamento.servece;
 
 import br.com.uniamerica.estacionamento.Repository.MarcaRepository;
 import br.com.uniamerica.estacionamento.Repository.ModeloRepository;
-import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Marca;
 import br.com.uniamerica.estacionamento.entity.Modelo;
-import br.com.uniamerica.estacionamento.entity.Veiculo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class MarcaService {
@@ -48,18 +47,20 @@ public class MarcaService {
 
         return this.marcaRepository.save(marca);
     }
-
     @Transactional
-    public void delete(Long id){
-        final Marca verificacao = this.marcaRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
+    public void delete(Long id) {
+        Marca marca = marcaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Marca não encontrada"));
 
-        if (this.modeloRepository.existsByMarca(verificacao)) {
-            throw new IllegalArgumentException("O condutor está presente em alguma movimentação e não pode ser excluído.");
+        List<Modelo> modelosComEssaMarca = this.modeloRepository.findByMarcaId(id);
+
+        if (!modelosComEssaMarca.isEmpty()) {
+            throw new IllegalStateException("Não é possível excluir esta marca pois existem modelos cadastrados com ela.");
         } else {
-            this.marcaRepository.delete(verificacao);
+            marcaRepository.delete(marca);
         }
-
     }
+
+
 
 }
