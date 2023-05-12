@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import org.hibernate.envers.AuditTable;
@@ -23,8 +24,8 @@ public class Movimentacao extends AbstractEntity{
     @Column(name = "tempo_desconto")
     private LocalTime tempoDesconto;
     @Getter @Setter
-    @Column(name = "tempo", nullable = false)
-    private LocalTime tempo;
+    @Column(name = "tempo")
+    private Duration tempo;
     @Getter @Setter
     @Column(name = "tempo_multao")
     private LocalTime tempoMulta;

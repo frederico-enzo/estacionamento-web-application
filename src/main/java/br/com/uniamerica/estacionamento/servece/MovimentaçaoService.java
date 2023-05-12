@@ -1,10 +1,10 @@
 package br.com.uniamerica.estacionamento.servece;
 
+import br.com.uniamerica.estacionamento.Repository.CondutorRepository;
 import br.com.uniamerica.estacionamento.Repository.ConfiguracaoRepository;
 import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
-import br.com.uniamerica.estacionamento.entity.Configuracao;
-import br.com.uniamerica.estacionamento.entity.Modelo;
-import br.com.uniamerica.estacionamento.entity.Movimentacao;
+import br.com.uniamerica.estacionamento.Repository.VeiculoRepository;
+import br.com.uniamerica.estacionamento.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,87 +24,43 @@ public class MovimentaçaoService {
     private ConfiguracaoRepository configuracaoRepository;
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
-
-
-    public Movimentacao findById(Long id) {
-        Optional<Movimentacao> optionalMovimentacao = this.movimentacaoRepository.findById(id);
-        if (optionalMovimentacao.isPresent()) {
-            return optionalMovimentacao.get();
-        } else {
-            throw new RuntimeException("Condutor não encontrado");
-        }
-    }
-
-    public List<Movimentacao> findAll() {
-        return this.movimentacaoRepository.findAll();
-    }
-
-    public List<Movimentacao> findBySaidaIsNull(){
-        return this.movimentacaoRepository.findBySaidaIsNull();
-    }
+    @Autowired
+    private CondutorRepository condutorRepository;
+    @Autowired
+    private VeiculoRepository veiculoRepository;
 
     @Transactional
     public Movimentacao cadastrar(Movimentacao movimentacao){
 
-        Configuracao configuracao = configuracaoRepository.findById(movimentacao.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Modelo não encontrado"));
-        if (configuracao == null) {
-            throw new IllegalStateException("Não há configurações cadastradas.");
+    final Configuracao configuracao = this.configuracaoRepository.findById(movimentacao.getConfiguracao().getId())
+            .orElseThrow(() -> new IllegalArgumentException("Configuração não correspondente"));
+    final Condutor condutor = this.condutorRepository.findById(movimentacao.getCondutor().getId())
+            .orElseThrow(()-> new IllegalArgumentException("Condutor não correspondente"));
+    final Veiculo veiculo = this.veiculoRepository.findById(movimentacao.getVeiculo().getId())
+            .orElseThrow(()-> new IllegalArgumentException("Veiculo não correspondente"));
+
+
+        if (condutor == null || condutor.isAtivo()){
+            throw new IllegalArgumentException("O condutor invalido");
         }
-        if (movimentacaoRepository.existsByVeiculoAndSaidaIsNull(movimentacao.getVeiculo())) {
-            throw new IllegalArgumentException("O veículo já está em movimento");
-        }
-        if (movimentacao.getEntrada().isAfter(movimentacao.getSaida())) {
-            throw new IllegalArgumentException("A data de entrada deve ser antes da data de saída");
+        if (veiculo == null || veiculo.isAtivo()){
+            throw new IllegalArgumentException("O veiculo invalido");
         }
 
-        BigDecimal valorHora = configuracao.getValorHora();
-        BigDecimal valorMinutoHora = configuracao.getValorMinutoHora();
+
+
         BigDecimal valorTotal = BigDecimal.ZERO;
-        LocalTime tempo = LocalTime.of(0, 0);
-
-        movimentacao.setValorHora(valorHora);
-        movimentacao.setTempo(tempo);
-
-        return this.movimentacaoRepository.save(movimentacao);
-    }
-
-    @Transactional
-    public Movimentacao Update(Movimentacao movimentacao){
-
-
-        Configuracao configuracao = configuracaoRepository.findById(movimentacao.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Modelo não encontrado"));
-
-        BigDecimal valorHora = configuracao.getValorHora();
-        BigDecimal valorMinutoHora = configuracao.getValorMinutoHora();
-        BigDecimal valorTotal = BigDecimal.ZERO;
-
-        long tempoEmMinutos = ChronoUnit.MINUTES.between(movimentacao.getEntrada().atStartOfDay(), movimentacao.getSaida().atStartOfDay());
-
-        if (tempoEmMinutos > 0) {
-            int horas = (int) (tempoEmMinutos / 60);
-            int minutos = (int) (tempoEmMinutos % 60);
-
-            BigDecimal valorTotalHoras = BigDecimal.valueOf(horas).multiply(valorHora);
-            BigDecimal valorTotalMinutos = BigDecimal.valueOf(minutos).multiply(valorMinutoHora);
-            valorTotal = valorTotalHoras.add(valorTotalMinutos);
-
-        }
-
-
-        LocalDateTime entrada = LocalDateTime.of(movimentacao.getEntrada(), LocalTime.MIDNIGHT);
-        LocalDateTime saida = LocalDateTime.of(movimentacao.getSaida(), LocalTime.MIDNIGHT);
-        Duration duration = Duration.between(entrada, saida);
-        LocalTime tempo = LocalTime.ofSecondOfDay(duration.getSeconds());
-
-
-        movimentacao.setTempo(tempo);
+        movimentacao.setValorHora(movimentacao.getConfiguracao().getValorHora());
         movimentacao.setValorTotal(valorTotal);
-
-
+        movimentacao.setValorMulta(movimentacao.getConfiguracao().getValorMultaMinuto());
+        veiculo.setAtivo(true);
+        condutor.setAtivo(true);
+        veiculoRepository.save(veiculo);
+        condutorRepository.save(condutor);
         return this.movimentacaoRepository.save(movimentacao);
     }
+
+
 
     @Transactional
     public void delete(Long id) {

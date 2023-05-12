@@ -20,7 +20,7 @@ import java.time.LocalTime;
         private BigDecimal valorHora;
         @Getter @Setter
         @Column(name = "valor_minuto_hora")
-        private BigDecimal valorMinutoHora;
+        private BigDecimal valorMultaMinuto;
         @Getter @Setter
         @Column(name = "inicio_expediente")
         private LocalTime inicioExpediente;
