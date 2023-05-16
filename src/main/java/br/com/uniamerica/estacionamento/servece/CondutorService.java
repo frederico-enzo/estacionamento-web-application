@@ -19,7 +19,7 @@ public class CondutorService {
 
     @Transactional
     public Condutor cadastrar(Condutor condutor){
-
+        condutor.setAtivo(false);
         Optional<Condutor> nomeJaCadastrado = condutorRepository.findByNome(condutor.getNome());
         Optional<Condutor> telefoneJaCadastrado = condutorRepository.findByTelefone(condutor.getTelefone());
         Optional<Condutor> cpfJaCadastrado = condutorRepository.findByCpf(condutor.getCpf());
@@ -45,7 +45,6 @@ public class CondutorService {
         }else if (cpf == null || !cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")) {
             throw new IllegalArgumentException("O CPF deve estar no formato ___.___.___-__");
         }
-
 
        return this.condutorRepository.save(condutor);
     }

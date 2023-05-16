@@ -43,9 +43,9 @@ public class MarcaController {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Marca marca){
+    public ResponseEntity<?> newMarca(@RequestBody final Marca marca){
         try {
-            this.marcaService.cadastrar(marca);
+            this.marcaService.newMarca(marca);
             return ResponseEntity.ok("Marca cadastrada com sucesso");
         } catch (DataIntegrityViolationException e){
             return ResponseEntity.badRequest().body(e.getMessage());

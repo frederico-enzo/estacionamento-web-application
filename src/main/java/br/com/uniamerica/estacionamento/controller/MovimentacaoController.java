@@ -1,6 +1,7 @@
 package br.com.uniamerica.estacionamento.controller;
 
 import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
+import br.com.uniamerica.estacionamento.entity.Configuracao;
 import br.com.uniamerica.estacionamento.entity.Movimentacao;
 import br.com.uniamerica.estacionamento.servece.MovimentaçaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
 public class MovimentacaoController {
 
     @Autowired
-    private MovimentaçaoService movimentaçaoService;
+    private MovimentaçaoService movimentacaoService;
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
 
@@ -43,10 +44,22 @@ public class MovimentacaoController {
 
 
     @PostMapping
-    public ResponseEntity<?> editar(@RequestParam final Movimentacao movimentacao){
-        try{
-            this.movimentaçaoService.cadastrar(movimentacao);
+    public ResponseEntity<?> cadastrar(@RequestBody final Movimentacao movimentacao) {
+        try {
+            this.movimentacaoService.cadastrar(movimentacao);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.internalServerError().body("Error: " + e.getCause().getCause().getMessage());
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Movimentacao movimentacaos){
+        try{
+            this.movimentacaoService.update(movimentacaos);
+            return ResponseEntity.ok("Registro editado com sucesso");
         }
         catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -60,7 +73,7 @@ public class MovimentacaoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable final Long id) {
         try {
-            this.movimentaçaoService.delete(id);
+            this.movimentacaoService.delete(id);
             return ResponseEntity.ok("veiculo excluído com sucesso");
         }catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

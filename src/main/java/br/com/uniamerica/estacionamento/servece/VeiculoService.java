@@ -53,13 +53,16 @@ public class VeiculoService {
         if (modeloBanco.isEmpty()){
             throw new IllegalArgumentException("Modelo inválido");
         }
-        veiculo.setAtivo(false);
+        Modelo modelo = modeloRepository.findById(veiculo.getModeloId().getId()).orElse(null);
+        modelo.setAtivo(true);
+        modeloRepository.save(modelo);
+
         return this.veiculoRepository.save(veiculo);
     }
 
     @Transactional
     public Veiculo editar (Veiculo veiculo){
-
+        veiculo.setAtivo(false);
         Optional<Modelo> modeloBanco = this.modeloRepository.findById(veiculo.getModeloId().getId());
         Optional<Veiculo> veiculoPlacaBanco = this.veiculoRepository.findByPlaca(veiculo.getPlaca());
         int ano = veiculo.getAno();
@@ -84,6 +87,7 @@ public class VeiculoService {
         if (modeloBanco.isEmpty()){
             throw new IllegalArgumentException("Modelo inválido");
         }
+
         veiculo.setAtualizacao(LocalDateTime.now());
         return this.veiculoRepository.save(veiculo);
     }

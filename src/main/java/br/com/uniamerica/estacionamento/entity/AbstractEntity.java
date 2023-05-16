@@ -19,13 +19,13 @@ public abstract class AbstractEntity {
     @Column(name = "dtAtualizacao")
     private LocalDateTime atualizacao;
     @Getter @Setter
-    @Column(name = "ativo", nullable = false)
+    @Column(name = "ativo")
     private boolean ativo;
 
     @PrePersist
     private void prePersist(){
         this.cadastro = LocalDateTime.now();
-        this.ativo = true;
+
     }
     @PreUpdate
     private void preUpdate(){

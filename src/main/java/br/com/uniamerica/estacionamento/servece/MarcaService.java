@@ -18,24 +18,27 @@ public class MarcaService {
     private MarcaRepository marcaRepository;
     @Autowired
     private ModeloRepository modeloRepository;
-    
-    @Transactional
-    public Marca cadastrar(Marca marca){
-        
-        Optional<Marca> verificacao = this.marcaRepository.findById(marca.getId());
-        
-        if (verificacao.isPresent()){
-            throw new IllegalArgumentException("Essa Marca já está cadastrada");
-        } else if (marca.getNome() == null || !marca.getNome().matches("[a-zA-Z\\s]+")) {
-            throw new IllegalArgumentException("O nome da marca deve conter somente letras");
+
+    @Transactional(rollbackFor = Exception.class)
+    public Marca newMarca(final Marca marca) {
+
+        Optional<Marca> nomeJaCadastrado = marcaRepository.findByNome(marca.getNome());
+        String nome = marca.getNome();
+
+        if (nomeJaCadastrado.isPresent()){
+            throw new IllegalArgumentException("Já há um marca cadastrado com esse nome");
+        }else if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
+            throw new IllegalArgumentException("O nome deve conter apenas letras ");
         }
 
-        return this.marcaRepository.save(marca);
+        marca.setAtivo(false);
+        return marcaRepository.save(marca);
     }
 
-    @Transactional
-    public Marca update (Marca marca){
 
+    @Transactional(rollbackFor = Exception.class)
+    public Marca update (Marca marca){
+        marca.setAtivo(false);
         Optional<Marca> nomeJaCadastrado = marcaRepository.findByNome(marca.getNome());
         Optional<Marca> verificacao = this.marcaRepository.findById(marca.getId());
 
@@ -47,7 +50,7 @@ public class MarcaService {
 
         return this.marcaRepository.save(marca);
     }
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         Marca marca = marcaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Marca não encontrada"));

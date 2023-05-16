@@ -1,5 +1,6 @@
 package br.com.uniamerica.estacionamento.servece;
 
+import br.com.uniamerica.estacionamento.Repository.MarcaRepository;
 import br.com.uniamerica.estacionamento.Repository.ModeloRepository;
 import br.com.uniamerica.estacionamento.Repository.VeiculoRepository;
 import br.com.uniamerica.estacionamento.entity.*;
@@ -16,6 +17,8 @@ import java.util.Optional;
 @Service
 public class ModeloService {
 
+    @Autowired
+    private MarcaRepository marcaRepository;
     @Autowired
     private ModeloRepository modeloRepository;
     @Autowired
@@ -42,6 +45,7 @@ public class ModeloService {
 
     @Transactional
     public Modelo cadastrar(Modelo modelo) {
+        modelo.setAtivo(false);
         Optional<Modelo> optionalModelo = modeloRepository.findByModeloAndMarcaId(modelo.getModelo(), modelo.getMarcaId());
         String nome = modelo.getModelo();
         if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
@@ -50,6 +54,9 @@ public class ModeloService {
         if (optionalModelo.isPresent()) {
             throw new IllegalArgumentException("Já existe um modelo cadastrado com este nome para esta marca.");
         }
+        Marca marca = marcaRepository.findById(modelo.getMarcaId().getId()).orElse(null);
+        marca.setAtivo(true);
+        marcaRepository.save(marca);
         return modeloRepository.save(modelo);
     }
     @Transactional
