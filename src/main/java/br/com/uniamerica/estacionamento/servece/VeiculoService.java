@@ -38,17 +38,18 @@ public class VeiculoService {
             throw new IllegalArgumentException("A placa deve estar no formato AAA0A00");
         }
         if (anoEmString == null || !anoEmString.matches("[0-9]{4}") || ano < 1900 || ano > Year.now().getValue()){
-            throw new IllegalArgumentException("Ano inválido");
+            throw new IllegalArgumentException("Ano inválido / deve ser maior que o ano de 1900 e menor ou igual que 2023");
         }
         if (veiculo.getCor() == null || !Arrays.asList(Cor.values()).contains(veiculo.getCor())){
-            throw new IllegalArgumentException("Cor inválido");
+            throw new IllegalArgumentException("A cor deve ser um valor válido (AZUL|PRETO|CINZA|MARRON|VERMELHO|PRATA|BRANCO|AMARELO|VERDE)");
         }
         if (veiculo.getTipo() == null || !Arrays.asList(Tipo.values()).contains(veiculo.getTipo())){
-            throw new IllegalArgumentException("Tipo inválido");
+            throw new IllegalArgumentException("O tipo deve ser um valor válido (CARRO|VAN|MOTO)");
         }
         if (modeloBanco.isEmpty()){
             throw new IllegalArgumentException("Modelo inválido");
         }
+
         Modelo modelo = modeloRepository.findById(veiculo.getModeloId().getId()).orElse(null);
         modelo.setAtivo(true);
         modeloRepository.save(modelo);
@@ -58,7 +59,7 @@ public class VeiculoService {
 
     @Transactional
     public Veiculo editar (Veiculo veiculo){
-        veiculo.setAtivo(false);
+
         Optional<Modelo> modeloBanco = this.modeloRepository.findById(veiculo.getModeloId().getId());
         Optional<Veiculo> veiculoPlacaBanco = this.veiculoRepository.findByPlaca(veiculo.getPlaca());
         int ano = veiculo.getAno();
@@ -72,27 +73,26 @@ public class VeiculoService {
             throw new IllegalArgumentException("A placa deve estar no formato AAA0A00");
         }
         if (anoEmString == null || !anoEmString.matches("[0-9]{4}") || ano < 1900 || ano > Year.now().getValue()){
-            throw new IllegalArgumentException("Ano inválido");
+            throw new IllegalArgumentException("Ano inválido / deve ser maior que o ano de 1900 e menor ou igual que 2023");
         }
         if (veiculo.getCor() == null || !Arrays.asList(Cor.values()).contains(veiculo.getCor())){
-            throw new IllegalArgumentException("Cor inválido");
+            throw new IllegalArgumentException("A cor deve ser um valor válido (AZUL|PRETO|CINZA|MARRON|VERMELHO|PRATA|BRANCO|AMARELO|VERDE)");
         }
         if (veiculo.getTipo() == null || !Arrays.asList(Tipo.values()).contains(veiculo.getTipo())){
-            throw new IllegalArgumentException("Tipo inválido");
+            throw new IllegalArgumentException("O tipo deve ser um valor válido (CARRO|VAN|MOTO)");
         }
         if (modeloBanco.isEmpty()){
             throw new IllegalArgumentException("Modelo inválido");
         }
 
-        veiculo.setAtualizacao(LocalDateTime.now());
         return this.veiculoRepository.save(veiculo);
     }
     public void delete(Long id) {
         final Veiculo verificacao = this.veiculoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
 
-        if (this.movimentacaoRepository.existsByveiculo(verificacao)){
-            throw new IllegalArgumentException("O veiculo esta em Movimentações");
+        if (verificacao.isAtivo()){
+            throw new IllegalArgumentException("O Veiculo está presente em alguma movimentação e não pode ser excluído.");
         }else {
             this.veiculoRepository.delete(verificacao);
         }

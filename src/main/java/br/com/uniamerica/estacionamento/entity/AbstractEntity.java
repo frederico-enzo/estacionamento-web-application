@@ -14,12 +14,12 @@ public abstract class AbstractEntity {
     private Long id;
 
     @Getter @Setter
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy / HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy | HH:mm:ss")
     @Column(name = "dtCadastro", nullable = false)
     private LocalDateTime cadastro;
 
     @Getter @Setter
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy / HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy | HH:mm:ss")
     @Column(name = "dtAtualizacao")
     private LocalDateTime atualizacao;
 

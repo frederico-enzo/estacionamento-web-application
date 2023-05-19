@@ -73,10 +73,10 @@ public class MarcaController {
         try {
             this.marcaService.delete(id);
             return ResponseEntity.ok("Registro deletado com sucesso");
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException  e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (RuntimeException e){
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 

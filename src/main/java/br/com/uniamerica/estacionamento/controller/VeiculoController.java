@@ -39,7 +39,7 @@ public class VeiculoController {
                : ResponseEntity.ok(veiculoBanco);
    }
 
-    @GetMapping("/list")
+    @GetMapping("/lista")
     public ResponseEntity<?> findall(){
         final List<Veiculo> veiculo = this.veiculoRepository.findAll();
 

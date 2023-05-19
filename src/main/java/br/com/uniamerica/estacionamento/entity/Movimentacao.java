@@ -18,57 +18,42 @@ public class Movimentacao extends AbstractEntity{
 
     @Getter @Setter
     @Column(name = "entrada", nullable = false)
-    @NotNull(message = "A entrada é obrigatória")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH'h'mm'm'")
     private LocalTime  entrada;
-
     @Getter @Setter
     @Column(name = "saida")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH'h'mm'm'")
-    private LocalTime  saida = LocalTime.of(0, 0);;
-
+    private LocalTime  saida;
     @Getter @Setter
     @Column(name = "tempo_desconto")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH'horas'mm'minutos'")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH'h'mm'm'")
     private LocalTime tempoDesconto;
-
     @Getter @Setter
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH'horas'mm'minutos'")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH'h'mm'm'")
     @Column(name = "tempo")
-    private LocalTime tempo = LocalTime.of(0, 0);;
-
+    private LocalTime tempo;
     @Getter @Setter
     @Column(name = "tempo_multao")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH':'mm'")
-    private LocalTime tempoMulta = LocalTime.of(0, 0);
-
+    private LocalTime tempoMulta;
     @Getter @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotEmpty(message = "O Id do veiculo é obrigatório")
+    @ManyToOne
     @JoinColumn(name = "veiculo_id", nullable = false, unique = true)
     private Veiculo veiculo;
-
     @Getter @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotEmpty(message = "O Id da configuracao é obrigatório")
-    @JoinColumn(name = "configuracao_id", nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(name = "configuracao_id",  unique = true)
     private Configuracao configuracao;
-
     @Getter @Setter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotEmpty(message = "O Id do condutor é obrigatório")
+    @ManyToOne
     @JoinColumn(name = "condutor_id", nullable = false)
     private Condutor condutor;
-
     @Getter @Setter
     @Column(name = "valor_multa")
-    private BigDecimal valorMulta = BigDecimal.ZERO;
-
+    private BigDecimal valorMulta;
     @Getter @Setter
     @Column(name = "valor_total")
-    private BigDecimal valorTotal = BigDecimal.ZERO;
-
+    private BigDecimal valorTotal;
     @Getter @Setter
     @Column(name = "valor_hora" )
-    private BigDecimal valorHora = BigDecimal.ZERO;
+    private BigDecimal valorHora;
 }

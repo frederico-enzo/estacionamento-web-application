@@ -1,4 +1,5 @@
 package br.com.uniamerica.estacionamento.controller;
+import br.com.uniamerica.estacionamento.Repository.ModeloRepository;
 import br.com.uniamerica.estacionamento.entity.*;
 import br.com.uniamerica.estacionamento.servece.ModeloService;
 import jakarta.persistence.*;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/api/modelo")
@@ -20,54 +22,55 @@ public class ModeloController {
 
     @Autowired
     private ModeloService modeloService;
+    @Autowired
+    private ModeloRepository modeloRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id) {
-        final Modelo modelo = this.modeloService.findById(id);
+    public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id){
+        final Modelo modeloBanco = this.modeloRepository.findById(id).orElse(null);
 
-        return ResponseEntity.ok(modelo);
+        return modeloBanco == null
+                ? ResponseEntity.badRequest().body("Veiculo não encontrado")
+                : ResponseEntity.ok(modeloBanco);
     }
 
     @GetMapping("/lista")
-    public ResponseEntity<List<Modelo>> findAll() {
-        List<Modelo> modelos = this.modeloService.findAll();
-        return ResponseEntity.ok(modelos);
+    public ResponseEntity<?> findall(){
+        final List<Modelo> veiculo = this.modeloRepository.findAll();
+
+        return ResponseEntity.ok(veiculo);
     }
 
     @GetMapping("/ativos")
-    public ResponseEntity<List<Modelo>> buscarAtivos() {
-        List<Modelo> modelos = this.modeloService.findByAtivo();
-        return ResponseEntity.ok(modelos);
+    public ResponseEntity<?>findByAtivos(){
+        final List<Modelo> modelosAtivos = this.modeloRepository.findByAtivoTrue();
+
+        return ResponseEntity.ok(modelosAtivos);
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Modelo modelo){
+    public ResponseEntity<?> newModelo(@RequestBody final Modelo modelo){
         try{
-            this.modeloService.cadastrar(modelo);
+            this.modeloService.newModelo(modelo);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
-        }
-        catch (IllegalArgumentException e) {
+        }catch (DataIntegrityViolationException e){
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error" + e.getCause().getCause().getMessage());
+        } catch (RuntimeException e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> edicao(@PathVariable("id") final Long id, @RequestBody final Modelo modelo){
         try{
-            final Modelo modeloBanco = this.modeloService.findById(id);
-
-
-
+            final Modelo verificacao = this.modeloRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
             this.modeloService.edicao(modelo);
             return ResponseEntity.ok("Registro editado com sucesso");
-        }
-        catch (DataIntegrityViolationException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getCause().getCause().getMessage());
-        }
-        catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
+        }catch (DataIntegrityViolationException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e){
+            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
@@ -75,7 +78,7 @@ public class ModeloController {
     public ResponseEntity<?> deletar(@PathVariable Long id) {
         try {
             modeloService.deletar(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Modelo excluido com sucesso");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         } catch (IllegalStateException e) {
@@ -83,44 +86,5 @@ public class ModeloController {
         }
     }
 
-    @Entity
-    @Audited
-    @Table(name = "veiculos", schema = "public")
-    @AuditTable(value = "veiculo_audit", schema = "audit")
-    public static class Veiculo extends AbstractEntity {
 
-        @Getter
-        @Setter
-        @Column(name = "placa", length = 10, nullable = false, unique = true)
-        private String placa;
-        @Getter @Setter
-        @Column(name = "cor", length = 20, nullable = false)
-        @Enumerated(EnumType.STRING)
-        private Cor cor;
-        @Getter @Setter
-        @ManyToOne
-        @JoinColumn(name = "modelo_id", nullable = false)
-        private Modelo modeloId;
-        @Getter @Setter
-        @Column(name = "tipo", length = 20, nullable = false)
-        @Enumerated(EnumType.STRING)
-        private Tipo tipo;
-        @Getter @Setter
-        @Column(name = "ano", nullable = false)
-        private int ano;
-    }
 }
-   /* {
-            "id": 1,
-            "cadastro": "2023-05-06T13:34:57.843843",
-            "atualizacao": "2023-05-06T13:34:57.843843",
-            "ativo": true,
-            "marcaId": {
-            "id": 1,
-            "cadastro": "2023-05-06T13:34:11.595602",
-            "atualizacao": "2023-05-06T13:34:11.595602",
-            "ativo": true,
-            "marca": "Ford"
-            },
-            "modelo": "Panpa"
-            }*/

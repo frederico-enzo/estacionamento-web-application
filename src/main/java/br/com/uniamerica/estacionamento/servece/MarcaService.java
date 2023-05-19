@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,29 +24,36 @@ public class MarcaService {
     public Marca newMarca(final Marca marca) {
 
         Optional<Marca> nomeJaCadastrado = marcaRepository.findByNome(marca.getNome());
-        String nome = marca.getNome();
 
         if (nomeJaCadastrado.isPresent()){
-            throw new IllegalArgumentException("Já há um marca cadastrado com esse nome");
-        }else if (nome == null || !nome.matches("[a-zA-Z\\s]+")) {
-            throw new IllegalArgumentException("O nome deve conter apenas letras ");
+            throw new IllegalArgumentException("Já há um modelo cadastrado com esse nome");
+        }else if (marca.getNome() == null ) {
+            throw new IllegalArgumentException("O nome deve ser preenxido");
+        }else if (marca.getNome().length() > 50){
+            throw new IllegalArgumentException("O nome não pode ser maior que 50 caracteres");
+        }else if (!marca.getNome().matches("[a-zA-Z\\s]+")) {
+            throw new IllegalArgumentException("O nome deve conter apenas letras");
         }
 
-        marca.setAtivo(false);
         return marcaRepository.save(marca);
     }
 
 
     @Transactional(rollbackFor = Exception.class)
     public Marca update (Marca marca){
-        marca.setAtivo(false);
         Optional<Marca> nomeJaCadastrado = marcaRepository.findByNome(marca.getNome());
-        Optional<Marca> verificacao = this.marcaRepository.findById(marca.getId());
+        LocalDateTime dataCadastro = marca.getCadastro();
 
-        if (verificacao.isPresent() && !nomeJaCadastrado.get().getId().equals(marca.getId())){
-            throw new IllegalArgumentException("Essa Marca já está cadastrada");
-        } else if (marca.getNome() == null || !marca.getNome().matches("[a-zA-Z\\s]+")) {
-            throw new IllegalArgumentException("O nome da marca deve conter somente letras");
+        if (nomeJaCadastrado.isPresent() && !nomeJaCadastrado.get().getId().equals(marca.getId())){
+            throw new IllegalArgumentException("Já há um modelo cadastrado com esse nome");
+        }else if (marca.getNome() == null ) {
+            throw new IllegalArgumentException("O nome deve ser preenxido");
+        }else if (marca.getNome().length() > 50){
+            throw new IllegalArgumentException("O nome não pode ser maior que 50 caracteres");
+        }else if (!marca.getNome().matches("[a-zA-Z\\s]+")) {
+            throw new IllegalArgumentException("O nome deve conter apenas letras");
+        }else if (dataCadastro == null){
+            throw new IllegalArgumentException("Por favor informe a data de cadastro");
         }
 
         return this.marcaRepository.save(marca);
@@ -54,10 +62,7 @@ public class MarcaService {
     public void delete(Long id) {
         Marca marca = marcaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Marca não encontrada"));
-
-        List<Modelo> modelosComEssaMarca = this.modeloRepository.findByMarcaId(id);
-
-        if (!modelosComEssaMarca.isEmpty()) {
+        if (marca.isAtivo()) {
             throw new IllegalStateException("Não é possível excluir esta marca pois existem modelos cadastrados com ela.");
         } else {
             marcaRepository.delete(marca);
