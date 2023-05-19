@@ -66,9 +66,9 @@ public class CondutorController {
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Condutor condutor){
+    public ResponseEntity<?> newCondutor(@RequestBody final Condutor condutor){
         try{
-            this.condutorService.cadastrar(condutor);
+            this.condutorService.newCondutor(condutor);
             return ResponseEntity.ok("Registro cadastrado com sucesso");
         } catch (DataIntegrityViolationException  e) {
             return ResponseEntity.badRequest().body(e.getMessage());

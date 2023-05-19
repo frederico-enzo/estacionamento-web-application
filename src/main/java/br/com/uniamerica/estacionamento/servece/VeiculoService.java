@@ -1,21 +1,17 @@
 package br.com.uniamerica.estacionamento.servece;
 
-import br.com.uniamerica.estacionamento.Repository.ConfiguracaoRepository;
 import br.com.uniamerica.estacionamento.Repository.ModeloRepository;
 import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
 import br.com.uniamerica.estacionamento.Repository.VeiculoRepository;
 import br.com.uniamerica.estacionamento.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.SimpleTimeZone;
 
 @Service
 public class VeiculoService {

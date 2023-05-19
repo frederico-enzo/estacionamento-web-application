@@ -1,8 +1,11 @@
 package br.com.uniamerica.estacionamento.controller;
-import br.com.uniamerica.estacionamento.Repository.ModeloRepository;
-import br.com.uniamerica.estacionamento.entity.Condutor;
-import br.com.uniamerica.estacionamento.entity.Modelo;
+import br.com.uniamerica.estacionamento.entity.*;
 import br.com.uniamerica.estacionamento.servece.ModeloService;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -78,6 +81,33 @@ public class ModeloController {
         } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @Entity
+    @Audited
+    @Table(name = "veiculos", schema = "public")
+    @AuditTable(value = "veiculo_audit", schema = "audit")
+    public static class Veiculo extends AbstractEntity {
+
+        @Getter
+        @Setter
+        @Column(name = "placa", length = 10, nullable = false, unique = true)
+        private String placa;
+        @Getter @Setter
+        @Column(name = "cor", length = 20, nullable = false)
+        @Enumerated(EnumType.STRING)
+        private Cor cor;
+        @Getter @Setter
+        @ManyToOne
+        @JoinColumn(name = "modelo_id", nullable = false)
+        private Modelo modeloId;
+        @Getter @Setter
+        @Column(name = "tipo", length = 20, nullable = false)
+        @Enumerated(EnumType.STRING)
+        private Tipo tipo;
+        @Getter @Setter
+        @Column(name = "ano", nullable = false)
+        private int ano;
     }
 }
    /* {
