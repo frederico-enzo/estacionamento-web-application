@@ -26,28 +26,36 @@ public class VeiculoService {
 
     @Transactional
     public Veiculo cadastrar (Veiculo veiculo){
+        if (veiculo.getModeloId() == null) {
+            throw new IllegalArgumentException("Modelo não informada");
+        }
+        final Modelo modeloDatabase = this.modeloRepository.findById(veiculo.getModeloId().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Modelo não existente"));
 
-        Optional<Modelo> modeloBanco = this.modeloRepository.findById(veiculo.getModeloId().getId());
         Optional<Veiculo> veiculoPlacaBanco = this.veiculoRepository.findByPlaca(veiculo.getPlaca());
         int ano = veiculo.getAno();
         String anoEmString = Integer.toString(ano);
 
         if (veiculoPlacaBanco.isPresent()){
             throw new IllegalArgumentException("Existe outro veiculo com essa placa");
-        }else if (veiculo.getPlaca() == null || !veiculo.getPlaca().matches("[A-Z]{3}[0-9][A-Z][0-9]{2}")){
-            throw new IllegalArgumentException("A placa deve estar no formato AAA0A00");
-        }
-        if (anoEmString == null || !anoEmString.matches("[0-9]{4}") || ano < 1900 || ano > Year.now().getValue()){
-            throw new IllegalArgumentException("Ano inválido / deve ser maior que o ano de 1900 e menor ou igual que 2023");
-        }
-        if (veiculo.getCor() == null || !Arrays.asList(Cor.values()).contains(veiculo.getCor())){
+        } else if (veiculo.getPlaca() == null ){
+            throw new IllegalArgumentException("A placa deve ser preenchida");
+        } else if (!veiculo.getPlaca().matches("[A-Z]{3}[0-9][A-Z][0-9]{2}|([A-Z]{3}-[0-9]{4})")) {
+            throw new IllegalArgumentException("A placa deve estar no formato XXX0X00 ou XXX-0000");
+        } else if (anoEmString == null ) {
+            throw new IllegalArgumentException("A ano deve ser preenchida");
+        } else if (!anoEmString.matches("[0-9]{4}")) {
+            throw new IllegalArgumentException("Ano tem somente 4 digitos");
+        } else if (ano < 1900 || ano > Year.now().getValue()){
+            throw new IllegalArgumentException("O ano deve ser maior que o ano de 1900 e menor ou igual que 2023");
+        } else if (veiculo.getCor() == null) {
+            throw new IllegalArgumentException("A cor do veiculo deve ser preenchida");
+        } else if (!Arrays.asList(Cor.values()).contains(veiculo.getCor())){
             throw new IllegalArgumentException("A cor deve ser um valor válido (AZUL|PRETO|CINZA|MARRON|VERMELHO|PRATA|BRANCO|AMARELO|VERDE)");
-        }
-        if (veiculo.getTipo() == null || !Arrays.asList(Tipo.values()).contains(veiculo.getTipo())){
+        } else if (veiculo.getTipo() == null) {
+            throw new IllegalArgumentException("O tipo deve ser preenchida");
+        } else if (!Arrays.asList(Tipo.values()).contains(veiculo.getTipo())){
             throw new IllegalArgumentException("O tipo deve ser um valor válido (CARRO|VAN|MOTO)");
-        }
-        if (modeloBanco.isEmpty()){
-            throw new IllegalArgumentException("Modelo inválido");
         }
 
         Modelo modelo = modeloRepository.findById(veiculo.getModeloId().getId()).orElse(null);
@@ -59,30 +67,39 @@ public class VeiculoService {
 
     @Transactional
     public Veiculo editar (Veiculo veiculo){
+        if (veiculo.getModeloId() == null) {
+            throw new IllegalArgumentException("Modelo não informada");
+        }
+        final Modelo modelo = this.modeloRepository.findById(veiculo.getModeloId().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Modelo não existente"));
 
-        Optional<Modelo> modeloBanco = this.modeloRepository.findById(veiculo.getModeloId().getId());
         Optional<Veiculo> veiculoPlacaBanco = this.veiculoRepository.findByPlaca(veiculo.getPlaca());
         int ano = veiculo.getAno();
         String anoEmString = Integer.toString(ano);
-
         Optional<Veiculo> placaJaCadastrada = this.veiculoRepository.findByPlaca(veiculo.getPlaca());
 
         if (veiculoPlacaBanco.isPresent() && !placaJaCadastrada.get().getId().equals(veiculo.getId())){
             throw new IllegalArgumentException("Existe outro veiculo com essa placa");
-        }else if (veiculo.getPlaca() == null || !veiculo.getPlaca().matches("[A-Z]{3}[0-9][A-Z][0-9]{2}")){
-            throw new IllegalArgumentException("A placa deve estar no formato AAA0A00");
-        }
-        if (anoEmString == null || !anoEmString.matches("[0-9]{4}") || ano < 1900 || ano > Year.now().getValue()){
-            throw new IllegalArgumentException("Ano inválido / deve ser maior que o ano de 1900 e menor ou igual que 2023");
-        }
-        if (veiculo.getCor() == null || !Arrays.asList(Cor.values()).contains(veiculo.getCor())){
+        } else if (veiculo.getPlaca() == null ){
+            throw new IllegalArgumentException("A placa deve ser preenchida");
+        } else if (!veiculo.getPlaca().matches("[A-Z]{3}[0-9][A-Z][0-9]{2}|([A-Z]{3}-[0-9]{4})")) {
+            throw new IllegalArgumentException("A placa deve estar no formato XXX0X00 ou XXX-0000");
+        } else if (anoEmString == null ) {
+            throw new IllegalArgumentException("A ano deve ser preenchida");
+        } else if (!anoEmString.matches("[0-9]{4}")) {
+            throw new IllegalArgumentException("Ano tem somente 4 digitos");
+        } else if (ano < 1900 || ano > Year.now().getValue()){
+            throw new IllegalArgumentException("O ano deve ser maior que o ano de 1900 e menor ou igual que 2023");
+        } else if (veiculo.getCor() == null) {
+            throw new IllegalArgumentException("A cor do veiculo deve ser preenchida");
+        } else if (!Arrays.asList(Cor.values()).contains(veiculo.getCor())){
             throw new IllegalArgumentException("A cor deve ser um valor válido (AZUL|PRETO|CINZA|MARRON|VERMELHO|PRATA|BRANCO|AMARELO|VERDE)");
-        }
-        if (veiculo.getTipo() == null || !Arrays.asList(Tipo.values()).contains(veiculo.getTipo())){
+        } else if (veiculo.getTipo() == null) {
+            throw new IllegalArgumentException("O tipo deve ser preenchida");
+        } else if (!Arrays.asList(Tipo.values()).contains(veiculo.getTipo())){
             throw new IllegalArgumentException("O tipo deve ser um valor válido (CARRO|VAN|MOTO)");
-        }
-        if (modeloBanco.isEmpty()){
-            throw new IllegalArgumentException("Modelo inválido");
+        } else if (veiculo.getCadastro() == null){
+            throw new IllegalArgumentException("Por favor informe a data de cadastro");
         }
 
         return this.veiculoRepository.save(veiculo);
