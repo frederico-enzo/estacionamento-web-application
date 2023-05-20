@@ -87,7 +87,9 @@ public class MovimentaçaoService {
         LocalTime saida = movimentacao.getSaida();
 
         long tempoEmMinutos = ChronoUnit.MINUTES.between(entrada, saida);
+
         BigDecimal valorPorMinuto = configuracao.getValorHora().divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
+
         int horas = (int) (tempoEmMinutos / 60);
         int minutos = (int) (tempoEmMinutos % 60);
 

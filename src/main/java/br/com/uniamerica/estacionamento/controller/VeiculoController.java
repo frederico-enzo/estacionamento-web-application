@@ -70,7 +70,6 @@ public class VeiculoController {
         try{
             final Veiculo verificacao = this.veiculoRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
-
             this.veiculoService.editar(veiculo);
             return ResponseEntity.ok("Registro editado com sucesso");
         } catch (DataIntegrityViolationException  e) {

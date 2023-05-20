@@ -55,11 +55,20 @@ public class MovimentacaoController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Movimentacao movimentacaos){
+    @PutMapping("/finalizar/{id}")
+    public ResponseEntity<?> finalizar(@PathVariable("id") final Long id, @RequestBody final Movimentacao movimentacaos){
         try{
+            final Movimentacao movimentacao = this.movimentacaoRepository.findById(id).orElse(null);
             this.movimentacaoService.update(movimentacaos);
-            return ResponseEntity.ok("Registro editado com sucesso");
+            return ResponseEntity.ok("Data e Hora\n " +
+                    "entrada:" + movimentacao.getEntrada() + "\n" +
+                    "saída:" + movimentacao.getSaida() + "\n" +
+                    "Condutor:" + movimentacao.getCondutor().getNome() + "\n" +
+                    "Veiculo:" + movimentacao.getVeiculo().getPlaca() + "\n" +
+                    "Quantidade de Horas:" + movimentacao.getTempo() + "\n" +
+                    "Quantidade de Horas Desconto:" + movimentacao.getTempoDesconto() + "\n" +
+                    "Valor a Pagar:" + movimentacao.getValorTotal() + "\n" +
+                    "Valor de Desconto");
         }
         catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
