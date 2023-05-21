@@ -2,10 +2,12 @@ package br.com.uniamerica.estacionamento.servece;
 import br.com.uniamerica.estacionamento.Repository.CondutorRepository;
 import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
 import br.com.uniamerica.estacionamento.entity.Condutor;
+import br.com.uniamerica.estacionamento.entity.Tipo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
@@ -36,7 +38,8 @@ public class CondutorService {
         }else if (cpf == null || !cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")) {
             throw new IllegalArgumentException("O CPF deve estar no formato ___.___.___-__");
         }
-
+        LocalTime tempoPago = LocalTime.of(0,0);
+        condutor.setTempoPago(tempoPago);
        return this.condutorRepository.save(condutor);
     }
 

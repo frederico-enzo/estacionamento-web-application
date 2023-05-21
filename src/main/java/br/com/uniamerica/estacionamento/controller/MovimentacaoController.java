@@ -60,15 +60,16 @@ public class MovimentacaoController {
         try{
             final Movimentacao movimentacao = this.movimentacaoRepository.findById(id).orElse(null);
             this.movimentacaoService.update(movimentacaos);
-            return ResponseEntity.ok("Data e Hora\n " +
-                    "entrada:" + movimentacao.getEntrada() + "\n" +
-                    "saída:" + movimentacao.getSaida() + "\n" +
-                    "Condutor:" + movimentacao.getCondutor().getNome() + "\n" +
-                    "Veiculo:" + movimentacao.getVeiculo().getPlaca() + "\n" +
-                    "Quantidade de Horas:" + movimentacao.getTempo() + "\n" +
-                    "Quantidade de Horas Desconto:" + movimentacao.getTempoDesconto() + "\n" +
-                    "Valor a Pagar:" + movimentacao.getValorTotal() + "\n" +
-                    "Valor de Desconto");
+            return ResponseEntity.ok(
+                    "Data e Hora: " + movimentacao.getCadastro() + "\n" +
+                    "entrada: " + movimentacao.getEntrada() +"\n" +
+                    "saída: " + movimentacao.getSaida() + "\n" +
+                    "Condutor: " + movimentacao.getCondutor().getNome() + " CPF: " + movimentacao.getCondutor().getCpf() + " TELEFONE: " + movimentacao.getCondutor().getTelefone() + "\n" +
+                    "Veiculo: " + movimentacao.getVeiculo().getPlaca() + " MODELO:" + movimentacao.getVeiculo().getModeloId().getNome() + " COR:"+movimentacao.getVeiculo().getCor() + "\n" +
+                    "Quantidade de Horas: " + movimentacao.getTempo() + "\n" +
+                    "Quantidade de Horas Desconto: " + movimentacao.getTempoDesconto() + "\n" +
+                    "Valor a Pagar: R$" + movimentacao.getValorTotal() + "\n" +
+                    "Valor da Multa: " + movimentacao.getValorMulta() + "\n");
         }
         catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
