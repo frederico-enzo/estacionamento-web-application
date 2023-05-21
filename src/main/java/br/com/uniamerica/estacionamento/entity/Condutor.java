@@ -1,4 +1,5 @@
 package br.com.uniamerica.estacionamento.entity;
+import jakarta.persistence.Transient;
 import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import jakarta.persistence.Column;
@@ -30,12 +31,26 @@ public class Condutor extends AbstractEntity{
     private String telefone;
 
     @Getter @Setter
-    @Column(name = "tempo_pago")
-    private Duration tempoPago = Duration.ofHours(50).plusMinutes(30);
+    private int horasDesconto = 0;
 
+    @Getter @Setter
+    private int minutosDesconto = 0;
+
+    @Getter @Setter
+    private int horasPago = 0;
+
+    @Getter @Setter
+    private int minutosPago = 0;
+
+    @Getter @Setter
+    private int contadorDeDesconto = 50;
+
+    @Getter @Setter
+    @Column(name = "tempo_Pago")
+    private String tempoPago = horasPago + "hrs" + minutosPago + "mim";
 
     @Getter @Setter
     @Column(name = "tempo_desconto")
-    private Duration tempoDesconto = Duration.ofHours(50).plusMinutes(30);
+    private String tempoDesconto =  horasDesconto + "hrs" + minutosDesconto + "mim";
 
 }
