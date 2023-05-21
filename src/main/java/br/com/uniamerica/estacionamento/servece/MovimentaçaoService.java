@@ -5,18 +5,16 @@ import br.com.uniamerica.estacionamento.Repository.ConfiguracaoRepository;
 import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
 import br.com.uniamerica.estacionamento.Repository.VeiculoRepository;
 import br.com.uniamerica.estacionamento.entity.*;
-import com.sun.jdi.request.DuplicateRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Optional;
+
 
 
 @Service
@@ -111,12 +109,25 @@ public class MovimentaçaoService {
             valorTotal = valorTotal.add(valorMulta);
             movimentacao.setValorTotal(valorTotal);
             movimentacao.setValorMulta(valorMulta);
-
+            /*
             LocalTime tempoPago = condutor.getTempoPago();
             long tempoPagoMin = tempoPago.getHour() * 60 + tempoPago.getMinute();
             tempoPagoMin = tempoPagoMin + segundos;
             LocalTime timeboy = LocalTime.ofSecondOfDay(tempoPagoMin);
             condutor.setTempoPago(timeboy);
+            movimentacao.setValorTotal(valorTotal);
+*/
+            Duration tempoPago = condutor.getTempoPago();
+
+            long tempoPagoMin = tempoPago.toMinutes();
+            int h = (int) (tempoPagoMin / 60);
+            int m = (int) (tempoPagoMin % 60);
+
+            int totalHoras = horas + h;
+            int totalMinutos = minutos + m;
+
+            tempoPago = Duration.ofHours(totalHoras).plusMinutes(totalMinutos);
+            condutor.setTempoPago(tempoPago);
             movimentacao.setValorTotal(valorTotal);
 
         } else {
@@ -128,12 +139,17 @@ public class MovimentaçaoService {
             BigDecimal valorTotalMinutos = BigDecimal.valueOf(minutos).multiply(valorPorMinuto);
             valorTotal = valorTotalHoras.add(valorTotalMinutos);
 
+            Duration tempoPago = condutor.getTempoPago();
 
-            LocalTime tempoPago = condutor.getTempoPago();
-            long tempoPagoMin = tempoPago.getHour() * 60 + tempoPago.getMinute();
-            tempoPagoMin = tempoPagoMin + segundos;
-            LocalTime timeboy = LocalTime.ofSecondOfDay(tempoPagoMin);
-            condutor.setTempoPago(timeboy);
+            long tempoPagoMin = tempoPago.toMinutes();
+            int h = (int) (tempoPagoMin / 60);
+            int m = (int) (tempoPagoMin % 60);
+
+            int totalHoras = horas + h;
+            int totalMinutos = minutos + m;
+
+            tempoPago = Duration.ofHours(totalHoras).plusMinutes(totalMinutos);
+            condutor.setTempoPago(tempoPago);
             movimentacao.setValorTotal(valorTotal);
         }
 
