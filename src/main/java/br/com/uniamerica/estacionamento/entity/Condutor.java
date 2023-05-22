@@ -43,7 +43,7 @@ public class Condutor extends AbstractEntity{
     private int minutosPago = 0;
 
     @Getter @Setter
-    private int contadorDeDesconto = 50;
+    private int contadorDeDesconto = 0;
 
     @Getter @Setter
     @Column(name = "tempo_Pago")

@@ -34,6 +34,7 @@ public class Movimentacao extends AbstractEntity{
     private LocalTime tempo;
     @Getter @Setter
     @Column(name = "tempo_multao")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH'h'mm'm'")
     private LocalTime tempoMulta;
     @Getter @Setter
     @ManyToOne

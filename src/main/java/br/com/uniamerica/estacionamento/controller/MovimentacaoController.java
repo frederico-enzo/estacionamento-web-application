@@ -64,12 +64,13 @@ public class MovimentacaoController {
                     "Data e Hora: " + movimentacao.getCadastro() + "\n" +
                     "entrada: " + movimentacao.getEntrada() +"\n" +
                     "saída: " + movimentacao.getSaida() + "\n" +
-                    "Condutor: " + movimentacao.getCondutor().getNome() + " CPF: " + movimentacao.getCondutor().getCpf() + " TELEFONE: " + movimentacao.getCondutor().getTelefone() + "\n" +
+                    "Condutor: " + movimentacao.getCondutor().getNome() + " CPF: " + movimentacao.getCondutor().getCpf() + " TELEFONE: " + movimentacao.getCondutor().getTelefone() +
+                            "TEMPO DESCONTO DISPONIVEL: "+ movimentacao.getCondutor().getTempoDesconto() +"\n" +
                     "Veiculo: " + movimentacao.getVeiculo().getPlaca() + " MODELO:" + movimentacao.getVeiculo().getModeloId().getNome() + " COR:"+movimentacao.getVeiculo().getCor() + "\n" +
                     "Quantidade de Horas: " + movimentacao.getTempo() + "\n" +
                     "Quantidade de Horas Desconto: " + movimentacao.getTempoDesconto() + "\n" +
                     "Valor a Pagar: R$" + movimentacao.getValorTotal() + "\n" +
-                    "Valor da Multa: " + movimentacao.getValorMulta() + "\n");
+                    "Valor da Multa: R$" + movimentacao.getValorMulta() + "\n");
         }
         catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
