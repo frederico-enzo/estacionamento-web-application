@@ -8,13 +8,12 @@ import br.com.uniamerica.estacionamento.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.Duration;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
-
 
 
 @Service
@@ -61,11 +60,13 @@ public class MovimentaçaoService {
         movimentacao.setValorMulta(valorMulta);
         movimentacao.setValorHora(configuracao.getValorHora());
 
+        configuracao.setAtivo(true);
         veiculo.setAtivo(true);
         condutor.setAtivo(true);
         movimentacao.setAtivo(true);
         veiculoRepository.save(veiculo);
         condutorRepository.save(condutor);
+        configuracaoRepository.save(configuracao);
         return this.movimentacaoRepository.save(movimentacao);
     }
 
@@ -73,12 +74,15 @@ public class MovimentaçaoService {
     public Movimentacao update(Movimentacao movimentacao) {
         final Configuracao configuracao = this.configuracaoRepository.findById(movimentacao.getConfiguracao().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Configuração não correspondente"));
-
         final Condutor condutor = this.condutorRepository.findById(movimentacao.getCondutor().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Condutor não correspondente"));
-
         final Veiculo veiculo = this.veiculoRepository.findById(movimentacao.getVeiculo().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Veiculo não correspondente"));
+        final Movimentacao movimentacaoDatabase = this.movimentacaoRepository.findById(movimentacao.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Movimentacao não correspondente"));
+        if (!movimentacaoDatabase.isAtivo()){
+            throw new IllegalArgumentException("Movimentacao ja encerada");
+        }
 
         /*SET TEMPO*/
         LocalTime entrada = movimentacao.getEntrada();
@@ -103,9 +107,10 @@ public class MovimentaçaoService {
         BigDecimal vmpm = configuracao.getValorMultaMinuto(); // vmpm = valor multa por minuto;
         int fem = fimExpediente.getHour() * 60; // fim expediente em minutos
         int gmt = sem - fem; // gmt = gerar multa - quantidade em minutos o tempo que foi violado;
-        BigDecimal valorTotalMultaMinutos = BigDecimal.valueOf(gmt).multiply(vmpm);
+        BigDecimal valorTotalMultaMinutos = BigDecimal.ZERO;
 
-        if (sem > fem){
+        if (sem > fem) {
+            valorTotalMultaMinutos = BigDecimal.valueOf(gmt).multiply(vmpm);
             valorTotal = valorTotal.add(valorTotalMultaMinutos);
         }
 
@@ -119,21 +124,32 @@ public class MovimentaçaoService {
         int verificador = (int) (tp / 3000); // 3000mim  = 50 hrs
         long longVerificador = (long) verificador;
         td = longVerificador * 300; // 300 min = 5 hrs
+
+        /*CALCULA O VALOR DE  DESCONTO*/
+        BigDecimal vd = movimentacao.getValorDesconto();
+        LocalTime tempoDesconto = movimentacao.getTempoDesconto();
+        long tdem = tempoDesconto.getHour() * 60 + tempoDesconto.getMinute(); // tdem = tempo desconto em minuto
+
+        vd = BigDecimal.valueOf(tdem).multiply(valorPorMinuto);
+        movimentacao.setValorDesconto(vd);
+
+        if (tdem > td) {
+            throw new IllegalArgumentException("Tempo excedente do permitido");
+        }
+        valorTotal = valorTotal.subtract(vd);
+        td = td - tdem;
+
+        configuracao.setAtivo(false);
+        veiculo.setAtivo(false);
+        condutor.setAtivo(false);
         condutor.setTempoDesconto(td);
-
-
-
-
-
-
         movimentacao.setValorMulta(valorTotalMultaMinutos);
         movimentacao.setValorTotal(valorTotal);
+        configuracaoRepository.save(configuracao);
         veiculoRepository.save(veiculo);
         condutorRepository.save(condutor);
         return this.movimentacaoRepository.save(movimentacao);
     }
-
-
 
 
     @Transactional
@@ -141,16 +157,14 @@ public class MovimentaçaoService {
         Optional<Movimentacao> optionalMovimentacao = movimentacaoRepository.findById(id);
         if (optionalMovimentacao.isPresent()) {
             Movimentacao movimentacao = optionalMovimentacao.get();
-            if (movimentacao.getSaida() == null) {
-                movimentacaoRepository.delete(movimentacao);
+            if (movimentacao.getSaida() != LocalTime.of(0,0)) {
+                movimentacao.setAtivo(false);
+                movimentacaoRepository.save(movimentacao);
             } else {
-                throw new IllegalArgumentException("Não é possível excluir uma movimentação com data de saída preenchida");
+                throw new IllegalArgumentException("Não é possível inativala uma movimentação sem data de saída preenchida");
             }
         } else {
-            throw new IllegalArgumentException("Movimentação não encontrada");
+            throw new IllegalArgumentException("movimentação não encontrada");
         }
     }
-
-
-
 }

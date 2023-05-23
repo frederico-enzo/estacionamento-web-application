@@ -39,6 +39,7 @@ public class CondutorService {
         }else if (cpf == null || !cpf.matches("\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")) {
             throw new IllegalArgumentException("O CPF deve estar no formato ___.___.___-__");
         }
+        condutor.setAtivo(false);
 
        return this.condutorRepository.save(condutor);
     }

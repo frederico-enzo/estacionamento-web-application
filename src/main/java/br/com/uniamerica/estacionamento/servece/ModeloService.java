@@ -45,6 +45,7 @@ public class ModeloService {
         } else if (!modelo.getNome().matches("[a-zA-Z\\s]+")) {
             throw new IllegalArgumentException("O nome deve conter apenas letras");
         }
+        modelo.setAtivo(false);
 
         marcaRepository.save(marca);
         return modeloRepository.save(modelo);

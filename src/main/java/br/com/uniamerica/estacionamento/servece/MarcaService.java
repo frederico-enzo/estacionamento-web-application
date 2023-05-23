@@ -34,6 +34,7 @@ public class MarcaService {
         }else if (!marca.getNome().matches("[a-zA-Z\\s]+")) {
             throw new IllegalArgumentException("O nome deve conter apenas letras");
         }
+        marca.setAtivo(false);
 
         return marcaRepository.save(marca);
     }
