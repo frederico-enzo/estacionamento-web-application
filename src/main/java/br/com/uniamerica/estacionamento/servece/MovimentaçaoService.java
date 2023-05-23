@@ -80,169 +80,54 @@ public class MovimentaçaoService {
         final Veiculo veiculo = this.veiculoRepository.findById(movimentacao.getVeiculo().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Veiculo não correspondente"));
 
-        BigDecimal valorTotal = movimentacao.getValorTotal();
+        /*SET TEMPO*/
         LocalTime entrada = movimentacao.getEntrada();
         LocalTime saida = movimentacao.getSaida();
-        LocalTime tempoDescMov = movimentacao.getTempoDesconto();
-        int horasDesconto = condutor.getHorasDesconto();
-        int minutosDesconto = condutor.getMinutosDesconto();
-        int totalMinMovDesconto = tempoDescMov.getHour() * 60 + tempoDescMov.getMinute();
-        int totalMinDesconto = horasDesconto * 60 + minutosDesconto;
-        long saidaMinutos = saida.getHour() * 60 + saida.getMinute();
-        long fimExpedienteMin = configuracao.getFimExpediente().getHour() * 60;
+        int eem = entrada.getHour() * 60 + entrada.getMinute(); // EEM = Entrada-Em-Minutos
+        int sem = saida.getHour() * 60 + saida.getMinute(); // SEM = Saida-Em-Minutos
+        int eemSubSem = sem - eem; // Tempo total estacionado em minutos
+        int hrsTempo = eemSubSem / 60; // O total de minutos dividido por 60 e as horas;
+        int minTempo = eemSubSem % 60; // O Resto é os minutos;
+        movimentacao.setTempo(LocalTime.of(hrsTempo, minTempo)); // set tempo;
 
-        //Se o tempo do condutor for menor que o desconto incerido em finlizaçao da movimentaçao
-        if (totalMinMovDesconto > totalMinDesconto) {
-            throw new IllegalArgumentException("Tempo de desconto excede o tempo disponível do condutor");
-        }
-        //calcula o valor minuto com base na hora
-        BigDecimal valorPorMinuto = configuracao.getValorHora().divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
+        /*CALCULO VALOR TOTAL*/
+        BigDecimal valorTotal = movimentacao.getValorTotal();
+        BigDecimal valorHora = configuracao.getValorHora(); // Valor da hora que esta em configuraçao
+        BigDecimal valorPorMinuto = configuracao.getValorHora().divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);//calculo com bigdecimal para saber o valor de um minuto pq nao em em configuralao. | scale:2 so vai pegar 2 numero apos o . e outro é para arredondar o valor
+        BigDecimal valorTotalHoras = BigDecimal.valueOf(hrsTempo).multiply(valorHora);
+        BigDecimal valorTotalMinutos = BigDecimal.valueOf(minTempo).multiply(valorPorMinuto);
+        valorTotal = valorTotalHoras.add(valorTotalMinutos);
 
-        //calculando o tempo que ó condutor ficou estacionado (usei duration mas nao gostei)
-        Duration duracao = Duration.between(entrada, saida);
-        long segundos = duracao.toSeconds();
-        LocalTime tempo = LocalTime.ofSecondOfDay(segundos);
+        /*CALCULA VALOR MULTA*/
+        LocalTime fimExpediente = configuracao.getFimExpediente();
+        BigDecimal vmpm = configuracao.getValorMultaMinuto(); // vmpm = valor multa por minuto;
+        int fem = fimExpediente.getHour() * 60; // fim expediente em minutos
+        int gmt = sem - fem; // gmt = gerar multa - quantidade em minutos o tempo que foi violado;
+        BigDecimal valorTotalMultaMinutos = BigDecimal.valueOf(gmt).multiply(vmpm);
 
-        if (saidaMinutos > fimExpedienteMin) {
-            long timeOut = saidaMinutos - fimExpedienteMin; // calculo quanto tempo ele ficou a mais
-            int min = (int) (timeOut % 60); // calculo para saber as minutos que ele ficou a mais (% pela o valor do resto da operaçao que seria os minutos)
-            int hrs = (int) (timeOut / 60); // calculo para saber as horas que ele ficou a mais
-            LocalTime tempoMulta = LocalTime.of(hrs, min);
-            movimentacao.setTempoMulta(tempoMulta);
-            BigDecimal valorMulta = BigDecimal.valueOf(timeOut).multiply(configuracao.getValorMultaMinuto());
-
-            long tempoEmMinutos = ChronoUnit.MINUTES.between(entrada, saida);
-            int horas = (int) (tempoEmMinutos / 60);
-            int minutos = (int) (tempoEmMinutos % 60);
-            BigDecimal valorTotalHoras = BigDecimal.valueOf(horas).multiply(configuracao.getValorHora());
-            BigDecimal valorTotalMinutos = BigDecimal.valueOf(minutos).multiply(valorPorMinuto);
-            valorTotal = valorTotalHoras.add(valorTotalMinutos);
-
-            valorTotal = valorTotal.add(valorMulta);
-
-            BigDecimal descontoTotal = BigDecimal.ZERO;
-
-            if (totalMinMovDesconto > 0) {
-                BigDecimal valorDescontoHora = configuracao.getValorHora();
-                BigDecimal valorDescontoMinuto = valorPorMinuto;
-
-                BigDecimal descontoHoras = valorDescontoHora.multiply(BigDecimal.valueOf(horasDesconto));
-                BigDecimal descontoMinutos = valorDescontoMinuto.multiply(BigDecimal.valueOf(minutosDesconto));
-
-                descontoTotal = descontoHoras.add(descontoMinutos);
-
-                valorTotal = valorTotal.subtract(descontoTotal);
-            }
-            movimentacao.setValorTotal(valorTotal);
-            movimentacao.setValorMulta(valorMulta);
-
-            String tempoPago = condutor.getTempoPago();
-            int hPago = condutor.getHorasPago();
-            int mPago = condutor.getMinutosPago();
-
-            String tempoDesconto = condutor.getTempoDesconto();
-            int hDesconto = condutor.getHorasDesconto();
-            int mDesconto = condutor.getMinutosDesconto();
-
-            hPago = hPago + horas;
-            mPago = mPago + minutos;
-            if (mPago >= 59) {
-                hPago = hPago + 1;
-                mPago = 0;
-            }
-
-            int contador = condutor.getContadorDeDesconto();
-            contador = contador + horas;
-
-            if (contador >= 60) {
-                hDesconto += 5;
-                contador = 0;
-            }
-
-            condutor.setContadorDeDesconto(contador);
-            condutor.setHorasDesconto(hDesconto);
-            condutor.setMinutosDesconto(mDesconto);
-            tempoDesconto = hDesconto + " horas " + mDesconto + " minutos";
-            condutor.setTempoDesconto(tempoDesconto);
-            condutor.setContadorDeDesconto(contador);
-
-            condutor.setHorasPago(hPago);
-            condutor.setMinutosPago(mPago);
-            tempoPago = hPago + " horas " + mPago + " minutos";
-            condutor.setTempoPago(tempoPago);
-            movimentacao.setValorTotal(valorTotal);
-            movimentacao.setValorMulta(valorMulta);
-
-        } else {
-            BigDecimal valorMulta = BigDecimal.ZERO;
-            long tempoEmMinutos = ChronoUnit.MINUTES.between(entrada, saida);
-            int horas = (int) (tempoEmMinutos / 60);
-            int minutos = (int) (tempoEmMinutos % 60);
-            BigDecimal valorTotalHoras = BigDecimal.valueOf(horas).multiply(configuracao.getValorHora());
-            BigDecimal valorTotalMinutos = BigDecimal.valueOf(minutos).multiply(valorPorMinuto);
-            valorTotal = valorTotalHoras.add(valorTotalMinutos);
-            BigDecimal descontoTotal = BigDecimal.ZERO;
-
-            if (totalMinMovDesconto > 0) {
-                BigDecimal valorDescontoHora = configuracao.getValorHora();
-                BigDecimal valorDescontoMinuto = valorPorMinuto;
-
-                BigDecimal descontoHoras = valorDescontoHora.multiply(BigDecimal.valueOf(horasDesconto));
-                BigDecimal descontoMinutos = valorDescontoMinuto.multiply(BigDecimal.valueOf(minutosDesconto));
-
-                descontoTotal = descontoHoras.add(descontoMinutos);
-
-                valorTotal = valorTotal.subtract(descontoTotal);
-            }
-            String tempoPago = condutor.getTempoPago();
-            int hPago = condutor.getHorasPago();
-            int mPago = condutor.getMinutosPago();
-
-            String tempoDesconto = condutor.getTempoDesconto();
-            int hDesconto = condutor.getHorasDesconto();
-            int mDesconto = condutor.getMinutosDesconto();
-
-            hPago = hPago + horas;
-            mPago = mPago + minutos;
-            if (mPago >= 60) {
-                hPago = hPago + 1;
-                mPago = 0;
-            }
-
-            int contador = condutor.getContadorDeDesconto();
-            contador += horas;
-
-            if (contador >= 50) {
-                hDesconto += 5;
-                contador = 0;
-            }
-
-            condutor.setContadorDeDesconto(contador);
-            condutor.setHorasDesconto(hDesconto);
-            condutor.setMinutosDesconto(mDesconto);
-            tempoDesconto = hDesconto + " horas " + mDesconto + " minutos";
-            condutor.setTempoDesconto(tempoDesconto);
-            condutor.setContadorDeDesconto(contador);
-
-            condutor.setHorasPago(hPago);
-            condutor.setMinutosPago(mPago);
-            tempoPago = hPago + " horas " + mPago + " minutos";
-            condutor.setTempoPago(tempoPago);
-            movimentacao.setValorTotal(valorTotal);
-            movimentacao.setValorMulta(BigDecimal.ZERO);
-
+        if (sem > fem){
+            valorTotal = valorTotal.add(valorTotalMultaMinutos);
         }
 
-        int horasUtilizadas = totalMinMovDesconto / 60;
-        int minutosUtilizados = totalMinMovDesconto % 60;
+        /*SALVA O TEMPO PAGO NO CONDUTOR*/
+        long tp = condutor.getTempoPago();
+        tp += eemSubSem;
+        condutor.setTempoPago(tp);
 
-        condutor.setHorasDesconto(horasDesconto - horasUtilizadas);
-        condutor.setMinutosDesconto(minutosDesconto - minutosUtilizados);
-        veiculo.setAtivo(false);
-        condutor.setAtivo(false);
-        movimentacao.setAtivo(false);
-        movimentacao.setValorHora(configuracao.getValorHora());
-        movimentacao.setTempo(tempo);
+        /*SALVA O TEMPO DESCONTO DO CONDUTOR*/
+        long td = condutor.getTempoDesconto();
+        int verificador = (int) (tp / 3000); // 3000mim  = 50 hrs
+        long longVerificador = (long) verificador;
+        td = longVerificador * 300; // 300 min = 5 hrs
+        condutor.setTempoDesconto(td);
+
+
+
+
+
+
+        movimentacao.setValorMulta(valorTotalMultaMinutos);
+        movimentacao.setValorTotal(valorTotal);
         veiculoRepository.save(veiculo);
         condutorRepository.save(condutor);
         return this.movimentacaoRepository.save(movimentacao);

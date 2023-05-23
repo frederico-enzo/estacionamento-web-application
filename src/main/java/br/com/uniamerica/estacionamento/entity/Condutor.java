@@ -30,27 +30,13 @@ public class Condutor extends AbstractEntity{
     @Column(name = "telefone", nullable = false, length = 20)
     private String telefone;
 
-    @Getter @Setter
-    private int horasDesconto = 0;
-
-    @Getter @Setter
-    private int minutosDesconto = 0;
-
-    @Getter @Setter
-    private int horasPago = 0;
-
-    @Getter @Setter
-    private int minutosPago = 0;
-
-    @Getter @Setter
-    private int contadorDeDesconto = 0;
 
     @Getter @Setter
     @Column(name = "tempo_Pago")
-    private String tempoPago = horasPago + "hrs" + minutosPago + "mim";
-
+    private Long tempoPago = 0L;
     @Getter @Setter
     @Column(name = "tempo_desconto")
-    private String tempoDesconto =  horasDesconto + "hrs" + minutosDesconto + "mim";
+    private Long tempoDesconto = 0L;
+
 
 }
