@@ -1,16 +1,18 @@
-# Estacionamento-Rest
+Estacionamento-Rest
+Este é um projeto de API em Java do tipo RESTful chamado Estacionamento-Rest.
 
-insert into marcas (id, ativo, dt_atualizacao, dt_cadastro, marca) values (1,'true', 'now()', 'now', 'ford');
+Tecnologias Utilizadas
+O projeto utiliza as seguintes tecnologias e dependências:
 
-insert into marcas (id, ativo, dt_atualizacao, dt_cadastro, marca) values (2,'true', 'now()', 'now', 'fiat');
-
-insert into modelos (id, ativo, dt_atualizacao, dt_cadastro, marca_id, modelo) values (1,'true', 'now()', 'now', 1, 'fiesta');
-
-insert into modelos (id, ativo, dt_atualizacao, dt_cadastro, marca_id, modelo) values (2,'true', 'now()', 'now', 2, 'palio');
-
-insert into veiculos (id, ativo, dt_atualizacao, dt_cadastro, ano, modelo_id, placa, tipo, cor) values (1,'true', 'now()', 'now', '2012', 2, 'BBB8Q23', 'CARRO', 'PRETO');
-
-insert into condutores (id, ativo, dt_atualizacao, dt_cadastro, nome, cpf, telefone) values (1,'true', 'now()', 'now', 'Marcus', '112.222.333-44', '(45)11111-4691');
-
-insert into movimentacoes (id, ativo, dt_atualizacao, dt_cadastro, entrada,saida,tempo, condutor_id, veiculo_id) values (1,'true', 'now()', 'now','now', 'now','now()', 1, 1);
+Spring Boot Starter Data JPA: Para acesso e persistência de dados.
+Spring Boot Starter Security: Para autenticação e controle de acesso.
+Spring Boot Starter Validation: Para validação de dados.
+Spring Boot Starter Web: Para desenvolvimento de APIs RESTful.
+Flyway Core: Para migração de banco de dados.
+PostgreSQL: Banco de dados relacional.
+Lombok: Para simplificar a criação de classes Java.
+Spring Boot Starter Test: Para testes automatizados.
+Spring Security Test: Para testes de segurança.
+Hibernate Envers: Para auditoria e controle de versão de entidades do Hibernate.
+Annotations: Para suporte a anotações do IntelliJ IDEA.
 	
