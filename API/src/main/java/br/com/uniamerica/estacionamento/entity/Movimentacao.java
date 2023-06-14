@@ -61,5 +61,5 @@ public class Movimentacao extends AbstractEntity{
     @Getter @Setter
     @Column(name = "valor_Desconto" )
     private BigDecimal valorDesconto = BigDecimal.ZERO;
-
+ 
 }

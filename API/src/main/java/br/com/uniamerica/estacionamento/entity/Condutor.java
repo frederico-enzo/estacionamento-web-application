@@ -15,7 +15,7 @@ import java.time.Duration;
 @Audited
 @Table(name = "condutores", schema = "public")
 @AuditTable(value = "condutores_audit", schema = "audit")
-public class Condutor extends AbstractEntity{
+public class    Condutor extends AbstractEntity{
 
 
     @Getter @Setter
