@@ -6,14 +6,14 @@ export class ModeloClient{
 
     constructor() {
         this.axiosClient = axios.create({
-            baseURL: 'http://localhost:9000/api/modelo',
+            baseURL: 'http://localhost:8080/api/modelo',
             headers: {'Content-type' : 'application/json'}
         });
     }
 
     public async findById(id: Number) : Promise<Modelo>{
         try{
-            return(await this.axiosClient.get<Modelo>(`${id}`))
+            return(await this.axiosClient.get<Modelo>(`${id}`)).data
         } catch (error:any){
             return Promise.reject(error.response);
         }

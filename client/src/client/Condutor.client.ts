@@ -1,52 +1,52 @@
-import { Marca } from "@/Model/Marca";
+import { Condutor } from "@/Model/Condutor";
 import axios, { AxiosInstance } from "axios";
 
-export class MarcaClient{
+export class ConfiguracaoClient{
 
     private axiosClient: AxiosInstance;
 
     constructor() {
         this.axiosClient = axios.create({
-            baseURL: 'http://localhost:8080/api/marca',
+            baseURL: 'http://localhost:8080/api/condutor',
             headers: {'Content-type' : 'application/json'}
         });
     }
 
-    public async findById(id: number) : Promise<Marca> {
+    public async findById(id: number) : Promise<Condutor> {
         try {
-            return (await this.axiosClient.get<Marca>(`/${id}`)).data
+            return (await this.axiosClient.get<Condutor>(`/${id}`)).data
         } catch (error:any) {
             return Promise.reject(error.response);
         }
     }
 
-    public async ativos(): Promise<Marca[]>{
+    public async ativos(): Promise<Condutor[]>{
         try {
-            return( await this.axiosClient.get<Marca[]>('/ativos')).data
+            return( await this.axiosClient.get<Condutor[]>('/ativos')).data
         } catch (error:any){
             return Promise.reject(error.response);
         }
     }
 
-    public async listar(): Promise<Marca[]> {
+    public async listar(): Promise<Condutor[]> {
         try {
-            return (await this.axiosClient.get<Marca[]>('/lista')).data;
+            return (await this.axiosClient.get<Condutor[]>('/lista')).data;
         } catch (error: any) {
             return Promise.reject(error.response);
         }
     }
 
-    public async newMarca(marca: Marca): Promise<void> {
+    public async newMarca(condutor: Condutor): Promise<void> {
         try {
-            return (await this.axiosClient.post('/', marca));
+            return (await this.axiosClient.post('/', condutor));
         } catch (error: any) {
             return Promise.reject(error.response);
         }
     }
 
-    public async upDate(id: Number, marca:Marca): Promise<void>{
+    public async upDate(id: Number, condutor:Condutor): Promise<void>{
         try{
-            return(await this.axiosClient.put(`/${marca.id}`, marca)).data;
+            return(await this.axiosClient.put(`/${condutor.id}`, condutor)).data;
         } catch(error: any) {
             return Promise.reject(error.response);
         }
@@ -59,5 +59,4 @@ export class MarcaClient{
            return Promise.reject(error.response);
         }
     }
-
 }
