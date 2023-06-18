@@ -6,7 +6,7 @@ import { AbstractEntity } from "./abstract-entity";
 export class Veiculo extends AbstractEntity{
 
     placa!: String
-    ano!: BigInteger
+    ano!: Number
     modeloId!: Modelo
     cor!: Cor
     tipo!: Tipo
