@@ -1,145 +1,116 @@
 <template>
   <div class="home">
-    <div class="side-left"> 
-      <ul class="list">
-        <li>Marca</li>
-        <li>Modelo</li>
-        <li>Veiculo</li>
-        <li>Condutor</li>
-      </ul>
-    </div>
-    <div class="side-right">
-      <div class="title">      
-        <h2>Estacionamento</h2>
-      </div>
-      <form>
-        <div class="in-line">
-          <input class="form-control" type="text" placeholder="Placa">
-          <input class="form-control" type="text" placeholder="CPF">
-          <input class="btn btn-success" type="submit" value="Enviar">
-          <button class="btn"><img class="img-config" src="../assets/configuracoes-da-web.png" alt=""></button>
-        </div>
-      </form>
-      <div>
-        <h4>Em Aberto</h4>
-        <table class="table table-hover">
-          <thead>
+    <header class="header">
+      <DIV class="logo">
+        <img width="65" src="../assets/estacionamento.png" alt="" />
+        <h3>PARKINGLOT</h3>
+      </DIV>
+      <nav>
+        <li class="nav-bar">
+          <ul>
+            Marcas
+          </ul>
+          <ul>
+            Modelos
+          </ul>
+          <ul>
+            Veiculos
+          </ul>
+          <ul>
+            Condutores
+          </ul>
+        </li>
+      </nav>
+      <cadastroConfiguracao />
+    </header>
+    <div class="conteiner-table">
+      <main class="siza">
+        <table class="table">
+          <thead class="thead-dark">
             <tr>
-              <th>Id</th>
-              <th>Veiculo</th>
-              <th>Condutor</th>
-              <th>Ativo</th>
-              <th>Entrada</th>
+              <th scope="col">Id</th>
+              <th scope="col">Placa</th>
+              <th scope="col">Cpf</th>
+              <th scope="col">Entrada</th>
+              <th scope="col">Ação</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>1</td>
-              <td>AWk-2121</td>
-              <td>Joger Mendosa</td>
-              <td>&#x2705;</td>
-              <td>23/02/2023 - 12:30</td>
+              <th scope="row">1</th>
+              <td>KWD-1241</td>
+              <td>132.456.789-12</td>
+              <td>12-05-2023 16:40</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>QAS-642</td>
+              <td>666.124.789-45</td>
+              <td>12-05-2023 14:00</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>BWE-1245</td>
+              <td>132.333.361-02</td>
+              <td>12-05-2023 15:10</td>
+              
             </tr>
           </tbody>
         </table>
-      </div>
+      </main>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
+import cadastroMarca from "../components/cadastro-marca.vue";
+import cadastroConfiguracao from "../components/cadastro-configuraçao.vue";
 
 export default defineComponent({
-  name: 'HomeView',
+  name: "HomeView",
   components: {
-
+    cadastroMarca,
+    cadastroConfiguracao,
   },
 });
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&family=Poppins:wght@500;800&display=swap');
-.container {
-  margin-top: 20px;
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&family=Poppins:wght@500;800&display=swap");
+.conteiner-table{
+  width: 100vw;
+  display: flex;
+  justify-content: center;
 }
-
-.table-hover tbody tr:hover {
-  background-color: #f5f5f5;
-  cursor: pointer;
+.siza {
+  margin-top: 50px;
+  border: solid 2px grey;
+  border-radius: 10px ;
+  width: 800px;
+  display: flex;
+  justify-content: center;
 }
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins';
-}
-
-.img-config {
-  width: 30px;
-  height: 30px;
-}
-
-.list {
-  list-style-type: none;
-}
-
-.title {
+.header {
+  width: 100vw;
+  height: 100px;
+  padding-left: 60px;
+  padding-right: 60px;
   display: flex;
   justify-content: space-between;
-  padding: 25px;
+  align-items: center;
+  border-bottom: solid 1px black;
 }
-
-.in-line {
+.logo {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 50vw;
-  padding-left: 25px;
-  gap: 15px;
+  gap: 10px;
 }
-
-.list li {
+ul {
   cursor: pointer;
-  margin-bottom: 7px;
+}
+.nav-bar {
+  list-style: none;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 160px;
-  height: 50px;
-  background: rgb(255, 255, 255);
-  border-radius: 10px;
-}
-
-.list li:hover {
-  background: #2037e7;
-  color:  rgb(255, 255, 255);
-}
-
-.home {
-  gap: 15px;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.side-left {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; 
-  padding-right: 25px ; 
-  width: 15vw;
-  height: 85vh;
-  background:#1500ff; 
-  border-radius: 40px; 
-}
-
-.side-right {
-  width: 80vw;
-  height: 85vh;
 }
 </style>
