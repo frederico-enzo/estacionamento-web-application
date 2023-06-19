@@ -19,7 +19,6 @@
                 </div>
             
                 <input class="form-control" type="Number" placeholder="Tempo Para Desconto">
-                <input class="form-control" type="Number" placeholder="Tempo De Desconto">
                 <input class="form-control" type="Number" placeholder="Vagos Van">
                 <input class="form-control" type="Number" placeholder="Vagas Moto">
                 <input class="form-control" type="Number" placeholder="Vagas Carro">
@@ -116,7 +115,7 @@ h3{
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
-  height: 600px;
+  height: 560px;
   background-color: #ffffff;
   border: 1px solid #8e8e8e;
   border-radius: 10px;
