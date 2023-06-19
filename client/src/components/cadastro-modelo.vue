@@ -1,13 +1,14 @@
 <template>
     <div>
-      <button class="btn b  btn-outline-primary" @click="exibirPopup">Marca</button>
+      <button class="btn b  btn-outline-primary" @click="exibirPopup">Modelo</button>
       <div class="overlay" v-if="exibir">
         <div id="popup" v-show="exibir" class="popup-container">
           <div class="close"><button @click="fecharPopup">x</button></div>
-          <h3>Marca</h3>
+          <h3>Modelo</h3>
           <div class="form-conteiner">
               <form class="form">
                   <input class="form-control" type="text" placeholder="Nome">
+                  <input class="form-control" type="text" placeholder="Marca">
                   <button type="button" class="btn btn-outline-success">Salvar</button>
               </form>
           </div>
@@ -101,7 +102,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
-    height: 200px;
+    height: 250px;
     background-color: #ffffff;
     border: 1px solid #8e8e8e;
     border-radius: 10px;

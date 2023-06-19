@@ -2,69 +2,54 @@
   <div class="home">
     <header class="header">
       <div class="logo">
-        <img width="65" src="../assets/estacionamento.png" alt="" />
-        <h3>PARKINGLOT</h3>
+        <img width="45" src="../assets/estacionamento.png" alt="" />
+        <h3>PARKING</h3>
       </div>
       <nav>
         <ul class="nav-bar">
-          <li>Marcas</li>
-          <li>Modelos</li>
-          <li>Veículos</li>
-          <li>Condutores</li>
+          <li><cadastroMarca /></li>
+          <li><cadastroModelo /></li>
+          <li><cadastroVeiculo /></li>
+          <li><cadastroCondutor /></li>
         </ul>
       </nav>
       <cadastroConfiguracao />
     </header>
-    <div class="conpass">
-      <div class="conteiner-table">
-        <main class="siza">
-          <table class="table">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Placa</th>
-                <th scope="col">CPF</th>
-                <th scope="col">Entrada</th>
-                <th scope="col">Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>KWD-1241</td>
-                <td>132.456.789-12</td>
-                <td>12-05-2023 16:40</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>QAS-642</td>
-                <td>666.124.789-45</td>
-                <td>12-05-2023 14:00</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>BWE-1245</td>
-                <td>132.333.361-02</td>
-                <td>12-05-2023 15:10</td>
-              </tr>
-            </tbody>
-          </table>
-        </main>
-      </div>
+    <div class="lestGo">
+      <filtros />
+    <!-- <tableMovimentacao/>  -->  
+      <tableCondutor/>  
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import cadastroMarca from "../components/cadastro-marca.vue";
 import cadastroConfiguracao from "../components/cadastro-configuraçao.vue";
+import cadastroVeiculo from "../components/cadastro-veiculo.vue";
+import cadastroModelo from "../components/cadastro-modelo.vue";
+import cadastroMarca from "../components/cadastro-marca.vue";
+import cadastroCondutor from "../components/cadastro-condutor.vue";
+import filtros from "../components/filtros.vue";
+import tableMovimentacao from "../components/table-movimentaçao-lista.vue";
+import tableMarca from "../components/table-marca.vue";
+import tableVeiculo from "../components/table-veiculo.vue";
+import tableCondutor from "../components/table-condutor.vue";
+
 
 export default defineComponent({
   name: "HomeView",
   components: {
-    cadastroMarca,
     cadastroConfiguracao,
+    cadastroVeiculo,
+    cadastroModelo,
+    cadastroMarca,
+    cadastroCondutor,
+    filtros,
+    tableMovimentacao,
+    tableMarca,
+    tableVeiculo,
+    tableCondutor,
   },
 });
 </script>
@@ -72,38 +57,14 @@ export default defineComponent({
 <style>
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&family=Poppins:wght@500;800&display=swap");
 
-.conteiner-table {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.conpass {
-  border-radius: 25px;
-  width: 1500px;
-  height: 700px;
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;
-  margin-left: 10.5vw;
-  background: rgb(255, 255, 255);
-  border: solid 2px rgb(195, 195, 195);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.siza {
-  border: solid 2px grey;
-  border-radius: 10px;
-  width: 800px;
-  display: flex;
-  justify-content: center;
-  background-color: #f9f9f9;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+.home {
+  height: 100vh;
+  background: linear-gradient(311.76deg, #d4e7fe -15.24%, #ffffff 78.85%);
 }
 
 .header {
   width: 100vw;
-  height: 100px;
+  height: 80px;
   padding-left: 60px;
   padding-right: 60px;
   display: flex;
@@ -111,7 +72,10 @@ export default defineComponent({
   align-items: center;
   border-bottom: solid 1px rgb(195, 195, 195);
 }
-
+.lestGo {
+  display: flex;
+  padding-right: 150px;
+}
 .logo {
   display: flex;
   align-items: center;
@@ -132,26 +96,5 @@ ul {
   font-weight: bold;
   color: #333;
   transition: color 0.3s ease;
-}
-
-.nav-bar li:hover {
-  color: #0078d4;
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-}
-
-.table th {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-}
-
-.table td {
-  padding: 10px;
-  border-bottom: solid 1px #ccc;
 }
 </style>

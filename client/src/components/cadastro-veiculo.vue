@@ -1,13 +1,30 @@
 <template>
     <div>
-      <button class="btn b  btn-outline-primary" @click="exibirPopup">Marca</button>
+      <button class="btn b  btn-outline-primary" @click="exibirPopup">Veiculo</button>
       <div class="overlay" v-if="exibir">
         <div id="popup" v-show="exibir" class="popup-container">
           <div class="close"><button @click="fecharPopup">x</button></div>
-          <h3>Marca</h3>
+          <h3>Veiculo</h3>
           <div class="form-conteiner">
               <form class="form">
-                  <input class="form-control" type="text" placeholder="Nome">
+                  <input class="form-control" type="text" placeholder="Placa">
+                  <input class="form-control" type="text" placeholder="Modelo">
+                  <input class="form-control" type="Number" placeholder="Ano">  
+                  <select class="form-control" name="Tipo" id="Tipo">
+                    <option value="CARRO">Carro</option>
+                    <option value="VAN">Van</option>
+                    <option value="MOTO">Moto</option>
+                  </select>
+                  <select class="form-control"  name="COR" id="Cor">
+                    <option value="AZUL">Azul</option>
+                    <option value="CINZA">Cinza</option>
+                    <option value="MARRON">Marron</option>
+                    <option value="PRETO">Preto</option>
+                    <option value="PRATA">Prata</option>
+                    <option value="BRANCO">Branco</option>
+                    <option value="AMARELO">Amarelo</option>
+                    <option value="VERDE">Verde</option>
+                  </select>
                   <button type="button" class="btn btn-outline-success">Salvar</button>
               </form>
           </div>
@@ -97,11 +114,11 @@
   
   #popup {
     position: fixed;
-    top: 30%;
+    top: 38%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 400px;
-    height: 200px;
+    height: 380px;
     background-color: #ffffff;
     border: 1px solid #8e8e8e;
     border-radius: 10px;
