@@ -2,7 +2,7 @@
   <NavBar/>
   <div class="lestGo">
     <div class="table-tape">
-    <table class="table">
+    <table class="table table-bordered">
       <thead>
         <tr>
           <th scope="col">Placa</th>
@@ -31,13 +31,14 @@
         </tr>
       </tbody>
     </table>
+    <footer>©Frederico 2023</footer>
   </div>
   </div>
 
 </template>
   
 <script lang="ts">
-import NavBar from './NavBar.vue';
+import NavBar from '../components/NavBar.vue';
 
 export default {
   components: { NavBar },
@@ -59,6 +60,24 @@ export default {
           Ano: "2014",
           Cor: "Prata",
           Tipo: "Carro",
+        },{
+          Placa: "ANV-8042",
+          Modelo: "VolksWagem",
+          Ano: "2014",
+          Cor: "Prata",
+          Tipo: "Carro",
+        },{
+          Placa: "ANV-8042",
+          Modelo: "VolksWagem",
+          Ano: "2014",
+          Cor: "Prata",
+          Tipo: "Carro",
+        },{
+          Placa: "ANV-8042",
+          Modelo: "VolksWagem",
+          Ano: "2014",
+          Cor: "Prata",
+          Tipo: "Carro",
         },
       ],
     };
@@ -67,18 +86,32 @@ export default {
 </script>
 
 <style scoped>
+footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  background: rgb(52, 108, 212);
+  color: white;
+  border-radius: 0px 0px 10px 10px;
+
+}
 thead :nth-child(1) {
   border-radius: 10px 0px 0 0;
 }
 thead :nth-child(7) {
   border-radius: 0px 10px 0 0;
 }
-
+.table-tape td {
+  text-align: center;
+  vertical-align: middle;
+}
 thead th {
   background: rgb(52, 108, 212);
   color: white;
   width: 8vw ;
-
+  text-align: center;
+  vertical-align: middle;
 }
 .lestGo {
   display: flex;

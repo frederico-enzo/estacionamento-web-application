@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import TableCondutor from '../components/table-condutor.vue';
-import TableMarca from '../components/table-marca.vue';
-import TableModelo from '../components/table-modelo.vue';
-import TableVeiculo from '../components/table-veiculo.vue';
+import TableCondutor from '../views/table-condutor.vue';
+import TableMarca from '../views/table-marca.vue';
+import TableModelo from '../views/table-modelo.vue';
+import TableVeiculo from '../views/table-veiculo.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/Estacionar',
     name: 'home',
     component: HomeView
   },

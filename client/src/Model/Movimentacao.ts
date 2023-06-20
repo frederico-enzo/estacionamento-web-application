@@ -9,7 +9,7 @@ export class Movimentacao extends AbstractEntity{
     veiculo!: Veiculo
     configuracao!: Configuracao
     entrada!: Date
-    saida1!: Date
+    saida!: Date
     tempoDesconto!: Date
     tempo!: Date
     tempoMulta!: Date

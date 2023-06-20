@@ -8,11 +8,14 @@
           <option value="veiculos">Veículo</option>
           <option value="marcas">Marca</option>
           <option value="modelos">Modelo</option>
+          <option value="Estacionar">Estacionar</option>
+
         </select>
       </div>
       <nav>
         <ul class="nav-bar">
-          <button class="btn btn-warning">Estacionar</button>
+          <li><cadastroMovimentacao /></li>
+        
           <li><cadastroMarca /></li>
           <li><cadastroModelo /></li>
           <li><cadastroVeiculo /></li>
@@ -30,7 +33,7 @@ import cadastroVeiculo from "../components/cadastro-veiculo.vue";
 import cadastroModelo from "../components/cadastro-modelo.vue";
 import cadastroMarca from "../components/cadastro-marca.vue";
 import cadastroCondutor from "../components/cadastro-condutor.vue";
-
+import cadastroMovimentacao from "../components/cadastro-movimentacao.vue"
 export default defineComponent({
     name: "Navbar",
   components: {
@@ -39,6 +42,7 @@ export default defineComponent({
     cadastroModelo,
     cadastroMarca,
     cadastroCondutor,
+    cadastroMovimentacao,
   },
   data() {
     return {
