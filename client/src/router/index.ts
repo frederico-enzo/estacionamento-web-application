@@ -7,7 +7,7 @@ import TableVeiculo from '../views/table-veiculo.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/Estacionar',
+    path: '/',
     name: 'home',
     component: HomeView
   },

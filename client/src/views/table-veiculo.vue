@@ -109,7 +109,7 @@ thead :nth-child(7) {
 thead th {
   background: rgb(52, 108, 212);
   color: white;
-  width: 8vw ;
+  width: 10vw ;
   text-align: center;
   vertical-align: middle;
 }

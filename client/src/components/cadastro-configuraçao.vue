@@ -2,7 +2,7 @@
   <div>
     <button class="btn b" @click="exibirPopup"><img width="35" src="../assets/configuracoes-da-web.png" alt=""></button>
     <div class="overlay" v-if="exibir">
-      <div id="popup" v-show="exibir" class="popup-container">
+      <div id="popup" v ow="exibir" class="popup-container">
         <div class="close"><button @click="fecharPopup">x</button></div>
         <h3>Configurações</h3>
         <div class="form-conteiner">

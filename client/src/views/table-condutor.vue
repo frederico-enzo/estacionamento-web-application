@@ -1,5 +1,6 @@
 <template>
   <NavBar/>
+
   <div class="table-tape">
     <table class="table table-bordered">
       <thead>

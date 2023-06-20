@@ -153,8 +153,10 @@ thead th {
 }
 
 .table-tape {
-  padding: 100px;
+  padding-top: 5vw;
 
+  padding-left: 1vw;
+  padding-right: 1vw;
 
 }
 </style>

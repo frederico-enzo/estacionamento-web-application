@@ -3,12 +3,12 @@
       <div class="logo">
         <img width="45" src="../assets/estacionamento.png" alt="" />
         <h3>PARKING</h3>
-        <select class="form-select" v-model="selectedOption" @change="navigateToTable">
+        <select class="form-select btn-outline-danger" v-model="selectedOption" @change="navigateToTable">
           <option value="Condutores">Condutor</option>
           <option value="veiculos">Veículo</option>
           <option value="marcas">Marca</option>
           <option value="modelos">Modelo</option>
-          <option value="Estacionar">Estacionar</option>
+          <option value="/">Estacionar</option>
 
         </select>
       </div>

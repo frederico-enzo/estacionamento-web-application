@@ -17,10 +17,10 @@
     </div>
   </template>
   
-  <script >
+  <script lang="ts">
   import axios from "axios";
   
-  export default {
+  export default{
     data() {
       return {
         exibir: false,
