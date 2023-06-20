@@ -1,60 +1,93 @@
 <template>
+  <NavBar/>
+  <div class="lestGo">
     <div class="table-tape">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Placa</th>
-            <th scope="col">Modelo</th>
-            <th scope="col">Cor</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Ano</th>
-            <th scope="col">Status</th>
-            <th scope="col">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td scope="col">WFQ-1505</td>
-            <td scope="col">Civic</td>
-            <td scope="row">Vermelho</td>
-            <td scope="row">Carro</td>
-            <td scope="row">2014</td>
-            <td><span class="btn btn-success">...</span></td>
-            <td>
-              <button type="button" class="btn btn-warning">✏️</button>
-            </td>
-          </tr>
-          <tr>
-            <td scope="col">TQW-0066</td>
-            <td scope="col">Uno</td>
-            <td scope="row">Verde</td>
-            <td scope="row">Carro</td>
-            <td scope="row">1997</td>
-            <td><span class="btn btn-danger">...</span></td>
-            <td>
-              <button type="button" class="btn btn-warning">✏️</button>
-            </td>
-          </tr>
-          <tr>
-            <td scope="col">JWB-8061</td>
-            <td scope="col">X6</td>
-            <td scope="row">Azul</td>
-            <td scope="row">Carro</td>
-            <td scope="row">2017</td>
-            <td><span class="btn btn-success">...</span></td>
-            <td>
-              <button type="button" class="btn btn-warning">✏️</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </template>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Placa</th>
+          <th scope="col">Modelo</th>
+          <th scope="col">Ano</th>
+          <th scope="col">Cor</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Status</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="veiculos in Veiculos" :key="veiculos.Placa">
+          <td>{{ veiculos.Placa }}</td>
+          <td>{{ veiculos.Modelo }}</td>
+          <td>{{ veiculos.Ano }}</td>
+          <td>{{ veiculos.Cor }}</td>
+          <td>{{ veiculos.Tipo }}</td>
+          <td><span class="btn btn-success">...</span></td>
+          <td>
+            <button type="button" class="btn btn-warning">✏️</button> -
+            <button type="button" class="btn btn-outline-danger">
+              &#x274C;
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+
+</template>
   
-  <style scoped>
-  .table-tape{
-    width: 1000px;
-    padding-top:60px ;
-  
-  }
-  </style>
+<script lang="ts">
+import NavBar from './NavBar.vue';
+
+export default {
+  components: { NavBar },
+  name: "TableVeiculo",
+  data() {
+    return {
+      Veiculos: [
+      {
+          Placa: "IAN-0023",
+          Modelo: "City",
+          Ano: "2008",
+          Cor: "Prata",
+          Tipo: "Carro",
+
+        },
+        {
+          Placa: "ANV-8042",
+          Modelo: "VolksWagem",
+          Ano: "2014",
+          Cor: "Prata",
+          Tipo: "Carro",
+        },
+      ],
+    };
+  },
+};
+</script>
+
+<style scoped>
+thead :nth-child(1) {
+  border-radius: 10px 0px 0 0;
+}
+thead :nth-child(7) {
+  border-radius: 0px 10px 0 0;
+}
+
+thead th {
+  background: rgb(52, 108, 212);
+  color: white;
+  width: 8vw ;
+
+}
+.lestGo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-tape {
+  padding: 100px;
+
+}
+</style>

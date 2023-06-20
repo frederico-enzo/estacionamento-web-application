@@ -1,48 +1,82 @@
 <template>
+  <NavBar/>
+  <div class="lestGo">
     <div class="table-tape">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Modelo</th>
-            <th scope="col">Marca</th>
-            <th scope="col">Status</th>
-            <th scope="col">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td scope="col">Civic</td>
-            <td scope="row">Honda</td>
-            <td><span class="btn btn-success">...</span></td>
-            <td>
-              <button type="button" class="btn btn-warning">✏️</button>
-            </td>
-          </tr>
-          <tr>
-            <td scope="col">Uno</td>
-            <td scope="row">Fiat</td>
-            <td><span class="btn btn-danger">...</span></td>
-            <td>
-              <button type="button" class="btn btn-warning">✏️</button>
-            </td>
-          </tr>
-          <tr>
-            <td scope="col">X6</td>
-            <td scope="row">BMW</td>
-            <td><span class="btn btn-success">...</span></td>
-            <td>
-              <button type="button" class="btn btn-warning">✏️</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </template>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">Marca</th>
+          <th scope="col">Status</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="modelos in Modelos" :key="modelos.nome">
+          <td>{{ modelos.nome }}</td>
+          <td>{{ modelos.Marca }}</td>
+          <td><span class="btn btn-success">...</span></td>
+          <td>
+            <button type="button" class="btn btn-warning">✏️</button> -
+            <button type="button" class="btn btn-outline-danger">
+              &#x274C;
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+
+</template>
   
-  <style scoped>
-  .table-tape{
-    width: 800px;
-    padding-top:60px ;
-  
-  }
-  </style>
+<script lang="ts">
+import NavBar from './NavBar.vue';
+
+export default {
+  components: { NavBar },
+  name: "TableModelo",
+  data() {
+    return {
+      Modelos: [
+      {
+          nome: "City",
+          Marca: "Honda",
+
+        },
+        {
+          nome: "Golf",
+          Marca: "VolksWagem",
+        },
+      ],
+    };
+  },
+};
+</script>
+
+<style scoped>
+thead :nth-child(1) {
+  border-radius: 10px 0px 0 0;
+}
+thead :nth-child(4) {
+  border-radius: 0px 10px 0 0;
+}
+
+thead th {
+  background: rgb(52, 108, 212);
+  color: white;
+  width: 100px ;
+
+}
+.lestGo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-tape {
+  width: 50vw ;
+  padding: 100px;
+
+}
+</style>
