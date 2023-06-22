@@ -49,9 +49,9 @@ export default defineComponent({
   },
   mounted() {
     this.findAll();
-    setInterval(() => {
+   /* setInterval(() => {
       this.findAll();
-    }, 500);  
+    }, 500);*/  
   },
 
   methods: {

@@ -19,7 +19,7 @@ export class ModeloClient{
         }
     }
 
-    public async lista(): Promise<Modelo[]>{
+    public async findAll(): Promise<Modelo[]>{
         try{
             return( await this.axiosClient.get<Modelo[]>('/lista')).data;
         } catch (error:any){
@@ -37,7 +37,7 @@ export class ModeloClient{
 
     public async newModelo(modelo : Modelo): Promise<void>{
         try{
-            return(await this.axiosClient.post('/', modelo));
+            return(await this.axiosClient.post('', modelo));
         } catch (error: any){
             return Promise.reject(error.response);
         }

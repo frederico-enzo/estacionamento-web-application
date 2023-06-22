@@ -1,78 +1,82 @@
 <template>
-  <NavBar/>
+  <NavBar />
   <div class="lestGo">
     <div class="table-tape">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th scope="col">Nome</th>
-          <th scope="col">Marca</th>
-          <th scope="col">Status</th>
-          <th scope="col">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="modelos in Modelos" :key="modelos.nome">
-          <td>{{ modelos.nome }}</td>
-          <td>{{ modelos.Marca }}</td>
-          <td><span class="btn btn-success">...</span></td>
-          <td>
-            <button type="button" class="btn btn-warning">✏️</button> -
-            <button type="button" class="btn btn-outline-danger">
-              &#x274C;
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <footer>©Frederico 2023</footer>
-
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Status</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="modelos in modelosList" :key="modelos.id">
+            <td>{{ modelos.nome }}</td>
+            <td>{{ modelos.marcaId.nome }}</td>
+            <td v-if="modelos.ativo">
+              <span class="btn btn-success">...</span>
+            </td>
+            <td v-if="!modelos.ativo">
+              <span class="btn btn-danger">...</span>
+            </td>
+            <td>
+              <button type="button" class="btn btn-warning">✏️</button> -
+              <button type="button" class="btn btn-outline-danger">
+                &#x274C;
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <footer>©Frederico 2023</footer>
+    </div>
   </div>
-  </div>
-
 </template>
   
 <script lang="ts">
-import NavBar from '../components/NavBar.vue';
+import { defineComponent } from "vue";
 
-export default {
-  components: { NavBar },
+import NavBar from "../components/NavBar.vue";
+import { ModeloClient } from "@/client/Modelo.client";
+import { Modelo } from "@/Model/Modelo";
+
+export default defineComponent({
   name: "TableModelo",
+  components: {
+    NavBar,
+  },
   data() {
     return {
-      Modelos: [
-      {
-          nome: "City",
-          Marca: "Honda",
-
-        },
-        {
-          nome: "Golf",
-          Marca: "VolksWagem",
-        }, {
-          nome: "Golf",
-          Marca: "VolksWagem",
-        }, {
-          nome: "Golf",
-          Marca: "VolksWagem",
-        }, {
-          nome: "Golf",
-          Marca: "VolksWagem",
-        }, {
-          nome: "Golf",
-          Marca: "VolksWagem",
-        }, {
-          nome: "Golf",
-          Marca: "VolksWagem",
-        },
-      ],
+      modelosList: new Array<Modelo>(),
     };
   },
-};
+  mounted() {
+    this.findAll();
+    /* setInterval(() => {
+      this.findAll();
+    }, 500);*/
+  },
+
+  methods: {
+    findAll() {
+      const modelosClient = new ModeloClient();
+      modelosClient
+        .findAll()
+        .then((sucess) => {
+          this.modelosList = sucess;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+});
 </script>
 
 <style scoped>
-footer{
+footer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,7 +84,6 @@ footer{
   background: rgb(52, 108, 212);
   color: white;
   border-radius: 0px 0px 10px 10px;
-
 }
 thead :nth-child(1) {
   border-radius: 10px 0px 0 0;
@@ -95,10 +98,9 @@ thead :nth-child(4) {
 thead th {
   background: rgb(52, 108, 212);
   color: white;
-  width: 100px ;
+  width: 100px;
   text-align: center;
   vertical-align: middle;
-
 }
 .lestGo {
   display: flex;
@@ -107,8 +109,7 @@ thead th {
 }
 
 .table-tape {
-  width: 50vw ;
+  width: 50vw;
   padding: 100px;
-
 }
 </style>
