@@ -58,8 +58,6 @@
     </div>
   </div>
 </template>
-
-
 <script lang="ts">
 import axios from "axios";
 import { MarcaClient } from "@/client/Marca.client";
@@ -132,6 +130,8 @@ export default {
   },
 };
 </script>
+
+
 
 <style scoped>
 .row {

@@ -4,7 +4,12 @@
       Marca
     </button>
     <div class="overlay" v-if="exibir">
-      <div id="popup" v-show="exibir" class="popup-container">
+      <div
+        id="popup"
+        :style="{ height: mensagem.ativo ? '300px' : '220px' }"
+        v-show="exibir"
+        class="popup-container"
+      >
         <div class="close"><button @click="fecharPopup">x</button></div>
         <h3>Marca</h3>
         <div class="form-conteiner">
@@ -13,6 +18,7 @@
               <div :class="mensagem.css" role="alert">
                 <strong>{{ mensagem.titulo }}</strong> {{ mensagem.mensagem }}
                 <button
+                  @click="redefinirTamanhoPopup"
                   type="button"
                   class="btn-close"
                   data-bs-dismiss="alert"
@@ -22,30 +28,27 @@
             </div>
           </div>
         </div>
-        <div class="form-corm">
-          <form class="form">
-            <input
-              v-model="marca.nome"
-              class="form-control"
-              type="text"
-              placeholder="Nome"
-            />
-            <br />
-            <button
-              @click="onClickCadastrar()"
-              type="button"
-              class="btn btn-outline-success"
-            >
-              Cadastrar
-            </button>
-          </form>
-        </div>
+        <form class="form">
+          <input
+            v-model="marca.nome"
+            class="form-control"
+            type="text"
+            placeholder="Nome"
+          />
+          <button
+            @click="onClickCadastrar()"
+            type="button"
+            class="btn btn-outline-success"
+          >
+            Cadastrar
+          </button>
+        </form>
       </div>
     </div>
   </div>
 </template>
   
-  <script >
+<script >
 import axios from "axios";
 
 import { Marca } from "@/Model/Marca";
@@ -82,13 +85,20 @@ export default {
           this.mensagem.mensagem = "Marca cadastrada com sucesso";
           this.mensagem.titulo = "";
           this.mensagem.css = "alert alert-success alert-dismissible fade show";
-      })
+        })
         .catch((error) => {
           this.mensagem.ativo = true;
           this.mensagem.mensagem = "";
           this.mensagem.titulo = "Error. ";
           this.mensagem.css = "alert alert-danger alert-dismissible fade show";
         });
+    },
+    redefinirTamanhoPopup() {
+      this.mensagem.ativo = false;
+      const popup = document.getElementById("popup");
+      if (popup) {
+        popup.style.height = "220px";
+      }
     },
   },
 };
@@ -133,11 +143,8 @@ h3 {
   display: flex;
   justify-content: center;
 }
-h1 {
-  margin-bottom: 2 5px;
-}
+
 .form {
-  gap: 5px;
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -154,22 +161,17 @@ h1 {
   justify-content: center;
   align-items: center;
 }
-.form-corm {
-  display: flex;
-  flex-direction: column;
-  justify-content: end;
-}
+
 #popup {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 10px;
   position: fixed;
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
-  height: 320px;
+  height: 200px;
   background-color: #ffffff;
   border: 1px solid #8e8e8e;
   border-radius: 10px;

@@ -49,9 +49,7 @@ export default defineComponent({
   },
   mounted() {
     this.findAll();
-   /* setInterval(() => {
-      this.findAll();
-    }, 500);*/  
+ 
   },
 
   methods: {
@@ -82,7 +80,7 @@ footer {
 thead :nth-child(1) {
   border-radius: 10px 0px 0 0;
 }
-thead :nth-child(3) {
+thead :nth-child(5) {
   border-radius: 0px 10px 0 0;
 }
 

@@ -54,9 +54,7 @@ export default defineComponent({
   },
   mounted() {
     this.findAll();
-    /* setInterval(() => {
-      this.findAll();
-    }, 500);*/
+
   },
 
   methods: {

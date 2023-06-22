@@ -28,7 +28,7 @@ export class VeiculoCliente{
         }
     }
 
-    public async lista(): Promise<Veiculo[]>{
+    public async findAll(): Promise<Veiculo[]>{
         try{
             return( await this.axiosClient.get<Veiculo[]>('/lista')).data;
         } catch (error:any){
