@@ -28,17 +28,17 @@ export class MarcaClient{
         }
     }
 
-    public async listar(): Promise<Marca[]> {
+    public async findAll(): Promise<Marca[]> {
         try {
-            return (await this.axiosClient.get<Marca[]>('/lista')).data;
-        } catch (error: any) {
-            return Promise.reject(error.response);
+            return (await this.axiosClient.get<Marca[]>(`/lista`)).data
+        } catch (error:any) {
+            return Promise.reject(error.response)
         }
     }
 
     public async newMarca(marca: Marca): Promise<void> {
         try {
-            return (await this.axiosClient.post('/', marca));
+            return (await this.axiosClient.post('', marca));
         } catch (error: any) {
             return Promise.reject(error.response);
         }
