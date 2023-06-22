@@ -1,7 +1,5 @@
 package br.com.uniamerica.estacionamento.entity;
-import jakarta.persistence.Transient;
-import org.hibernate.envers.AuditTable;
-import org.hibernate.envers.Audited;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -12,9 +10,7 @@ import lombok.Setter;
 import java.time.Duration;
 
 @Entity
-@Audited
 @Table(name = "condutores", schema = "public")
-@AuditTable(value = "condutores_audit", schema = "audit")
 public class    Condutor extends AbstractEntity{
 
 

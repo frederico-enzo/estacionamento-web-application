@@ -1,23 +1,17 @@
 package br.com.uniamerica.estacionamento.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.DecimalMin;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.envers.AuditTable;
-import org.hibernate.envers.Audited;
+
 import java.math.BigDecimal;
 import java.time.LocalTime;
-import jakarta.validation.constraints.NotNull;
 
 
     @Entity
-    @Audited
     @Table(name = "configuracao", schema = "public")
-    @AuditTable(value = "configuracao_audit", schema = "audit")
     public class Configuracao extends AbstractEntity{
 
         @Getter @Setter

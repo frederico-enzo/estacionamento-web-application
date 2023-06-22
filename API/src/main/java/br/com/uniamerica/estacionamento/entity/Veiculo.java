@@ -1,18 +1,13 @@
 package br.com.uniamerica.estacionamento.entity;
-import jakarta.validation.constraints.*;
-import org.hibernate.envers.AuditTable;
-import org.hibernate.envers.Audited;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UniqueElements;
+
 
 
 @Entity
-@Audited
 @Table(name = "veiculos", schema = "public")
-@AuditTable(value = "veiculo_audit", schema = "audit")
 public class Veiculo extends AbstractEntity {
 
     @Getter @Setter
