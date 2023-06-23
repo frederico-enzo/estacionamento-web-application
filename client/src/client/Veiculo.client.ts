@@ -38,7 +38,7 @@ export class VeiculoCliente{
 
     public async newVeiculo(veiculo : Veiculo) : Promise<void>{
         try{
-            return (await this.axiosClient.post('/', veiculo));
+            return (await this.axiosClient.post('', veiculo));
         } catch(error: any){
             return Promise.reject(error.response);
         }

@@ -15,14 +15,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="veiculos in Veiculos" :key="veiculos.Placa">
-          <td>{{ veiculos.Placa }}</td>
-          <td>{{ veiculos.Modelo }}</td>
-          <td>{{ veiculos.Ano }}</td>
-          <td>{{ veiculos.Cor }}</td>
-          <td>{{ veiculos.Tipo }}</td>
-          <td><span class="btn btn-success">...</span></td>
-          <td>
+        <tr v-for="veiculos in veiculoList" :key="veiculos.id">
+          <td>{{ veiculos.placa }}</td>
+          <td>{{ veiculos.modeloId.nome }}</td>
+          <td>{{ veiculos.ano }}</td>
+          <td>{{ veiculos.cor }}</td>
+          <td>{{ veiculos.tipo }}</td>
+          <td v-if="veiculos.ativo">
+              <span class="btn btn-success">...</span>
+            </td>
+            <td v-if="!veiculos.ativo">
+              <span class="btn btn-danger">...</span>
+            </td>
+            <td>          
             <button type="button" class="btn btn-warning">✏️</button> -
             <button type="button" class="btn btn-outline-danger">
               &#x274C;
@@ -34,56 +39,41 @@
     <footer>©Frederico 2023</footer>
   </div>
   </div>
-
 </template>
-  
-<script lang="ts">
+
+  <script lang="ts">
 import NavBar from '../components/NavBar.vue';
+
+import { Veiculo } from '@/Model/Veiculo';
+import { VeiculoCliente } from '@/client/Veiculo.client';
 
 export default {
   components: { NavBar },
   name: "TableVeiculo",
   data() {
     return {
-      Veiculos: [
-      {
-          Placa: "IAN-0023",
-          Modelo: "City",
-          Ano: "2008",
-          Cor: "Prata",
-          Tipo: "Carro",
-
-        },
-        {
-          Placa: "ANV-8042",
-          Modelo: "VolksWagem",
-          Ano: "2014",
-          Cor: "Prata",
-          Tipo: "Carro",
-        },{
-          Placa: "ANV-8042",
-          Modelo: "VolksWagem",
-          Ano: "2014",
-          Cor: "Prata",
-          Tipo: "Carro",
-        },{
-          Placa: "ANV-8042",
-          Modelo: "VolksWagem",
-          Ano: "2014",
-          Cor: "Prata",
-          Tipo: "Carro",
-        },{
-          Placa: "ANV-8042",
-          Modelo: "VolksWagem",
-          Ano: "2014",
-          Cor: "Prata",
-          Tipo: "Carro",
-        },
-      ],
+      veiculoList: new Array<Veiculo>(),
     };
+  },
+  mounted() {
+    this.findAll();
+  },
+  methods: {
+    findAll() {
+      const veiculoClient = new VeiculoCliente();
+      veiculoClient
+        .findAll()
+        .then((success) => {
+          this.veiculoList = success;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>
+
 
 <style scoped>
 footer{
