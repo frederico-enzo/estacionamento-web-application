@@ -1,5 +1,5 @@
 <template>
-  <NavBar/>
+  <NavBar />
 
   <div class="table-tape">
     <table class="table table-bordered">
@@ -15,14 +15,20 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="condutor in data" :key="condutor.cpf">
+        <tr v-for="condutor in condutorList" :key="condutor.id">
           <td>{{ condutor.nome }}</td>
           <td>{{ condutor.cpf }}</td>
           <td>{{ condutor.telefone }}</td>
           <td>{{ condutor.tempoDesconto }}</td>
           <td>{{ condutor.tempoPago }}</td>
 
-          <td><span class="btn btn-success">...</span></td>
+          <td v-if="condutor.ativo">
+            <span class="btn btn-success">...</span>
+          </td>
+          <td v-if="!condutor.ativo">
+            <span class="btn btn-danger">...</span>
+          </td>
+
           <td>
             <button type="button" class="btn btn-warning">✏️</button> -
             <button type="button" class="btn btn-outline-danger">
@@ -33,76 +39,46 @@
       </tbody>
     </table>
     <footer>©Frederico 2023</footer>
-
   </div>
-  
 </template>
   
 <script lang="ts">
-import NavBar from '../components/NavBar.vue';
+import NavBar from "../components/NavBar.vue";
+import { CondutorClient } from "@/client/Condutor.client";
+import { Condutor } from "@/Model/Condutor";
+import { defineComponent } from "vue";
 
-export default {
-  components: { NavBar },
+export default defineComponent({
   name: "TableCondutor",
+  components: {
+    NavBar,
+  },
   data() {
     return {
-      data: [
-      {
-          nome: "João",
-          cpf: "138.882.295-87",
-          telefone: "(45) 91912-1123",
-          tempoDesconto: 0,
-          tempoPago: "23hrs",
-          status: "ativo",
-        },
-        {
-          nome: "Frederico",
-          cpf: "138.883.229-87",
-          telefone: "(45) 99993-1123",
-          tempoDesconto: 0,
-          tempoPago: "23hrs",
-          status: "ativo",
-        },
-        {
-          nome: "Frederico",
-          cpf: "138.883.229-87",
-          telefone: "(45) 99993-1123",
-          tempoDesconto: 0,
-          tempoPago: "23hrs",
-          status: "ativo",
-        },
-        {
-          nome: "Frederico",
-          cpf: "138.883.229-87",
-          telefone: "(45) 99993-1123",
-          tempoDesconto: 0,
-          tempoPago: "23hrs",
-          status: "ativo",
-        },
-        {
-          nome: "Frederico",
-          cpf: "138.883.229-87",
-          telefone: "(45) 99993-1123",
-          tempoDesconto: 0,
-          tempoPago: "23hrs",
-          status: "ativo",
-        },
-        {
-          nome: "Frederico",
-          cpf: "138.883.229-87",
-          telefone: "(45) 99993-1123",
-          tempoDesconto: 0,
-          tempoPago: "23hrs",
-          status: "ativo",
-        },
-      ],
+      condutorList: new Array<Condutor>(),
     };
   },
-};
+  mounted() {
+    this.findAll();
+  },
+  methods: {
+    findAll() {
+      const condutorClient = new CondutorClient();
+      condutorClient
+        .findAll()
+        .then((data: Condutor[]) => {
+          this.condutorList = data;
+        })
+        .catch((error: Error) => {
+          console.log(error);
+        });
+    },
+  },
+});
 </script>
 
 <style scoped>
-footer{
+footer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -110,7 +86,6 @@ footer{
   background: rgb(52, 108, 212);
   color: white;
   border-radius: 0px 0px 10px 10px;
-
 }
 thead :nth-child(1) {
   border-radius: 10px 0px 0 0;
@@ -128,9 +103,8 @@ thead th {
 
 .table-tape {
   padding: 100px;
-  padding-right:250px ;
-  padding-left:250px ;
-
+  padding-right: 250px;
+  padding-left: 250px;
 }
 .table-tape td {
   text-align: center;

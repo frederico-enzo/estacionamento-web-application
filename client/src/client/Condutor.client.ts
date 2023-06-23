@@ -1,7 +1,7 @@
 import { Condutor } from "@/Model/Condutor";
 import axios, { AxiosInstance } from "axios";
 
-export class ConfiguracaoClient{
+export class CondutorClient{
 
     private axiosClient: AxiosInstance;
 
@@ -28,7 +28,7 @@ export class ConfiguracaoClient{
         }
     }
 
-    public async listar(): Promise<Condutor[]> {
+    public async findAll(): Promise<Condutor[]> {
         try {
             return (await this.axiosClient.get<Condutor[]>('/lista')).data;
         } catch (error: any) {
@@ -38,7 +38,7 @@ export class ConfiguracaoClient{
 
     public async newMarca(condutor: Condutor): Promise<void> {
         try {
-            return (await this.axiosClient.post('/', condutor));
+            return (await this.axiosClient.post('', condutor));
         } catch (error: any) {
             return Promise.reject(error.response);
         }
