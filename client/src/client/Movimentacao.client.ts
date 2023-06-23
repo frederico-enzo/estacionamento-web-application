@@ -1,7 +1,7 @@
 import { Movimentacao } from "@/Model/Movimentacao";
 import axios, { AxiosInstance } from "axios";
 
-export class ConfiguracaoClient{
+export class MovimentacaoClient{
 
     private axiosClient: AxiosInstance;
 
@@ -28,7 +28,7 @@ export class ConfiguracaoClient{
         }
     }
 
-    public async listar(): Promise<Movimentacao[]> {
+    public async findAll(): Promise<Movimentacao[]> {
         try {
             return (await this.axiosClient.get<Movimentacao[]>('/lista')).data;
         } catch (error: any) {
