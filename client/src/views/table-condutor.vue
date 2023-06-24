@@ -31,7 +31,11 @@
 
           <td>
             <button type="button" class="btn btn-warning">✏️</button> -
-            <button type="button" class="btn btn-outline-danger">
+            <button
+              @click="onClickExcluir(condutor.id)"
+              type="button"
+              class="btn btn-outline-danger"
+            >
               &#x274C;
             </button>
           </td>
@@ -68,6 +72,17 @@ export default defineComponent({
         .findAll()
         .then((data: Condutor[]) => {
           this.condutorList = data;
+        })
+        .catch((error: Error) => {
+          console.log(error);
+        });
+    },
+    onClickExcluir(id: number) {
+      const condutorClient = new CondutorClient();
+      condutorClient
+        .excluir(id)
+        .then(() => {
+          this.findAll();
         })
         .catch((error: Error) => {
           console.log(error);

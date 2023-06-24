@@ -17,7 +17,7 @@
             <td v-if="!marcas.ativo"><span class="btn btn-danger">...</span></td>
             <td>
               <button type="button" class="btn btn-warning">✏️</button> -
-              <button type="button" class="btn btn-outline-danger">
+              <button  @click="onClickExcluir(marcas.id)" type="button" class="btn btn-outline-danger">
                 &#x274C;
               </button>
             </td>
@@ -62,7 +62,18 @@ export default defineComponent({
         .catch((error : Error) => {
           console.log(error);
         });
-    }
+    },
+    onClickExcluir(id: number) {
+      const marcaClient = new MarcaClient();
+      marcaClient
+        .excluir(id)
+        .then(() => {
+          this.findAll();
+        })
+        .catch((error: Error) => {
+          console.log(error);
+        });
+    },
   },
 });
 </script>

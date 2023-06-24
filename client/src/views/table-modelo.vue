@@ -23,7 +23,11 @@
             </td>
             <td>
               <button type="button" class="btn btn-warning">✏️</button> -
-              <button type="button" class="btn btn-outline-danger">
+              <button
+                @click="onClickExcluir(modelos.id)"
+                type="button"
+                class="btn btn-outline-danger"
+              >
                 &#x274C;
               </button>
             </td>
@@ -54,7 +58,6 @@ export default defineComponent({
   },
   mounted() {
     this.findAll();
-
   },
 
   methods: {
@@ -62,10 +65,21 @@ export default defineComponent({
       const modelosClient = new ModeloClient();
       modelosClient
         .findAll()
-        .then((sucess : Modelo[]) => {
+        .then((sucess: Modelo[]) => {
           this.modelosList = sucess;
         })
-        .catch((error : Error) => {
+        .catch((error: Error) => {
+          console.log(error);
+        });
+    },
+    onClickExcluir(id: number) {
+      const modelosClient = new ModeloClient();
+      modelosClient
+        .excluir(id)
+        .then(() => {
+          this.findAll();
+        })
+        .catch((error: Error) => {
           console.log(error);
         });
     },
