@@ -16,7 +16,9 @@
           <td>{{ entradas.condutor.cpf }}</td>
           <td>{{ entradas.veiculo.placa }}</td>
           <td>{{ entradas.entrada }}</td>
-          <td><span class="btn btn-success">...</span></td>
+          <td v-if="entradas.ativo"><span class="btn btn-success">...</span></td>
+          <td v-if="!entradas.ativo"><span class="btn btn-danger">...</span></td>
+
           <td>
             <button type="button" class="btn btn-secondary">Finalizar</button> -
             <button type="button" class="btn btn-warning">✏️</button>

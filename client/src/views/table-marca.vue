@@ -56,10 +56,10 @@ export default defineComponent({
     findAll() {
       const marcaClient = new MarcaClient();
       marcaClient.findAll()
-        .then(sucess => {
+        .then((sucess : Marca[]) =>{
           this.marcasList = sucess
         })
-        .catch(error => {
+        .catch((error : Error) => {
           console.log(error);
         });
     }

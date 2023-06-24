@@ -52,11 +52,11 @@ export class ConfiguracaoClient{
         }
     }
 
-    public async deletar(id:Number): Promise<void>{
-        try{
-            return(await this.axiosClient.delete(`${id}`)).data;
-        } catch (error: any){
-           return Promise.reject(error.response);
+    public async excluir(id: number): Promise<string> {
+        try {
+            return (await this.axiosClient.delete<string>(`/${id}`)).data
+        } catch (error:any) {
+            return Promise.reject(error.response)
         }
     }
 }

@@ -62,10 +62,10 @@ export default defineComponent({
       const modelosClient = new ModeloClient();
       modelosClient
         .findAll()
-        .then((sucess) => {
+        .then((sucess : Modelo[]) => {
           this.modelosList = sucess;
         })
-        .catch((error) => {
+        .catch((error : Error) => {
           console.log(error);
         });
     },
