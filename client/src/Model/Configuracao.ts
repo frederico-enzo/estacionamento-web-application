@@ -2,15 +2,15 @@ import { AbstractEntity } from "./abstract-entity";
 
 export class Configuracao extends AbstractEntity{
 
-    valorHora!: BigInt
-    valorMultaMinuto!: BigInt
+    valorHora!: Number
+    valorMultaMinuto!: Number
     inicioExpediente!: Date
     fimExpediente!: Date
     tempoParaDesconto!: Date
     tempoDeDesconto!: Date
     gerarDesconto!: boolean
-    vagasCarro!: BigInteger
-    vagasMoto!: BigInteger
-    vagosVan!: BigInteger
+    vagasCarro!: Number
+    vagasMoto!: Number
+    vagosVan!: Number
 
 }

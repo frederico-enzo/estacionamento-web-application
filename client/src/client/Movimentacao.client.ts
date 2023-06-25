@@ -36,9 +36,9 @@ export class MovimentacaoClient{
         }
     }
 
-    public async newMarca(movimentacao: Movimentacao): Promise<void> {
+    public async newMovimentacao(movimentacao: Movimentacao): Promise<void> {
         try {
-            return (await this.axiosClient.post('/', movimentacao));
+            return (await this.axiosClient.post('', movimentacao));
         } catch (error: any) {
             return Promise.reject(error.response);
         }
