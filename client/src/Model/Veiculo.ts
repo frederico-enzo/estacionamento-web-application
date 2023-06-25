@@ -10,5 +10,5 @@ export class Veiculo extends AbstractEntity{
     modeloId!: Modelo
     cor!: Cor
     tipo!: Tipo
-
+    editMode?: boolean;
 }

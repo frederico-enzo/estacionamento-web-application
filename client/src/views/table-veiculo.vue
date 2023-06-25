@@ -17,11 +17,47 @@
         </thead>
         <tbody>
           <tr v-for="veiculo in veiculoList" :key="veiculo.id">
-            <td>{{ veiculo.placa }}</td>
-            <td>{{ veiculo.modeloId.nome }}</td>
-            <td>{{ veiculo.ano }}</td>
-            <td>{{ veiculo.cor }}</td>
-            <td>{{ veiculo.tipo }}</td>
+            <td>
+              <input
+                class="form-control"
+                v-if="veiculo.editMode"
+                v-model="veiculo.placa"
+              />
+              <span v-else>{{ veiculo.placa }}</span>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                v-if="veiculo.editMode"
+                v-model="veiculo.modeloId.nome"
+              />
+              <span v-else>{{ veiculo.modeloId.nome }}</span>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                v-if="veiculo.editMode"
+                v-model="veiculo.ano"
+              />
+              <span v-else>{{ veiculo.ano }}</span>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                v-if="veiculo.editMode"
+                v-model="veiculo.cor"
+              />
+              <span v-else>{{ veiculo.cor }}</span>
+            </td>
+            <td>
+              <input
+                class="form-control"
+                v-if="veiculo.editMode"
+                v-model="veiculo.tipo"
+              />
+              <span v-else>{{ veiculo.tipo }}</span>
+            </td>
+
             <td v-if="veiculo.ativo">
               <span class="btn btn-success">...</span>
             </td>
@@ -29,7 +65,23 @@
               <span class="btn btn-danger">...</span>
             </td>
             <td>
-              <button type="button" class="btn btn-warning">✏️</button> -
+              <button
+                @click="salvarEdicao(veiculo)"
+                v-if="veiculo.editMode"
+                type="button"
+                class="btn btn-success"
+              >
+                Salvar
+              </button>
+              <button
+                @click="onClickEditar(veiculo.id)"
+                v-else
+                type="button"
+                class="btn btn-warning"
+              >
+                Editar
+              </button>
+              -
               <button
                 type="button"
                 class="btn btn-outline-danger"
@@ -42,6 +94,11 @@
         </tbody>
       </table>
       <footer>©Frederico 2023</footer>
+      <br />
+
+      <div v-if="mensagem.show" :class="mensagem.css" id="alert">
+        {{ mensagem.mensagem }}
+      </div>
     </div>
   </div>
 </template>
@@ -58,6 +115,11 @@ export default {
     return {
       veiculo: new Veiculo(),
       veiculoList: new Array<Veiculo>(),
+      mensagem: {
+        show: false,
+        mensagem: "",
+        css: "",
+      },
     };
   },
   mounted() {
@@ -80,11 +142,50 @@ export default {
       veiculoClient
         .excluir(id)
         .then(() => {
-          this.findAll(); 
+          this.findAll();
+          this.mensagem.show = true;
+          this.mensagem.css = "alert alert-success  fade show";
+          this.mensagem.mensagem = "Veiculo excluido com sucesso.";
+          setTimeout(() => {
+            this.mensagem.show = false;
+          }, 3500);
         })
         .catch((error: Error) => {
           console.log(error);
+          this.mensagem.show = true;
+          this.mensagem.css = "alert alert-danger fade show";
+          this.mensagem.mensagem = "Não foi possivel excluir o veiculo.";
+          setTimeout(() => {
+            this.mensagem.show = false;
+          }, 3500);
         });
+    },
+    onClickEditar(id: number) {
+      const veiculo = this.veiculoList.find((veiculo) => veiculo.id === id);
+      if (veiculo) {
+        veiculo.editMode = true;
+      }
+    },
+    async salvarEdicao(veiculo: Veiculo) {
+      const veiculoClient = new VeiculoCliente();
+      try {
+        await veiculoClient.upDate(veiculo.id, veiculo);
+        veiculo.editMode = false;
+        this.mensagem.show = true;
+        this.mensagem.css = "alert alert-success fade show";
+        this.mensagem.mensagem = "Veículo atualizado com sucesso.";
+        setTimeout(() => {
+          this.mensagem.show = false;
+        }, 3500);
+      } catch (error) {
+        console.log(error);
+        this.mensagem.show = true;
+        this.mensagem.css = "alert alert-danger fade show";
+        this.mensagem.mensagem = "Não foi possível atualizar o veículo.";
+        setTimeout(() => {
+          this.mensagem.show = false;
+        }, 3500);
+      }
     },
   },
 };
