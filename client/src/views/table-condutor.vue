@@ -16,21 +16,68 @@
       </thead>
       <tbody>
         <tr v-for="condutor in condutorList" :key="condutor.id">
-          <td>{{ condutor.nome }}</td>
-          <td>{{ condutor.cpf }}</td>
-          <td>{{ condutor.telefone }}</td>
+          <td>
+            <input
+              v-if="condutor.editMode"
+              v-model="condutor.nome"
+              class="form-control"
+              type="text"
+              placeholder="Nome"
+            />
+            <span v-else>{{ condutor.nome }}</span>
+          </td>
+          <td>
+            <input
+              v-if="condutor.editMode"
+              v-model="condutor.cpf"
+              class="form-control"
+              type="text"
+              placeholder="CPF"
+              v-mask="'###.###.###-##'"
+              :mask-reverse="true"
+              maxlength="14"
+            />
+            <span v-else>{{ condutor.cpf }}</span>
+          </td>
+          <td>
+            <input
+              v-if="condutor.editMode"
+              v-model="condutor.telefone"
+              v-mask="'(##)#####-####'"
+              :mask-reverse="true"
+              class="form-control"
+              type="text"
+              placeholder="Telefone"
+              maxlength="14"
+            />
+            <span v-else>{{ condutor.telefone }}</span>
+          </td>
+
           <td>{{ condutor.tempoDesconto }}</td>
           <td>{{ condutor.tempoPago }}</td>
-
-          <td v-if="condutor.ativo">
-            <span class="btn btn-success">...</span>
-          </td>
-          <td v-if="!condutor.ativo">
-            <span class="btn btn-danger">...</span>
+          <td>
+            <span v-if="condutor.ativo" class="btn btn-success">...</span>
+            <span v-else class="btn btn-danger">...</span>
           </td>
 
           <td>
-            <button type="button" class="btn btn-warning">✏️</button> -
+            <button
+                @click="salvarEdicao(condutor)"
+                v-if="condutor.editMode"
+                type="button"
+                class="btn btn-success"
+              >
+                Salvar
+              </button>
+              <button
+                @click="onClickEditar(condutor.id)"
+                v-else
+                type="button"
+                class="btn btn-warning"
+              >
+                Editar
+              </button>
+            -
             <button
               @click="onClickExcluir(condutor.id)"
               type="button"
@@ -43,9 +90,9 @@
       </tbody>
     </table>
     <footer>©Frederico 2023</footer>
-  </div>
-  <div v-if="mensagem.show" :class="mensagem.css" id="alert">
-    {{ mensagem.mensagem }}
+    <div v-if="mensagem.show" :class="mensagem.css" id="alert">
+      {{ mensagem.mensagem }}
+    </div>
   </div>
 </template>
   
@@ -63,6 +110,7 @@ export default defineComponent({
   data() {
     return {
       condutorList: new Array<Condutor>(),
+      condutor: new Condutor(),
       mensagem: {
         show: false,
         mensagem: "",
@@ -74,6 +122,33 @@ export default defineComponent({
     this.findAll();
   },
   methods: {
+    onClickEditar(id: number) {
+      const condutor = this.condutorList.find((condutor) => condutor.id === id);
+      if (condutor) {
+        condutor.editMode = true;
+      }
+    },
+    async salvarEdicao(condutor: Condutor) {
+      const condutorClient = new CondutorClient();
+      try {
+        await condutorClient.upDate(condutor.id, condutor);
+        condutor.editMode = false;
+        this.mensagem.show = true;
+        this.mensagem.css = "alert alert-success fade show";
+        this.mensagem.mensagem = "Veículo atualizado com sucesso.";
+        setTimeout(() => {
+          this.mensagem.show = false;
+        }, 5000);
+      } catch (error) {
+        console.log(error);
+        this.mensagem.show = true;
+        this.mensagem.css = "alert alert-danger fade show";
+        this.mensagem.mensagem = "Não foi possível atualizar o veículo.";
+        setTimeout(() => {
+          this.mensagem.show = false;
+        }, 5000);
+      }
+    },
     findAll() {
       const condutorClient = new CondutorClient();
       condutorClient
@@ -112,6 +187,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#alert {
+  margin: 15px 15px 15px 0px;
+  width: 300px;
+  height: 60px;
+}
 footer {
   display: flex;
   align-items: center;

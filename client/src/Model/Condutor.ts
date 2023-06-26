@@ -8,5 +8,6 @@ export class Condutor extends AbstractEntity{
     telefone!: String
     tempoPago!: BigInteger
     tempoDesconto!: BigInteger
+    editMode?: boolean;
 
 }
