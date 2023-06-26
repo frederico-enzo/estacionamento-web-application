@@ -44,7 +44,7 @@ export class CondutorClient{
         }
     }
 
-    public async newMarca(condutor: Condutor): Promise<void> {
+    public async newCondutor(condutor: Condutor): Promise<void> {
         try {
             return (await this.axiosClient.post('', condutor));
         } catch (error: any) {
