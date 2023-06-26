@@ -3,7 +3,7 @@
 
   <div class="lestGo">
     <div class="table-tape">
-      <table class="table table-bordered">
+      <table class="table table-bordered shadow">
         <thead>
           <tr>
             <th scope="col">Placa</th>
@@ -19,18 +19,30 @@
           <tr v-for="veiculo in veiculoList" :key="veiculo.id">
             <td>
               <input
-                class="form-control"
                 v-if="veiculo.editMode"
                 v-model="veiculo.placa"
+                class="form-control"
+                type="text"
+                v-mask="'AAA-####'"
+                :mask-reverse="true"
               />
               <span v-else>{{ veiculo.placa }}</span>
             </td>
             <td>
-              <input
-                class="form-control"
+              <select
                 v-if="veiculo.editMode"
-                v-model="veiculo.modeloId.nome"
-              />
+                title="Modelos"
+                v-model="veiculo.modeloId"
+                class="form-control"
+              >
+                <option
+                  v-for="modelo in modeloList"
+                  :key="modelo.id"
+                  :value="modelo"
+                >
+                  {{ modelo.nome }}
+                </option>
+              </select>
               <span v-else>{{ veiculo.modeloId.nome }}</span>
             </td>
             <td>
@@ -38,32 +50,49 @@
                 class="form-control"
                 v-if="veiculo.editMode"
                 v-model="veiculo.ano"
+                :mask-reverse="true"
+                v-mask="'####'"
               />
               <span v-else>{{ veiculo.ano }}</span>
             </td>
             <td>
-              <input
-                class="form-control"
+              <select
                 v-if="veiculo.editMode"
                 v-model="veiculo.cor"
-              />
+                class="form-control"
+                name="COR"
+                id="Cor"
+              >
+                <option value="AZUL">Azul</option>
+                <option value="CINZA">Cinza</option>
+                <option value="MARRON">Marron</option>
+                <option value="PRETO">Preto</option>
+                <option value="PRATA">Prata</option>
+                <option value="BRANCO">Branco</option>
+                <option value="AMARELO">Amarelo</option>
+                <option value="VERDE">Verde</option>
+              </select>
               <span v-else>{{ veiculo.cor }}</span>
             </td>
             <td>
-              <input
-                class="form-control"
+              <select
                 v-if="veiculo.editMode"
                 v-model="veiculo.tipo"
-              />
+                class="form-control"
+                name="Tipo"
+                id="Tipo"
+              >
+                <option value="CARRO">Carro</option>
+                <option value="VAN">Van</option>
+                <option value="MOTO">Moto</option>
+              </select>
               <span v-else>{{ veiculo.tipo }}</span>
             </td>
+            <td>
+              <span v-if="veiculo.ativo" class="btn btn-success">...</span>
+              <span v-else class="btn btn-danger">...</span>
+            </td>
 
-            <td v-if="veiculo.ativo">
-              <span class="btn btn-success">...</span>
-            </td>
-            <td v-if="!veiculo.ativo">
-              <span class="btn btn-danger">...</span>
-            </td>
             <td>
               <button
                 @click="salvarEdicao(veiculo)"
@@ -94,12 +123,11 @@
         </tbody>
       </table>
       <footer>©Frederico 2023</footer>
-      <br />
-
       <div v-if="mensagem.show" :class="mensagem.css" id="alert">
         {{ mensagem.mensagem }}
       </div>
     </div>
+    <br />
   </div>
 </template>
 
@@ -107,6 +135,8 @@
 import NavBar from "../components/NavBar.vue";
 import { Veiculo } from "@/Model/Veiculo";
 import { VeiculoCliente } from "@/client/Veiculo.client";
+import { Modelo } from "@/Model/Modelo";
+import { ModeloClient } from "@/client/Modelo.client";
 
 export default {
   components: { NavBar },
@@ -115,6 +145,7 @@ export default {
     return {
       veiculo: new Veiculo(),
       veiculoList: new Array<Veiculo>(),
+      modeloList: new Array<Modelo>(),
       mensagem: {
         show: false,
         mensagem: "",
@@ -124,8 +155,20 @@ export default {
   },
   mounted() {
     this.findAll();
+    this.BuscarModelos();
   },
   methods: {
+    BuscarModelos() {
+      const modeloClient = new ModeloClient();
+      modeloClient
+        .findAll()
+        .then((sucess) => {
+          this.modeloList = sucess;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     findAll() {
       const veiculoClient = new VeiculoCliente();
       veiculoClient
@@ -148,7 +191,7 @@ export default {
           this.mensagem.mensagem = "Veiculo excluido com sucesso.";
           setTimeout(() => {
             this.mensagem.show = false;
-          }, 3500);
+          }, 5000);
         })
         .catch((error: Error) => {
           console.log(error);
@@ -157,7 +200,7 @@ export default {
           this.mensagem.mensagem = "Não foi possivel excluir o veiculo.";
           setTimeout(() => {
             this.mensagem.show = false;
-          }, 3500);
+          }, 5000);
         });
     },
     onClickEditar(id: number) {
@@ -176,7 +219,7 @@ export default {
         this.mensagem.mensagem = "Veículo atualizado com sucesso.";
         setTimeout(() => {
           this.mensagem.show = false;
-        }, 3500);
+        }, 5000);
       } catch (error) {
         console.log(error);
         this.mensagem.show = true;
@@ -184,7 +227,7 @@ export default {
         this.mensagem.mensagem = "Não foi possível atualizar o veículo.";
         setTimeout(() => {
           this.mensagem.show = false;
-        }, 3500);
+        }, 5000);
       }
     },
   },
@@ -193,6 +236,12 @@ export default {
 
 
 <style scoped>
+#alert {
+  margin: 15px 15px 15px 0px;
+  width: 300px;
+  height: 60px;
+}
+
 footer {
   display: flex;
   align-items: center;

@@ -6,7 +6,7 @@
     <div class="overlay" v-if="exibir">
       <div
         id="popup"
-        :style="{ height: mensagem.ativo ? '300px' : '220px' }"
+        :style="{ height: mensagem.ativo ? '320px' : '230px' }"
         v-show="exibir"
         class="popup-container"
       >
@@ -35,6 +35,7 @@
             type="text"
             placeholder="Nome"
           />
+          <br />
           <button
             @click="onClickCadastrar()"
             type="button"
@@ -171,7 +172,7 @@ h3 {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
-  height: 200px;
+  height: 230px;
   background-color: #ffffff;
   border: 1px solid #8e8e8e;
   border-radius: 10px;

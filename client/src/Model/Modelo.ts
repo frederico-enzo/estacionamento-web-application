@@ -5,5 +5,5 @@ export class Modelo extends AbstractEntity{
 
     nome!: String
     marcaId!: Marca
-
+    editMode?: boolean;
 }

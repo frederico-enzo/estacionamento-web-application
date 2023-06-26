@@ -29,16 +29,18 @@
           </div>
           <form class="form">
             <input
-              v-model="Veiculo.placa"
               class="form-control"
               type="text"
-              placeholder="Placa - XXX-0000 OU XXX0X00"
-              style="text-transform: uppercase"
+              v-model="Veiculo.placa"
+              v-mask="'AAA-####'"
+              :mask-reverse="true"
+              placeholder="Digite a placa"
             />
             <input
               v-model="Veiculo.ano"
               class="form-control"
-              type="Number"
+              :mask-reverse="true"
+              v-mask="'####'"
               placeholder="Ano"
             />
             <div class="flex">
@@ -105,8 +107,6 @@
 </template>
   
   <script lang="ts">
-import axios from "axios";
-
 import { Veiculo } from "@/Model/Veiculo";
 import { VeiculoCliente } from "@/client/Veiculo.client";
 
@@ -187,10 +187,9 @@ export default {
 .flex :nth-child(1) {
   padding-right: 15px;
 }
-.row{
+.row {
   margin-left: 10px;
   margin-right: 10px;
-
 }
 .close {
   padding: 5px;

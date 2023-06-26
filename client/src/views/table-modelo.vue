@@ -2,7 +2,7 @@
   <NavBar />
   <div class="lestGo">
     <div class="table-tape">
-      <table class="table table-bordered">
+      <table class="table table-bordered shadow">
         <thead>
           <tr>
             <th scope="col">Nome</th>
@@ -12,19 +12,57 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="modelos in modelosList" :key="modelos.id">
-            <td>{{ modelos.nome }}</td>
-            <td>{{ modelos.marcaId.nome }}</td>
-            <td v-if="modelos.ativo">
+          <tr v-for="modelo in modelosList" :key="modelo.id">
+            <td>
+              <input
+                v-if="modelo.editMode"
+                class="form-control"
+                v-model="modelo.nome"
+              />
+              <span v-else>{{ modelo.nome }}</span>
+            </td>
+            <td>
+              <select
+                v-if="modelo.editMode"
+                v-model="modelo.marcaId"
+                class="form-control"
+              >
+                <option
+                  v-for="marca in marcasList"
+                  :key="marca.id"
+                  :value="marca"
+                >
+                  {{ marca.nome }}
+                </option>
+              </select>
+              <span v-else>{{ modelo.marcaId.nome }} </span>
+            </td>
+            <td v-if="modelo.ativo">
               <span class="btn btn-success">...</span>
             </td>
-            <td v-if="!modelos.ativo">
+            <td v-else>
               <span class="btn btn-danger">...</span>
             </td>
             <td>
-              <button type="button" class="btn btn-warning">✏️</button> -
               <button
-                @click="onClickExcluir(modelos.id)"
+                @click="salvarEdicao(modelo)"
+                v-if="modelo.editMode"
+                type="button"
+                class="btn btn-success"
+              >
+                Salvar
+              </button>
+              <button
+                v-else
+                @click="onClickEditar(modelo.id)"
+                type="button"
+                class="btn btn-warning"
+              >
+                Editar
+              </button>
+              -
+              <button
+                @click="onClickExcluir(modelo.id)"
                 type="button"
                 class="btn btn-outline-danger"
               >
@@ -35,16 +73,22 @@
         </tbody>
       </table>
       <footer>©Frederico 2023</footer>
+      <div v-if="mensagem.show" :class="mensagem.css" id="alert">
+        {{ mensagem.mensagem }}
+      </div>
     </div>
   </div>
 </template>
   
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onUpdated } from "vue";
 
 import NavBar from "../components/NavBar.vue";
 import { ModeloClient } from "@/client/Modelo.client";
 import { Modelo } from "@/Model/Modelo";
+import { Marca } from "@/Model/Marca";
+import { MarcaClient } from "@/client/Marca.client";
+import { id } from "date-fns/locale";
 
 export default defineComponent({
   name: "TableModelo",
@@ -53,14 +97,33 @@ export default defineComponent({
   },
   data() {
     return {
+      modelo: new Modelo(),
+      marcasList: new Array<Marca>(),
       modelosList: new Array<Modelo>(),
+      mensagem: {
+        show: false,
+        mensagem: "",
+        css: "",
+      },
     };
   },
   mounted() {
     this.findAll();
+    this.carregarMarcas();
   },
 
   methods: {
+    carregarMarcas() {
+      const marcaClient = new MarcaClient();
+      marcaClient
+        .findAll()
+        .then((sucess) => {
+          this.marcasList = sucess;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     findAll() {
       const modelosClient = new ModeloClient();
       modelosClient
@@ -72,15 +135,56 @@ export default defineComponent({
           console.log(error);
         });
     },
+    onClickEditar(id: number) {
+      const modelo = this.modelosList.find((modelo) => modelo.id === id);
+      if (modelo) {
+        modelo.editMode = true;
+      }
+    },
+    salvarEdicao(modelo: Modelo) {
+      const modeloClient = new ModeloClient();
+      modeloClient
+        .upDate(modelo.id, modelo)
+        .then(() => {
+          modelo.editMode = false;
+          this.mensagem.show = true;
+          this.mensagem.css = "alert alert-success fade show";
+          this.mensagem.mensagem = "Marca atualizada com sucesso.";
+          setTimeout(() => {
+            this.mensagem.show = false;
+          }, 5000);
+        })
+        .catch((error: Error) => {
+          console.log(error);
+          this.mensagem.show = true;
+          this.mensagem.css = "alert alert-danger fade show";
+          this.mensagem.mensagem = "Não foi possível atualizar a marca.";
+          setTimeout(() => {
+            this.mensagem.show = false;
+          }, 3500);
+        });
+    },
     onClickExcluir(id: number) {
       const modelosClient = new ModeloClient();
       modelosClient
         .excluir(id)
         .then(() => {
           this.findAll();
+          this.mensagem.show = true;
+          this.mensagem.css = "alert alert-success fade show";
+          this.mensagem.mensagem = "Veiculo excluído com sucesso.";
+          setTimeout(() => {
+            this.mensagem.show = false;
+          }, 5000);
         })
         .catch((error: Error) => {
           console.log(error);
+          this.mensagem.show = true;
+          this.mensagem.css = "alert alert-danger fade show";
+          this.mensagem.mensagem = "Não foi possível excluir o veiculo.";
+          setTimeout(() => {
+            this.mensagem.show = false;
+          }, 5000);
         });
     },
   },
@@ -88,6 +192,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
+#alert {
+  margin: 15px 15px 15px 0px;
+  width: 300px;
+  height: 60px;
+}
 footer {
   display: flex;
   align-items: center;

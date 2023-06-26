@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <div class="table-tape">
-    <table class="table table-bordered">
+    <table class="table table-bordered shadow">
       <thead>
         <tr>
           <th scope="col">Condutor - CPF</th>

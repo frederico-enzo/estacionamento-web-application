@@ -2,7 +2,7 @@
   <NavBar />
 
   <div class="table-tape">
-    <table class="table table-bordered">
+    <table class="table table-bordered shadow">
       <thead>
         <tr>
           <th scope="col">Nome</th>
@@ -44,6 +44,9 @@
     </table>
     <footer>©Frederico 2023</footer>
   </div>
+  <div v-if="mensagem.show" :class="mensagem.css" id="alert">
+    {{ mensagem.mensagem }}
+  </div>
 </template>
   
 <script lang="ts">
@@ -60,6 +63,11 @@ export default defineComponent({
   data() {
     return {
       condutorList: new Array<Condutor>(),
+      mensagem: {
+        show: false,
+        mensagem: "",
+        css: "",
+      },
     };
   },
   mounted() {
@@ -83,9 +91,20 @@ export default defineComponent({
         .excluir(id)
         .then(() => {
           this.findAll();
+          this.mensagem.show = true;
+          this.mensagem.css = "alert alert-success  fade show";
+          this.mensagem.mensagem = "Veiculo excluido com sucesso.";
+          setTimeout(() => {
+            this.mensagem.show = false;
+          }, 3500);
         })
         .catch((error: Error) => {
           console.log(error);
+          this.mensagem.css = "alert alert-danger fade show";
+          this.mensagem.mensagem = "Não foi possivel excluir o veiculo.";
+          setTimeout(() => {
+            this.mensagem.show = false;
+          }, 3500);
         });
     },
   },
