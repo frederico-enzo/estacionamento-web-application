@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div>
     <button class="btn b btn-outline-primary" @click="exibirPopup">
       Modelo
