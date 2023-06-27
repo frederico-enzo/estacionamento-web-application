@@ -1,102 +1,104 @@
 <template>
-  <NavBar />
-  <div class="overlay">
-    <div
-      id="popup"
-      class="popup-container"
-      :style="{ height: mensagem.ativo ? '450px' : '380px' }"
-    >
-      <br />
-      <h3>Veiculo</h3>
-      <div class="form-conteiner">
-        <div v-if="mensagem.ativo" class="row">
-          <div class="col-md-12 text-start">
-            <div :class="mensagem.css" role="alert">
-              <strong>{{ mensagem.titulo }}</strong> {{ mensagem.mensagem }}
-              <button
-                @click="redefinirTamanhoPopup"
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
+  <div>
+    <NavBar />
+    <div class="overlay">
+      <div
+        id="popup"
+        class="popup-container"
+        :style="{ height: mensagem.ativo ? '450px' : '380px' }"
+      >
+        <br />
+        <h3>Veiculo</h3>
+        <div class="form-container">
+          <div v-if="mensagem.ativo" class="row">
+            <div class="col-md-12 text-start">
+              <div :class="mensagem.css" role="alert">
+                <strong>{{ mensagem.titulo }}</strong> {{ mensagem.mensagem }}
+                <button
+                  @click="redefinirTamanhoPopup"
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                ></button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <form class="form">
-        <input
-          class="form-control"
-          type="text"
-          v-model="Veiculo.placa"
-          v-mask="'AAA-####'"
-          :mask-reverse="true"
-          placeholder="Digite a placa"
-        />
-        <input
-          v-model="Veiculo.ano"
-          class="form-control"
-          :mask-reverse="true"
-          v-mask="'####'"
-          placeholder="Ano"
-        />
-        <div class="flex">
-          <label> Modelos: </label>
-          <select
-            title="Modelos"
-            v-model="Veiculo.modeloId"
+        <form class="form">
+          <input
             class="form-control"
-          >
-            <option
-              v-for="modelo in modeloList"
-              :key="modelo.id"
-              :value="modelo"
+            type="text"
+            v-model="veiculo.placa"
+            v-mask="'AAA-####'"
+            :mask-reverse="true"
+            placeholder="Digite a placa"
+          />
+          <input
+            v-model="veiculo.ano"
+            class="form-control"
+            :mask-reverse="true"
+            v-mask="'####'"
+            placeholder="Ano"
+          />
+          <div class="flex">
+            <label> Modelos: </label>
+            <select
+              title="Modelos"
+              v-model="veiculo.modeloId"
+              class="form-control"
             >
-              {{ modelo.nome }}
-            </option>
-          </select>
-        </div>
-        <div class="flex">
-          <label>Tipo:</label>
-          <select
-            v-model="Veiculo.tipo"
-            class="form-control"
-            name="Tipo"
-            id="Tipo"
-          >
-            <option value="CARRO">Carro</option>
-            <option value="VAN">Van</option>
-            <option value="MOTO">Moto</option>
-          </select>
-        </div>
+              <option
+                v-for="modelo in modeloList"
+                :key="modelo.id"
+                :value="modelo"
+              >
+                {{ modelo.nome }}
+              </option>
+            </select>
+          </div>
+          <div class="flex">
+            <label>Tipo:</label>
+            <select
+              v-model="veiculo.tipo"
+              class="form-control"
+              name="Tipo"
+              id="Tipo"
+            >
+              <option value="CARRO">Carro</option>
+              <option value="VAN">Van</option>
+              <option value="MOTO">Moto</option>
+            </select>
+          </div>
 
-        <div class="flex">
-          <label>Cor:</label>
-          <select
-            v-model="Veiculo.cor"
-            class="form-control"
-            name="COR"
-            id="Cor"
-          >
-            <option value="AZUL">Azul</option>
-            <option value="CINZA">Cinza</option>
-            <option value="MARRON">Marron</option>
-            <option value="PRETO">Preto</option>
-            <option value="PRATA">Prata</option>
-            <option value="BRANCO">Branco</option>
-            <option value="AMARELO">Amarelo</option>
-            <option value="VERDE">Verde</option>
-          </select>
-        </div>
+          <div class="flex">
+            <label>Cor:</label>
+            <select
+              v-model="veiculo.cor"
+              class="form-control"
+              name="COR"
+              id="Cor"
+            >
+              <option value="AZUL">Azul</option>
+              <option value="CINZA">Cinza</option>
+              <option value="MARRON">Marron</option>
+              <option value="PRETO">Preto</option>
+              <option value="PRATA">Prata</option>
+              <option value="BRANCO">Branco</option>
+              <option value="AMARELO">Amarelo</option>
+              <option value="VERDE">Verde</option>
+            </select>
+          </div>
 
-        <button
-          @click="CadastrarVeiculo()"
-          type="button"
-          class="btn btn-outline-success"
-        >
-          Cadastrar
-        </button>
-      </form>
+          <button
+            @click="CadastrarVeiculo"
+            type="button"
+            class="btn btn-outline-success"
+          >
+            Cadastrar
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -109,15 +111,15 @@ import { Modelo } from "@/Model/Modelo";
 import { ModeloClient } from "@/client/Modelo.client";
 import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   components: {
     NavBar,
   },
   data() {
     return {
       exibir: false,
-      Veiculo: new Veiculo(),
-      modeloList: new Array<Modelo>(),
+      veiculo: new Veiculo(),
+      modeloList: [] as Modelo[],
       mensagem: {
         ativo: false,
         titulo: "",
@@ -140,8 +142,8 @@ export default {
       const modeloClient = new ModeloClient();
       modeloClient
         .findAll()
-        .then((sucess) => {
-          this.modeloList = sucess;
+        .then((success) => {
+          this.modeloList = success;
         })
         .catch((error) => {
           console.log(error);
@@ -150,19 +152,21 @@ export default {
     CadastrarVeiculo() {
       const veiculoClient = new VeiculoCliente();
       veiculoClient
-        .newVeiculo(this.Veiculo)
+        .newVeiculo(this.veiculo)
         .then((success) => {
-          this.Veiculo = new Veiculo();
+          this.veiculo = new Veiculo();
           this.mensagem.ativo = true;
-          this.mensagem.mensagem = "Modelo cadastrada com sucesso";
+          this.mensagem.mensagem = "Veículo cadastrado com sucesso";
           this.mensagem.titulo = "";
-          this.mensagem.css = "alert alert-success alert-dismissible fade show";
+          this.mensagem.css =
+            "alert alert-success alert-dismissible fade show";
         })
         .catch((error) => {
           this.mensagem.ativo = true;
           this.mensagem.mensagem = "";
           this.mensagem.titulo = "Error. ";
-          this.mensagem.css = "alert alert-danger alert-dismissible fade show";
+          this.mensagem.css =
+            "alert alert-danger alert-dismissible fade show";
         });
     },
     redefinirTamanhoPopup() {
@@ -173,7 +177,7 @@ export default {
       }
     },
   },
-};
+});
 </script>
 
 <style scoped>
