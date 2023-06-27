@@ -1,64 +1,69 @@
 <template>
-  <div>
-    <button class="btn b btn-outline-primary" @click="exibirPopup">
-      Marca
-    </button>
-    <div class="overlay" v-if="exibir">
-      <div
-        id="popup"
-        :style="{ height: mensagem.ativo ? '320px' : '230px' }"
-        v-show="exibir"
-        class="popup-container"
-      >
-        <div class="close"><button @click="fecharPopup">x</button></div>
-        <h3>Marca</h3>
-        <div class="form-conteiner">
-          <div v-if="mensagem.ativo" class="row">
-            <div class="col-md-12 text-start">
-              <div :class="mensagem.css" role="alert">
-                <strong>{{ mensagem.titulo }}</strong> {{ mensagem.mensagem }}
-                <button
-                  @click="redefinirTamanhoPopup"
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="alert"
-                  aria-label="Close"
-                ></button>
-              </div>
+  <NavBar />
+  <div class="overlay">
+    <div
+      id="popup"
+      class="popup-container"
+      :style="{ height: mensagem.ativo ? '350px' : '250px' }"
+    >
+      <br />
+      <h3>Modelo</h3>
+      <div class="form-conteiner">
+        <div v-if="mensagem.ativo" class="row">
+          <div class="col-md-12 text-start">
+            <div :class="mensagem.css" role="alert">
+              <strong>{{ mensagem.titulo }}</strong> {{ mensagem.mensagem }}
+              <button
+                @click="redefinirTamanhoPopup"
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
             </div>
           </div>
         </div>
-        <form class="form">
-          <input
-            v-model="marca.nome"
-            class="form-control"
-            type="text"
-            placeholder="Nome"
-          />
-          <br />
-          <button
-            @click="onClickCadastrar()"
-            type="button"
-            class="btn btn-outline-success"
-          >
-            Cadastrar
-          </button>
-        </form>
       </div>
+      <form class="form">
+        <input
+          v-model="modelo.nome"
+          class="form-control"
+          type="text"
+          placeholder="Nome"
+        />
+        <select v-model="modelo.marcaId" class="form-control">
+          <option v-for="marca in marcasList" :key="marca.id" :value="marca">
+            {{ marca.nome }}
+          </option>
+        </select>
+
+        <button
+          @click="onClickCadastrar()"
+          type="button"
+          class="btn btn-outline-success"
+        >
+          Cadastrar
+        </button>
+      </form>
     </div>
   </div>
 </template>
-  
-<script >
-import axios from "axios";
 
-import { Marca } from "@/Model/Marca";
+  <script lang="ts">
 import { MarcaClient } from "@/client/Marca.client";
+import { Marca } from "@/Model/Marca";
+import { Modelo } from "@/Model/Modelo";
+import { ModeloClient } from "@/client/Modelo.client";
+import NavBar from '@/components/NavBar.vue'
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
+  components: {
+    NavBar,
+  },
   data() {
     return {
-      marca: new Marca(),
+      modelo: new Modelo(),
       mensagem: {
         ativo: false,
         titulo: "",
@@ -66,7 +71,12 @@ export default {
         css: "",
       },
       exibir: false,
+      marcasList: new Array<Marca>(),
     };
+  },
+
+  mounted() {
+    this.carregarMarcas();
   },
 
   methods: {
@@ -76,14 +86,25 @@ export default {
     fecharPopup() {
       this.exibir = false;
     },
-    onClickCadastrar() {
+    carregarMarcas() {
       const marcaClient = new MarcaClient();
       marcaClient
-        .newMarca(this.marca)
+        .findAll()
+        .then((sucess) => {
+          this.marcasList = sucess;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    onClickCadastrar() {
+      const modeloClient = new ModeloClient();
+      modeloClient
+        .newModelo(this.modelo)
         .then((success) => {
-          this.marca = new Marca();
+          this.modelo = new Modelo();
           this.mensagem.ativo = true;
-          this.mensagem.mensagem = "Marca cadastrada com sucesso";
+          this.mensagem.mensagem = "Modelo cadastrada com sucesso";
           this.mensagem.titulo = "";
           this.mensagem.css = "alert alert-success alert-dismissible fade show";
         })
@@ -98,14 +119,14 @@ export default {
       this.mensagem.ativo = false;
       const popup = document.getElementById("popup");
       if (popup) {
-        popup.style.height = "220px";
+        popup.style.height = "250px";
       }
     },
   },
-};
+});
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .flex {
   display: flex;
   padding: 15px;
@@ -152,7 +173,7 @@ h3 {
 }
 .overlay {
   position: fixed;
-  top: 0;
+  top: 80px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -171,8 +192,8 @@ h3 {
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
-  height: 230px;
+  width: 600px;
+  height: 300px;
   background-color: #ffffff;
   border: 1px solid #8e8e8e;
   border-radius: 10px;

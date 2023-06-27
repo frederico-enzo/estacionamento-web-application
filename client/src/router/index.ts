@@ -4,6 +4,11 @@ import TableCondutor from '../views/table-condutor.vue';
 import TableMarca from '../views/table-marca.vue';
 import TableModelo from '../views/table-modelo.vue';
 import TableVeiculo from '../views/table-veiculo.vue';
+import FormularioMarca from '../views/Formularios/formulario-marca.vue'
+import FormularioModelo from '../views/Formularios/formulario-modelo.vue'
+import FormularioMovimentacao from '../views/Formularios/formulario-movimentacao.vue'
+import FormularioVeiculo from '../views/Formularios/formulario-veiculo.vue'
+import FormularioCondutor from '../views/Formularios/formulario-condutor.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -20,6 +25,28 @@ const routes: Array<RouteRecordRaw> = [
     path: '/marcas',
     name: 'Marcas',
     component: TableMarca
+  },
+  {
+    path: '/marcas-form',
+    name: 'formulario-marca',
+    component: FormularioMarca
+  },
+  {
+    path: '/modelos-form',
+    name: 'formulario-modelos',
+    component: FormularioModelo
+  }, {
+    path: '/estacionar-form',
+    name: 'formulario-movimentacao',
+    component: FormularioMovimentacao
+  }, {
+    path: '/veiculo-form',
+    name: 'formulario-veiculo',
+    component: FormularioVeiculo
+  }, {
+    path: '/condutor-form',
+    name: 'formulario-condutor',
+    component: FormularioCondutor
   },
   {
     path: '/modelos',

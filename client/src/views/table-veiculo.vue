@@ -3,6 +3,9 @@
 
   <div class="lestGo">
     <div class="table-tape">
+      <div class="marca">
+        <router-link :to="{name: 'formulario-veiculo'}" type="button" class="btn btn-warning ">Cadastrar</router-link>
+      </div>
       <table class="table table-bordered shadow">
         <thead>
           <tr>
@@ -241,7 +244,11 @@ export default {
   width: 300px;
   height: 60px;
 }
-
+.marca{
+  margin:  15px 0px 15px 15px ;
+  display: flex;
+  justify-content: end;
+}
 footer {
   display: flex;
   align-items: center;

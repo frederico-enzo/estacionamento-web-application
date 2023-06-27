@@ -3,58 +3,31 @@
       <div class="logo">
         <img width="45" src="../assets/estacionamento.png" alt="" />
         <h3>PARKING</h3>
-        <select class="form-select btn-outline-danger" v-model="selectedOption" @change="navigateToTable">
-          <option value="Condutores">Condutor</option>
-          <option value="veiculos">Veículo</option>
-          <option value="marcas">Marca</option>
-          <option value="modelos">Modelo</option>
-          <option value="/">Estacionar</option>
-
-        </select>
       </div>
       <nav>
         <ul class="nav-bar">
-          <li><cadastroMovimentacao /></li>
-        
-          <li><cadastroMarca /></li>
-          <li><cadastroModelo /></li>
-          <li><cadastroVeiculo /></li>
-          <li><cadastroCondutor /></li>
+          <li><router-link class="btn b btn-warning" to="/">Estacionar</router-link></li>
+          <li><router-link class="btn b btn-outline-primary" to="/Condutores">Condutores</router-link></li>
+          <li><router-link class="btn b btn-outline-primary" to="/veiculos">Veículo</router-link></li>
+          <li><router-link class="btn b btn-outline-primary" to="/marcas">Marca</router-link></li>
+          <li><router-link class="btn b btn-outline-primary" to="/modelos">Modelo</router-link></li>
         </ul>
       </nav>
       <cadastroConfiguracao/>
     </header>
 </template>
+ 
+<script>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import cadastroConfiguracao from "../components/cadastro-configuraçao.vue";
-import cadastroVeiculo from "../components/cadastro-veiculo.vue";
-import cadastroModelo from "../components/cadastro-modelo.vue";
-import cadastroMarca from "../components/cadastro-marca.vue";
-import cadastroCondutor from "../components/cadastro-condutor.vue";
-import cadastroMovimentacao from "../components/cadastro-movimentacao.vue"
-export default defineComponent({
-    name: "Navbar",
-  components: {
-    cadastroConfiguracao,
-    cadastroVeiculo,
-    cadastroModelo,
-    cadastroMarca,
-    cadastroCondutor,
-    cadastroMovimentacao,
-  },
-  data() {
-    return {
-      selectedOption: 'condutores',
-    };
-  },
-  methods: {
-    navigateToTable() {
-      this.$router.push(`/${this.selectedOption}`);
-    },
-  },
-});
+import cadastroConfiguracao from "@/components/cadastro-configuraçao.vue"
+
+export default{
+  components:{
+    cadastroConfiguracao
+  }
+}
+
+
 </script>
 
 <style scoped>

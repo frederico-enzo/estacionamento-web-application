@@ -1,6 +1,14 @@
 <template>
   <NavBar />
   <div class="table-tape">
+    <div class="marca">
+      <router-link
+        :to="{ name: 'formulario-movimentacao' }"
+        type="button"
+        class="btn btn-warning"
+        >Cadastrar</router-link
+      >
+    </div>
     <table class="table table-bordered shadow">
       <thead>
         <tr>
@@ -16,8 +24,12 @@
           <td>{{ entradas.condutor.cpf }}</td>
           <td>{{ entradas.veiculo.placa }}</td>
           <td>{{ entradas.entrada }}</td>
-          <td v-if="entradas.ativo"><span class="btn btn-success">...</span></td>
-          <td v-if="!entradas.ativo"><span class="btn btn-danger">...</span></td>
+          <td v-if="entradas.ativo">
+            <span class="btn btn-success">...</span>
+          </td>
+          <td v-if="!entradas.ativo">
+            <span class="btn btn-danger">...</span>
+          </td>
 
           <td>
             <button type="button" class="btn btn-secondary">Finalizar</button> -
@@ -41,7 +53,7 @@ export default defineComponent({
   name: "TableMovimentacao",
   data() {
     return {
-      MovimentacaoList:new Array<Movimentacao>(),
+      MovimentacaoList: new Array<Movimentacao>(),
     };
   },
   mounted() {
@@ -79,7 +91,11 @@ thead :nth-child(1) {
 thead :nth-child(5) {
   border-radius: 0px 10px 0 0;
 }
-
+.marca {
+  margin: 15px 0px 15px 15px;
+  display: flex;
+  justify-content: end;
+}
 thead th {
   background: rgb(52, 108, 212);
   color: white;

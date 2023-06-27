@@ -1,18 +1,13 @@
-  <template>
-  <div>
-    <button class="btn b btn-outline-primary" @click="exibirPopup">
-      Modelo
-    </button>
-    <div class="overlay" v-if="exibir">
-      <div
+<template>
+    <NavBar/>
+    <div class="overlay">
+    <div
         id="popup"
-        :style="{ height: mensagem.ativo ? '320px' : '250px' }"
         class="popup-container"
+        :style="{ height: mensagem.ativo ? '320px' : '230px' }"
       >
-        <div class="close">
-          <button @click="fecharPopup">x</button>
-        </div>
-        <h3>Modelo</h3>
+      <br>
+        <h3>Marca</h3>
         <div class="form-conteiner">
           <div v-if="mensagem.ativo" class="row">
             <div class="col-md-12 text-start">
@@ -28,88 +23,60 @@
               </div>
             </div>
           </div>
-          <form class="form">
-            <input
-              v-model="modelo.nome"
-              class="form-control"
-              type="text"
-              placeholder="Nome"
-            />
-            <select v-model="modelo.marcaId" class="form-control">
-              <option
-                v-for="marca in marcasList"
-                :key="marca.id"
-                :value="marca"
-              >
-                {{ marca.nome }}
-              </option>
-            </select>
-
-            <button
-              @click="onClickCadastrar()"
-              type="button"
-              class="btn btn-outline-success"
-            >
-              Cadastrar
-            </button>
-          </form>
         </div>
+        <form class="form">
+          <input
+            v-model="marca.nome"
+            class="form-control"
+            type="text"
+            placeholder="Nome"
+          />
+          <br />
+          <button
+            @click="onClickCadastrar()"
+            type="button"
+            class="btn btn-outline-success"
+          >
+            Cadastrar
+          </button>
+        </form>
       </div>
     </div>
-  </div>
 </template>
-<script lang="ts">
+
+<script >
 import axios from "axios";
-import { MarcaClient } from "@/client/Marca.client";
+
 import { Marca } from "@/Model/Marca";
-import { Modelo } from "@/Model/Modelo";
-import { ModeloClient } from "@/client/Modelo.client";
+import { MarcaClient } from "@/client/Marca.client";
+import NavBar from "@/components/NavBar.vue";
 
 export default {
+  name: "formulario-marca",
+  components: {
+    NavBar,
+  },
   data() {
     return {
-      modelo: new Modelo(),
+      marca: new Marca(),
       mensagem: {
         ativo: false,
         titulo: "",
         mensagem: "",
         css: "",
       },
-      exibir: false,
-      marcasList: new Array<Marca>(),
     };
   },
 
-  mounted() {
-    this.carregarMarcas();
-  },
-
   methods: {
-    exibirPopup() {
-      this.exibir = true;
-    },
-    fecharPopup() {
-      this.exibir = false;
-    },
-    carregarMarcas() {
+    onClickCadastrar() {
       const marcaClient = new MarcaClient();
       marcaClient
-        .findAll()
-        .then((sucess) => {
-          this.marcasList = sucess;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    onClickCadastrar() {
-      const modeloClient = new ModeloClient();
-      modeloClient
-        .newModelo(this.modelo)
+        .newMarca(this.marca)
         .then((success) => {
-          this.modelo = new Modelo();
+          this.marca = new Marca();
           this.mensagem.ativo = true;
-          this.mensagem.mensagem = "Modelo cadastrada com sucesso";
+          this.mensagem.mensagem = "Marca cadastrada com sucesso";
           this.mensagem.titulo = "";
           this.mensagem.css = "alert alert-success alert-dismissible fade show";
         })
@@ -124,20 +91,14 @@ export default {
       this.mensagem.ativo = false;
       const popup = document.getElementById("popup");
       if (popup) {
-        popup.style.height = "250px";
+        popup.style.height = "300px";
       }
     },
   },
 };
 </script>
 
-
-
 <style scoped>
-.row {
-  margin-right: 2px;
-  margin-left: 2px;
-}
 .flex {
   display: flex;
   padding: 15px;
@@ -176,15 +137,15 @@ h3 {
   display: flex;
   justify-content: center;
 }
+
 .form {
-  gap: 5px;
   padding: 15px;
   display: flex;
   flex-direction: column;
 }
 .overlay {
   position: fixed;
-  top: 0;
+  top: 80px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -196,12 +157,15 @@ h3 {
 }
 
 #popup {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
   position: fixed;
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
-  height: 250px;
+  width: 600px;
+  height: 300px;
   background-color: #ffffff;
   border: 1px solid #8e8e8e;
   border-radius: 10px;

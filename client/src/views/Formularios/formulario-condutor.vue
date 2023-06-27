@@ -1,19 +1,14 @@
 <template>
-  <div>
-    <button class="btn b btn-outline-primary" @click="exibirPopup">
-      Condutores
-    </button>
-    <div class="overlay" v-if="exibir">
-      <div
+    <NavBar/>
+    <div class="overlay">
+    <div
         id="popup"
-        v-show="exibir"
-        :style="{ height: mensagem.ativo ? '420px' : '350px' }"
         class="popup-container"
+        :style="{ height: mensagem.ativo ? '420px' : '330px' }"
       >
-        <div class="close"><button @click="fecharPopup">x</button></div>
+      <br>
         <h3>Condutor</h3>
         <div class="form-conteiner">
-          <br />
           <div v-if="mensagem.ativo" class="row">
             <div class="col-md-12 text-start">
               <div :class="mensagem.css" role="alert">
@@ -28,7 +23,8 @@
               </div>
             </div>
           </div>
-          <form class="form">
+        </div>
+        <form class="form">
             <input
               v-model="condutor.nome"
               class="form-control"
@@ -62,17 +58,19 @@
               Salvar
             </button>
           </form>
-        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
 import { Condutor } from "@/Model/Condutor";
 import { CondutorClient } from "@/client/Condutor.client";
+import NavBar from "@/components/NavBar.vue"
 
 export default {
+    components: {
+    NavBar,
+  },
   data() {
     return {
       exibir: false,
@@ -119,8 +117,8 @@ export default {
   },
 };
 </script>
-  
-  <style scoped>
+
+<style scoped>
 .flex {
   display: flex;
   padding: 15px;
@@ -159,15 +157,15 @@ h3 {
   display: flex;
   justify-content: center;
 }
+
 .form {
-  gap: 5px;
   padding: 15px;
   display: flex;
   flex-direction: column;
 }
 .overlay {
   position: fixed;
-  top: 0;
+  top: 80px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -179,15 +177,17 @@ h3 {
 }
 
 #popup {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
   position: fixed;
   top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
+  width: 600px;
   height: 300px;
   background-color: #ffffff;
   border: 1px solid #8e8e8e;
   border-radius: 10px;
-  padding: 10px;
 }
 </style>
