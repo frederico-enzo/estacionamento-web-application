@@ -20,6 +20,13 @@ export class ConfiguracaoClient{
         }
     }
 
+    public async findAll(): Promise<Configuracao[]> {
+        try {
+            return (await this.axiosClient.get<Configuracao[]>(`/lista`)).data
+        } catch (error:any) {
+            return Promise.reject(error.response)
+        }
+    }
     public async ativos(): Promise<Configuracao[]>{
         try {
             return( await this.axiosClient.get<Configuracao[]>('/ativos')).data
@@ -28,25 +35,19 @@ export class ConfiguracaoClient{
         }
     }
 
-    public async listar(): Promise<Configuracao[]> {
+ 
+
+    public async newMarca(configuracao: Configuracao): Promise<void> {
         try {
-            return (await this.axiosClient.get<Configuracao[]>('/lista')).data;
+            return (await this.axiosClient.post('', Configuracao));
         } catch (error: any) {
             return Promise.reject(error.response);
         }
     }
 
-    public async newMarca(marca: Configuracao): Promise<void> {
-        try {
-            return (await this.axiosClient.post('/', marca));
-        } catch (error: any) {
-            return Promise.reject(error.response);
-        }
-    }
-
-    public async upDate(id: Number, marca:Configuracao): Promise<void>{
+    public async upDate(id: Number, configuracao:Configuracao): Promise<void>{
         try{
-            return(await this.axiosClient.put(`/${marca.id}`, marca)).data;
+            return(await this.axiosClient.put(`/${configuracao.id}`, configuracao)).data;
         } catch(error: any) {
             return Promise.reject(error.response);
         }

@@ -9,12 +9,18 @@ import FormularioModelo from '../views/Formularios/formulario-modelo.vue'
 import FormularioMovimentacao from '../views/Formularios/formulario-movimentacao.vue'
 import FormularioVeiculo from '../views/Formularios/formulario-veiculo.vue'
 import FormularioCondutor from '../views/Formularios/formulario-condutor.vue'
-
+import TableConfiguracao from '../views/table-configuracao.vue'
+import FormularioConfiguracao from '../views/Formularios/formulario-configuracao.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
     component: HomeView
+  },
+  {
+    path: '/configuraçao',
+    name: 'configuraçao',
+    component: TableConfiguracao
   },
   {
     path: '/condutores',
@@ -47,6 +53,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/condutor-form',
     name: 'formulario-condutor',
     component: FormularioCondutor
+  },
+  {
+    path: '/configuracap-form',
+    name: 'formulario-configuracao',
+    component: FormularioConfiguracao
   },
   {
     path: '/modelos',

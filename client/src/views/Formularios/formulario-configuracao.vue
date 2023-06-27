@@ -5,10 +5,10 @@
       <div
         id="popup"
         class="popup-container"
-        :style="{ height: mensagem.ativo ? '420px' : '330px' }"
+        :style="{ height: mensagem.ativo ? '540px' : '480px' }"
       >
         <br />
-        <h3>Estacionar</h3>
+        <h3>Configuração</h3>
         <div class="form-container">
           <div v-if="mensagem.ativo" class="row">
             <div class="col-md-12 text-start">
@@ -25,26 +25,69 @@
             </div>
           </div>
         </div>
-        <form class="form">
-          <select v-model="movimentacao.condutor" class="form-control">
-            <option
-              v-for="condutor in condutorList"
-              :key="condutor.id"
-              :value="condutor"
-            >
-              {{ condutor.nome }} {{ condutor.cpf }}
-            </option>
-          </select>
-          <select v-model="movimentacao.placa" class="form-control">
-            <option
-              v-for="veiculo in veiculoList"
-              :key="veiculo.id"
-              :value="veiculo"
-            >
-              {{ veiculo.placa }}
-            </option>
-          </select>
-          
+        <form action="/enviar-dados" method="POST">
+          <label for="valorHora">Valor por Hora:</label>
+          <input
+            class="form-control"
+            type="text"
+            v-model="config.valorHora"
+            name="valorHora"
+            id="valorHora"
+            required
+            v-mask="'##.##'"
+            placeholder="00.00"
+         />
+
+          <label for="valorMultaMinuto">Valor da Multa por Minuto:</label>
+          <input
+            class="form-control"
+            type="text"
+            v-model="config.valorMultaMinuto"
+            name="valorMultaMinuto"
+            id="valorMultaMinuto"
+            required
+            v-mask="'##.##'"
+            placeholder="0.00"
+        />
+
+          <label for="inicioExpediente">Horário de Início do Expediente:</label>
+          <input
+            class="form-control"
+            type="text"
+            v-model="config.inicioExpediente"
+            name="inicioExpediente"
+            id="inicioExpediente"
+            required
+            v-mask="'##:##:##'"
+            placeholder="HH:MM:SS"
+         />
+
+          <label for="fimExpediente">Horário de Término do Expediente:</label>
+          <input
+            class="form-control"
+            type="text"
+            v-model="config.fimExpediente"
+            name="fimExpediente"
+            id="fimExpediente"
+            placeholder="HH:MM:SS"
+            v-mask="'##:##:##'"
+            required
+          />
+
+          <label for="tempoParaDesconto"
+            >Tempo para Aplicar Desconto (HH:MM:SS):</label
+          >
+          <input
+          class="form-control"
+
+            type="text"
+            v-model="config.tempoParaDesconto"
+            name="tempoParaDesconto"
+            id="tempoParaDesconto"
+            required
+            v-mask="'##:##:##'"
+            placeholder="HH:MM:SS"
+          />
 
           <br />
           <button
@@ -52,7 +95,7 @@
             type="button"
             class="btn btn-outline-success"
           >
-            Cadastrar
+            Salvar
           </button>
         </form>
       </div>
@@ -61,25 +104,19 @@
 </template>
   
   <script>
+import axios from "axios";
 import NavBar from "@/components/NavBar.vue";
-import { format } from "date-fns";
-import { Movimentacao } from "@/Model/Movimentacao";
-import { MovimentacaoClient } from "@/client/Movimentacao.client";
-import { Condutor } from "@/Model/Condutor";
-import { CondutorClient } from "@/client/Condutor.client";
-import { VeiculoCliente } from "@/client/Veiculo.client";
+import { Configuracao } from "@/Model/Configuracao";
 import { ConfiguracaoClient } from "@/client/Configuracao.client";
 
 export default {
+  name: "formulario-cofiguracao",
   components: {
     NavBar,
   },
   data() {
     return {
-      condutorList: [],
-      veiculoList: [],
-      configList: [],
-      movimentacao: new Movimentacao(),
+      config: new Configuracao(),
       mensagem: {
         ativo: false,
         titulo: "",
@@ -88,70 +125,36 @@ export default {
       },
     };
   },
-  mounted() {
-    this.findCondutor();
-    this.findVeiculo();
-  },
   methods: {
     onClickCadastrar() {
-      const now = new Date();
-      const formattedHoraMinutos = format(now, "HH'h'mm'm'");
-      this.movimentacao.entrada = formattedHoraMinutos;
-      this.movimentacao.configuracao = { id: 1 };
-
-      const movimentacaoClient = new MovimentacaoClient();
-      movimentacaoClient
-        .newMovimentacao(this.movimentacao)
+      const configuracaoClient = new ConfiguracaoClient();
+      configuracaoClient
+        .newMarca(this.config)
         .then((success) => {
-          this.movimentacao = new Movimentacao();
+          this.config = new Configuracao();
           this.mensagem.ativo = true;
-          this.mensagem.mensagem = "Movimentação cadastrada com sucesso";
+          this.mensagem.mensagem = "Marca cadastrada com sucesso";
           this.mensagem.titulo = "";
           this.mensagem.css = "alert alert-success alert-dismissible fade show";
         })
         .catch((error) => {
           this.mensagem.ativo = true;
           this.mensagem.mensagem = "";
-          this.mensagem.titulo = "Error.";
+          this.mensagem.titulo = "Error. ";
           this.mensagem.css = "alert alert-danger alert-dismissible fade show";
-        });
-    },
-
-    findCondutor() {
-      const condutorClient = new CondutorClient();
-      condutorClient
-        .findAll()
-        .then((data) => {
-          this.condutorList = data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
-    findVeiculo() {
-      const veiculoClient = new VeiculoCliente();
-      veiculoClient
-        .findAll()
-        .then((data) => {
-          this.veiculoList = data;
-        })
-        .catch((error) => {
-          console.log(error);
         });
     },
     redefinirTamanhoPopup() {
       this.mensagem.ativo = false;
       const popup = document.getElementById("popup");
       if (popup) {
-        popup.style.height = "380px";
+        popup.style.height = "300px";
       }
     },
   },
 };
 </script>
-
-<style scoped>
+  <style scoped>
 .flex {
   display: flex;
   padding: 15px;
@@ -214,11 +217,11 @@ h3 {
   flex-direction: column;
   padding: 10px;
   position: fixed;
-  top: 30%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 600px;
-  height: 300px;
+  height: 600px;
   background-color: #ffffff;
   border: 1px solid #8e8e8e;
   border-radius: 10px;

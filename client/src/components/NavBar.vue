@@ -11,6 +11,7 @@
           <li><router-link class="btn b btn-outline-primary" to="/veiculos">Veículo</router-link></li>
           <li><router-link class="btn b btn-outline-primary" to="/marcas">Marca</router-link></li>
           <li><router-link class="btn b btn-outline-primary" to="/modelos">Modelo</router-link></li>
+          <li><router-link  to="/configuraçao"><img width="35" src="../assets/configuracoes-da-web.png" alt=""></router-link></li>
         </ul>
       </nav>
       <cadastroConfiguracao/>

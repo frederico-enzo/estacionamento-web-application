@@ -1,6 +1,6 @@
 import { AbstractEntity } from "./abstract-entity";
 
-export class Configuracao extends AbstractEntity{
+export class Configuracao extends AbstractEntity {
 
     valorHora!: Number
     valorMultaMinuto!: Number
@@ -12,5 +12,6 @@ export class Configuracao extends AbstractEntity{
     vagasCarro!: Number
     vagasMoto!: Number
     vagosVan!: Number
+    editMode?: boolean;
 
 }
