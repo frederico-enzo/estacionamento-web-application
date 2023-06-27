@@ -32,16 +32,16 @@
               :key="condutor.id"
               :value="condutor"
             >
-              {{ condutor.nome }} {{ condutor.cpf }}
+             Nome: {{ condutor.nome }} CPF: {{ condutor.cpf }}
             </option>
           </select>
-          <select v-model="movimentacao.placa" class="form-control">
+          <select v-model="movimentacao.veiculo" class="form-control">
             <option
               v-for="veiculo in veiculoList"
               :key="veiculo.id"
               :value="veiculo"
             >
-              {{ veiculo.placa }}
+              Placa: {{ veiculo.placa }}
             </option>
           </select>
           

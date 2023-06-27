@@ -17,5 +17,6 @@ export class Movimentacao extends AbstractEntity{
     valorTotal!: BigInt
     valorHora!: BigInt
     valorDesconte!: BigInt
+    editMode?: boolean;
 
 }
