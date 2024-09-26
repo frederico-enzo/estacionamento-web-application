@@ -1,38 +1,41 @@
 package br.com.uniamerica.estacionamento.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-@MappedSuperclass
+
+
+@MappedSuperclass // Mapeia para que o banco de dados considere as colunas dessa super-classe
 public abstract class AbstractEntity {
     @Id
     @Getter
-    @Column(name = "id", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true, nullable = false) // Cria a coluna no DB
     private Long id;
 
     @Getter @Setter
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy | HH:mm:ss")
-    @Column(name = "dtCadastro", nullable = false)
+    @Column(nullable = false)
     private LocalDateTime cadastro;
 
     @Getter @Setter
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy | HH:mm:ss")
-    @Column(name = "dtAtualizacao")
-    private LocalDateTime atualizacao;
+    @Column()
+    private LocalDateTime edicao;
 
+    @NotNull(message = "O status deve ser informado!")
     @Getter @Setter
-    @Column(name = "ativo")
-    private boolean ativo = true;;
+    @Column(nullable = false)
+    private boolean ativo;
 
     @PrePersist
-    private void prePersist(){
+    public void prePersist() {
         this.cadastro = LocalDateTime.now();
+        this.ativo = true;
     }
     @PreUpdate
-    private void preUpdate(){
-        this.atualizacao = LocalDateTime.now();
+    public void preUpdate(){
+        this.edicao = LocalDateTime.now();
     }
 }

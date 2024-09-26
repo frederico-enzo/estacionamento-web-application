@@ -1,97 +1,73 @@
 package br.com.uniamerica.estacionamento.controller;
 
-import br.com.uniamerica.estacionamento.Repository.MarcaRepository;
 import br.com.uniamerica.estacionamento.entity.Condutor;
 import br.com.uniamerica.estacionamento.entity.Marca;
-import br.com.uniamerica.estacionamento.entity.Veiculo;
-import br.com.uniamerica.estacionamento.servece.MarcaService;
+import br.com.uniamerica.estacionamento.repository.MarcaRepository;
+import br.com.uniamerica.estacionamento.service.MarcaService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/api/marca")
+@RestController
+@RequestMapping(value = "/api/marca")
 public class MarcaController {
-
-    @Autowired
-    private MarcaService marcaService;
     @Autowired
     private MarcaRepository marcaRepository;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findByIdPaht(@PathVariable ("id") Long id){
-        final Marca marca = this.marcaRepository.findById(id).orElse(null);
-        return marca == null
-                ? ResponseEntity.badRequest().body("Marca não encontrada")
-                : ResponseEntity.ok(marca);
+    @Autowired
+    private MarcaService marcaService;
+
+    @GetMapping
+    public ResponseEntity<?> findById(@RequestParam("id") final Long id){
+        final Marca marca =  this.marcaRepository.findById(id).orElse(null);
+        return marca == null ? ResponseEntity.badRequest().body("Nenhuma marca encontrada") : ResponseEntity.ok(marca);
     }
 
     @GetMapping("/lista")
-    public ResponseEntity<?> findAll(){
-        final List<Marca> listMarca = this.marcaRepository.findAll();
-        return ResponseEntity.ok(listMarca);
+    public ResponseEntity<?> listarAll(){
+        final List<Marca> marcas = this.marcaRepository.findAll();
+        return marcas.isEmpty() ? ResponseEntity.badRequest().body("Nenhuma marca encontrada! Cadastre-as!") : ResponseEntity.ok(marcas);
     }
-
-    @GetMapping("/ativos")
-    public ResponseEntity<?> findByAtivos(){
-        final List<Marca> ativosMarca = this.marcaRepository.findByAtivoTrue();
-        return ResponseEntity.ok(ativosMarca);
+    @GetMapping("/lista/ativos")
+    public ResponseEntity<?> listarAtivos(){
+        final List<Marca> marcas = this.marcaRepository.findAllAtivo();
+        return marcas.isEmpty() ? ResponseEntity.badRequest().body("Nenhuma marca encontrada! Cadastre-as!") : ResponseEntity.ok(marcas);
     }
 
     @PostMapping
-    public ResponseEntity<?> newMarca(@RequestBody final Marca marca){
-        try {
-            this.marcaService.newMarca(marca);
-            return ResponseEntity.ok("Marca cadastrada com sucesso");
-        } catch (DataIntegrityViolationException e){
+    public ResponseEntity<?> cadastrarMarca(@RequestBody @Validated final Marca marca){
+        try{
+            final Marca newMarca = this.marcaService.cadastrar(marca);
+            return ResponseEntity.ok(String.format("Marca [ %s ] cadastrada com sucesso!", marca.getNome()));
+        } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> uddate(@PathVariable ("id") Long id ,@RequestBody final Marca marca ){
+    @PutMapping
+    public ResponseEntity<?> atualizarMarca(
+            @RequestParam("id") final Long id,
+            @RequestBody @Validated Marca marca
+    ){
         try {
-            final Marca verificacao = this.marcaRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
-            this.marcaService.update(marca);
-            return ResponseEntity.ok("Registro editado com sucesso");
-        } catch (DataIntegrityViolationException e){
+            final Marca marcaAtualizada = this.marcaService.editar(id, marca);
+            return ResponseEntity.ok( String.format("Marca [ %s ] atualizada com sucesso", marcaAtualizada.getNome()));
+        }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable ("id") Long id){
-        try {
-            this.marcaService.delete(id);
-            return ResponseEntity.ok("Registro deletado com sucesso");
-        } catch (DataIntegrityViolationException  e) {
+    @DeleteMapping
+    public ResponseEntity<?> desativar(
+            @RequestParam("id") final Long id
+    ){
+        try{
+            return this.marcaService.desativar(id);
+        }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

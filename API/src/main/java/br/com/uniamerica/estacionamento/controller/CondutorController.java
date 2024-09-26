@@ -1,109 +1,87 @@
 package br.com.uniamerica.estacionamento.controller;
-import br.com.uniamerica.estacionamento.Repository.CondutorRepository;
-import br.com.uniamerica.estacionamento.Repository.MovimentacaoRepository;
+
 import br.com.uniamerica.estacionamento.entity.Condutor;
-import br.com.uniamerica.estacionamento.entity.Veiculo;
-import br.com.uniamerica.estacionamento.servece.CondutorService;
+import br.com.uniamerica.estacionamento.repository.CondutorRepository;
+import br.com.uniamerica.estacionamento.service.CondutorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping(value = "/api/condutor")
 public class CondutorController {
 
-    /*
-      @Autowired = Usado para acessar outras Classes
-      @RequestMapping = Mapeia os metodos da controller / Define o URI para  qual o metodo deve responder
-      @GetMapping = é usada para mapear uma solicitação HTTP GET
-      ResponseEntity = usado para enviar informações adicionais no cabeçalho ou corpo da resposta
-      <?> = usada para indicar que um tipo específico pode ser usado, mas que ainda não é conhecido ou não é relevante em um determinado contexto
-      @PathVariable =  é usada para mapear variáveis de caminho de URL em parâmetros de método
-      orElse =   é usado para fornecer um valor padrão quando um valor não está presente
-      badRequest = é usado para criar uma resposta HTTP 400 (Bad Request)
-    */
-
-
-    @Autowired
-    private  CondutorService condutorService;
     @Autowired
     private CondutorRepository condutorRepository;
+    @Autowired
+    private CondutorService condutorService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id) {
+    @GetMapping
+    public ResponseEntity<?> findById(@RequestParam("id") final Long id){
         final Condutor condutor = this.condutorRepository.findById(id).orElse(null);
+        return condutor == null ? ResponseEntity.badRequest().body("Nenhum condutor encontrado") : ResponseEntity.ok(condutor);
+    }
+    @GetMapping("/nome")
+    public ResponseEntity<?> findByNome(@RequestParam("nome") final String nome){
+        final List<Condutor> condutores = this.condutorRepository.findByNome(nome);
+        return condutores.isEmpty() ? ResponseEntity.badRequest().body("Nenhum condutor encontrado") : ResponseEntity.ok(condutores);
+    }
+    @GetMapping("/cpf")
+    public ResponseEntity<?> findByCpf(@RequestParam("cpf") final String cpf){
+        final List<Condutor> condutores = this.condutorRepository.findByCpf(cpf);
+        return condutores.isEmpty() ? ResponseEntity.badRequest().body("Nenhum condutor encontrado") : ResponseEntity.ok(condutores);
+    }
 
-        return condutor == null
-                ? ResponseEntity.badRequest().body("Condutor não encontrado")
-                : ResponseEntity.ok(condutor);
+
+    @GetMapping("/relatorio")
+    public ResponseEntity<?> relatorio(@RequestParam("id") final Long id){
+        return this.condutorService.relatorioPerfil(id);
     }
 
     @GetMapping("/lista")
-    public ResponseEntity<?> findAll() {
-        List<Condutor> condutores = this.condutorRepository.findAll();
-        return ResponseEntity.ok(condutores);
+    public ResponseEntity<?> listarAll(){
+        return ResponseEntity.ok(this.condutorRepository.findAll());
     }
 
-    @GetMapping("/ativos")
-    public ResponseEntity<?> findByAtivo(){
-        List<Condutor> condutores = this.condutorRepository.findByAtivoTrue();
-
-        return ResponseEntity.ok(condutores);
-    }
-
-    @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<?> findByCpf(@PathVariable("cpf") final String cpf){
-        final Optional <Condutor> condutor = this.condutorRepository.findByCpf(cpf);
-
-        return condutor == null
-                ? ResponseEntity.badRequest().body("Condutor não encontrado")
-                : ResponseEntity.ok(condutor);
+    @GetMapping("/lista/ativos")
+    public ResponseEntity<?> listarAtivos(){
+        return ResponseEntity.ok(this.condutorRepository.findAllAtivo());
     }
 
     @PostMapping
-    public ResponseEntity<?> newCondutor(@RequestBody final Condutor condutor){
-        try{
-            this.condutorService.newCondutor(condutor);
-            return ResponseEntity.ok("Registro cadastrado com sucesso");
-        } catch (DataIntegrityViolationException  e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") final Long id, @RequestBody final Condutor condutor){
-        try{
-            final Condutor verificacao = this.condutorRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
-            this.condutorService.update(condutor);
-            return ResponseEntity.ok("Registro editado com sucesso");
-
-        } catch (DataIntegrityViolationException  e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
-        }
-    }
-
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable final Long id) {
+    public ResponseEntity<?> cadastrarCondutor(@RequestBody @Validated final Condutor condutor){
         try {
-            this.condutorService.delete(id);
-            return ResponseEntity.ok("Condutor excluído com sucesso");
-        }  catch (DataIntegrityViolationException  e) {
+            final Condutor newCondutor = this.condutorService.cadastrar(condutor);
+            return ResponseEntity.ok(String.format("Condutor [ %s ] cadastrado com sucesso", newCondutor.getNome()));
+        } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
+
+    @PutMapping
+    public ResponseEntity<?> editarCondutor(
+            @RequestParam("id") final Long id,
+            @RequestBody @Validated final Condutor condutor
+    ){
+        try {
+            final Condutor condutorBanco = this.condutorService.editar(id, condutor);
+            return ResponseEntity.ok(String.format("Condutor [ %s ] editado com sucesso", condutorBanco.getNome()));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @DeleteMapping
+    public ResponseEntity<?> desativarCondutor(
+            @RequestParam("id") final Long id
+    ){
+        try{
+            return this.condutorService.desativar(id);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
-
-

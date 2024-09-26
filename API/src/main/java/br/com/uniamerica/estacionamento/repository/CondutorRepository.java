@@ -1,18 +1,19 @@
-package br.com.uniamerica.estacionamento.Repository;
+package br.com.uniamerica.estacionamento.repository;
 
 import br.com.uniamerica.estacionamento.entity.Condutor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface CondutorRepository extends JpaRepository<Condutor, Long> {
-
-     List<Condutor> findByAtivoTrue();
-     Optional<Condutor> findByCpf(String cpf);
+     @Query("from Condutor where nome = :nome")
+     public List<Condutor> findByNome(@Param("nome") final String nome);
+     @Query("from Condutor where cpf = :cpf order by cpf limit 1")
+     public List<Condutor> findByCpf(@Param("cpf") final String cpf);
+     @Query("from Condutor where ativo = true")
+     public List<Condutor> findAllAtivo();
 }

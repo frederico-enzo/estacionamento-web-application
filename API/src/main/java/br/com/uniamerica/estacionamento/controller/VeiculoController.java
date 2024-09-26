@@ -1,93 +1,79 @@
 package br.com.uniamerica.estacionamento.controller;
 
-
-import br.com.uniamerica.estacionamento.Repository.VeiculoRepository;
 import br.com.uniamerica.estacionamento.entity.Veiculo;
-import br.com.uniamerica.estacionamento.servece.VeiculoService;
+import br.com.uniamerica.estacionamento.repository.VeiculoRepository;
+import br.com.uniamerica.estacionamento.service.VeiculoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Optional;
 
-@Controller
-@RequestMapping("/api/veiculo")
+@RestController
+@RequestMapping(value = "/api/veiculo")
 public class VeiculoController {
-
-    @Autowired
-    private VeiculoService veiculoService;
     @Autowired
     private VeiculoRepository veiculoRepository;
 
-   @GetMapping("/{id}")
-   public ResponseEntity<?> findByIdPath(@PathVariable("id") final Long id){
-       final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
+    @Autowired
+    private VeiculoService veiculoService;
 
-       return veiculoBanco == null
-               ? ResponseEntity.badRequest().body("Veiculo não encontrado")
-               : ResponseEntity.ok(veiculoBanco);
-   }
-
-   @GetMapping("/placa/{placa}")
-    final ResponseEntity<?> findByPlacaPath(@PathVariable("placa") final String placa){
-       final Optional<Veiculo> veiculoBanco = this.veiculoRepository.findByPlaca(placa);
-
-       return veiculoBanco == null
-               ? ResponseEntity.badRequest().body("Veiculo não encontrado")
-               : ResponseEntity.ok(veiculoBanco);
-   }
-
-    @GetMapping("/lista")
-    public ResponseEntity<?> findall(){
-        final List<Veiculo> veiculo = this.veiculoRepository.findAll();
-
-        return ResponseEntity.ok(veiculo);
+    @GetMapping
+    public ResponseEntity<?> findById(@RequestParam("id") final Long id){
+        final Veiculo veiculo = this.veiculoRepository.findById(id).orElse(null);
+        return veiculo == null ? ResponseEntity.badRequest().body("Nenhum veiculo encontrado") : ResponseEntity.ok(veiculo);
     }
-
-    @GetMapping("/ativos")
-    public ResponseEntity<List<Veiculo>>findByAtivos(){
-        final List<Veiculo> veiculosAtivos = this.veiculoRepository.findByAtivoTrue();
-
-        return ResponseEntity.ok(veiculosAtivos);
+    @GetMapping("/placa")
+    public ResponseEntity<?> findByPlaca(@RequestParam("placa") final String placa)     {
+        final List<Veiculo> veiculos = this.veiculoRepository.findByPlaca(placa);
+        return veiculos.isEmpty() ? ResponseEntity.badRequest().body("Nenhum veiculo encontrado") : ResponseEntity.ok(veiculos);
+    }
+    @GetMapping("/lista")
+    public ResponseEntity<?> listarAll(){
+        return ResponseEntity.ok(this.veiculoRepository.findAll());
+    }
+    @GetMapping("/lista/ativos")
+    public ResponseEntity<?> listarAllAtivos(){
+        final List<Veiculo> veiculos = this.veiculoRepository.findAllAtivo();
+        return veiculos.isEmpty() ? ResponseEntity.badRequest().body("Nenhum veiculo encontrado") : ResponseEntity.ok(veiculos);
     }
 
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody final Veiculo veiculo){
-        try{
-            this.veiculoService.cadastrar(veiculo);
-            return ResponseEntity.ok("Registro cadastrado com sucesso");
-        } catch (DataIntegrityViolationException  e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
-        }
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final  Veiculo veiculo){
-        try{
-            final Veiculo verificacao = this.veiculoRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("Não foi possível identificar o registro informado"));
-            this.veiculoService.editar(veiculo);
-            return ResponseEntity.ok("Registro editado com sucesso");
-        } catch (DataIntegrityViolationException  e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
-        }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable final Long id) {
+    public ResponseEntity<?> cadastrar(@RequestBody @Validated final Veiculo veiculo){
         try {
-            this.veiculoService.delete(id);
-            return ResponseEntity.ok("veiculo excluído com sucesso");
-        } catch (DataIntegrityViolationException  e) {
+            final Veiculo newVeiculo = this.veiculoService.cadastrar(veiculo);
+            return ResponseEntity.ok(String.format("Veiulo placa [ %s ] cadastrado com sucesso!", newVeiculo.getPlaca()));
+        }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e){
-            return ResponseEntity.internalServerError().body("Error: " + e.getMessage());
         }
     }
+
+    @PutMapping
+    public ResponseEntity<?> atualizar(
+            @RequestParam("id") final Long id,
+            @RequestBody @Validated
+            final Veiculo veiculo
+    ){
+        try {
+            final Veiculo newVeiculo = this.veiculoService.editar(id, veiculo);
+            return ResponseEntity.ok(String.format("Veiulo placa [ %s ] editado com sucesso!", newVeiculo.getPlaca()));
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> desativar(
+            @RequestParam("id") final Long id
+    ){
+        try{
+            return this.veiculoService.desativar(id);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+
+
 }

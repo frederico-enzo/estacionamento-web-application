@@ -1,5 +1,5 @@
 package br.com.uniamerica.estacionamento.entity;
 
-public enum Cor{
-    AZUL, PRETO, CINZA, MARRON, VERMELHO, PRATA, BRANCO, AMARELO, VERDE;
+public enum Cor {
+    BRANCO, AZUL, PRETO, AMARELO, VERMELHO, PRATA, ROSA, VERDE, ROXO
 }
