@@ -4,9 +4,7 @@
 ## Índice
 
 - [Tecnologias](#tecnologias)
-- [Features](#features)
-- [Setup](#setup)
-- [Deploy em Docker-Compose](#deploy-em-docker-compose)
+
 
 ## Tecnologias 
 
