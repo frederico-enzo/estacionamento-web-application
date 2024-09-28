@@ -1,6 +1,5 @@
 # Gestão de Estacionamento | Interface Web
  - Aplicação web para gestão de estacionamento, desenvolvido em ambiente acadêmico. Disponibiliza o CRUD completo de todoas as entidades
- - Autor: Jean Felipe Moschen Buss
    
 ## Índice
 
