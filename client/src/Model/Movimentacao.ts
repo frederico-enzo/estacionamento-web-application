@@ -1,22 +1,16 @@
-import { Condutor } from "./Condutor";
-import { Configuracao } from "./Configuracao";
-import { Veiculo } from "./Veiculo";
-import { AbstractEntity } from "./abstract-entity";
+import { AbstractEntity } from './abstract-entity'
+import { Condutor } from './condutor'
+import { Veiculo } from './veiculo'
 
-export class Movimentacao extends AbstractEntity{
-
-    condutor!: Condutor
-    veiculo!: Veiculo
-    configuracao!: Configuracao
-    entrada!: Date
-    saida!: Date
-    tempoDesconto!: Date
-    tempo!: Date
-    tempoMulta!: Date
-    valorMulta!: BigInt
-    valorTotal!: BigInt
-    valorHora!: BigInt
-    valorDesconte!: BigInt
-    editMode?: boolean;
-
+export class Movimentacao extends AbstractEntity {
+  dataEntrada!: Date
+  dataSaida!: Date
+  tempoEstacionadoSegundos!: number
+  tempoMultaSegundos!: number
+  tempoDescontoSegundos!: number
+  veiculo!: Veiculo
+  condutor!: Condutor
+  valorHora!: number
+  valorMulta!: number
+  valorTotal!: number
 }

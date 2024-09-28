@@ -1,13 +1,10 @@
-import { AbstractEntity } from "./abstract-entity";
+import { AbstractEntity } from './abstract-entity'
 
-
-export class Condutor extends AbstractEntity{
-
-    nome!: String
-    cpf !: String 
-    telefone!: String
-    tempoPago!: BigInteger
-    tempoDesconto!: BigInteger
-    editMode?: boolean;
-
+export class Condutor extends AbstractEntity {
+  nome!: string
+  cpf!: string
+  telefone!: string
+  tempoPagoSegundos!: number
+  tempoDescontoSegundos!: number
+  tempoDescontoUsadoSegundos!: number
 }

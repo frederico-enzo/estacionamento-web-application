@@ -1,61 +1,85 @@
-import { Movimentacao } from "@/Model/Movimentacao";
-import axios, { AxiosInstance } from "axios";
+import { Configuracao } from '@/model/configuracao'
+import { Movimentacao } from '@/model/movimentacao'
+import { Tipo } from '@/model/tipo'
+import axios, { AxiosInstance } from 'axios'
 
-export class MovimentacaoClient{
+export class MovimentacaoClient {
+  private axiosClient: AxiosInstance
 
-    private axiosClient: AxiosInstance;
+  constructor() {
+    this.axiosClient = axios.create({
+      baseURL: `${process.env.VUE_APP_BACKEND_URL}`,
+      headers: { 'Content-Type': 'application/json' }   
+    })
+  }
 
-    constructor() {
-        this.axiosClient = axios.create({
-            baseURL: 'http://localhost:8080/api/movimentacao',
-            headers: {'Content-type' : 'application/json'}
-        });
+  public async findById(id: number): Promise<Movimentacao> {
+    try {
+      const response = await this.axiosClient.get<Movimentacao>(`/movimentacao?id=${id}`)
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
+  }
 
-    public async findById(id: number) : Promise<Movimentacao> {
-        try {
-            return (await this.axiosClient.get<Movimentacao>(`/${id}`)).data
-        } catch (error:any) {
-            return Promise.reject(error.response);
-        }
+  public async listarAll(): Promise<Movimentacao[]> {
+    try {
+      const response = await this.axiosClient.get<Movimentacao[]>('/movimentacao/lista')
+      return response.data
+    } catch (error) {
+      console.error(error)
+      return []
     }
+  }
 
-    public async ativos(): Promise<Movimentacao[]>{
-        try {
-            return( await this.axiosClient.get<Movimentacao[]>('/ativos')).data
-        } catch (error:any){
-            return Promise.reject(error.response);
-        }
+  public async listarAbertas(): Promise<Movimentacao[]> {
+    try {
+      const response = await this.axiosClient.get<Movimentacao[]>('/movimentacao/lista/abertas')
+      return response.data
+    } catch (error) {
+      console.error(error)
+      return []
     }
+  }
+  public async getVagas(tipo: Tipo): Promise<Movimentacao[]> {
+    try {
+      const response = await this.axiosClient.get<Movimentacao[]>(`/movimentacao/lista/vagas?tipo=${tipo}`)
+      return response.data
+    } catch (error) {
+      console.error(error)
+      return []
+    }
+  }
 
-    public async findAll(): Promise<Movimentacao[]> {
-        try {
-            return (await this.axiosClient.get<Movimentacao[]>('/lista')).data;
-        } catch (error: any) {
-            return Promise.reject(error.response);
-        }
+  public async novaMovimentacao(movimentacao: Movimentacao): Promise<Movimentacao> {
+    try {
+      const response = await this.axiosClient.post<Movimentacao>('/movimentacao/nova', movimentacao)
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
+  }
 
-    public async newMovimentacao(movimentacao: Movimentacao): Promise<void> {
-        try {
-            return (await this.axiosClient.post('', movimentacao));
-        } catch (error: any) {
-            return Promise.reject(error.response);
-        }
+  public async editarMovimentacao(movimentacao: Movimentacao): Promise<string> {
+    try {
+      const response = await this.axiosClient.put<string>(
+        `/movimentacao/editar?id=${movimentacao.id}`,
+        movimentacao
+      )
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
+  }
 
-    public async upDate(id: Number, movimentacao:Movimentacao): Promise<void>{
-        try{
-            return(await this.axiosClient.put(`/${movimentacao.id}`, movimentacao)).data;
-        } catch(error: any) {
-            return Promise.reject(error.response);
-        }
+  public async deletar(movimentacao: Movimentacao): Promise<Movimentacao> {
+    try {Movimentacao
+      const response = await this.axiosClient.delete<Movimentacao>(
+        `/movimentacao?id=${movimentacao.id}`
+      )
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
-    public async excluir(id: number): Promise<string> {
-        try {
-            return (await this.axiosClient.delete<string>(`/${id}`)).data
-        } catch (error:any) {
-            return Promise.reject(error.response)
-        }
-    }
+  }
 }

@@ -1,69 +1,89 @@
-import { Condutor } from "@/Model/Condutor";
-import axios, { AxiosInstance } from "axios";
+import { Condutor } from '@/model/condutor'
+import axios, { AxiosInstance } from 'axios'
+export class CondutorClient {
+  private axiosClient: AxiosInstance
 
-export class CondutorClient{
+  constructor() {
+    this.axiosClient = axios.create({
+      baseURL: `${process.env.VUE_APP_BACKEND_URL}`,
+      headers: { 'Content-type': 'application/json' }
+    })
+  }
 
-    private axiosClient: AxiosInstance;
-
-    constructor() {
-        this.axiosClient = axios.create({
-            baseURL: 'http://localhost:8080/api/condutor',
-            headers: {'Content-type' : 'application/json'}
-        });
+  public async findById(id: number): Promise<Condutor> {
+    try {
+      const response = await this.axiosClient.get<Condutor>(`/condutor?id=${id}`)
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
+  }
 
-    public async findById(id: number) : Promise<Condutor> {
-        try {
-            return (await this.axiosClient.get<Condutor>(`/${id}`)).data
-        } catch (error:any) {
-            return Promise.reject(error.response);
-        }
+  public async lista(): Promise<Condutor[]> {
+    try {
+      const response = await this.axiosClient.get<Condutor[]>('/condutor/lista')
+      return response.data
+    } catch (error) {
+      console.error(error)
+      return []
     }
+  }
+  public async findByNome(nome: string): Promise<Condutor[]> {
+    try {
+      const response = await this.axiosClient.get<Condutor[]>(`/condutor/nome?nome=${nome}`)
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
+  public async findByCpf(cpf: string): Promise<Condutor[]> {
+    try {
+      const response = await this.axiosClient.get<Condutor[]>(`/condutor/cpf?cpf=${cpf}`)
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
 
-    public async findByCpf(cpf: String) : Promise<Condutor[]> {
-        try {
-            return (await this.axiosClient.get<Condutor[]>(`/cpf/${cpf}`)).data
-        } catch (error:any) {
-            return Promise.reject(error.response);
-        }
+  public async listaAtivos(): Promise<Condutor[]> {
+    try {
+      const response = await this.axiosClient.get<Condutor[]>('/condutor/lista/ativos')
+      return response.data
+    } catch (error) {
+      console.error(error)
+      return []
     }
+  }
 
-    public async ativos(): Promise<Condutor[]>{
-        try {
-            return( await this.axiosClient.get<Condutor[]>('/ativos')).data
-        } catch (error:any){
-            return Promise.reject(error.response);
-        }
+  public async cadastrarCondutor(condutor: Condutor): Promise<Condutor> {
+    try {
+      const response = await this.axiosClient.post<Condutor>('/condutor', condutor)
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
+  }
 
-    public async findAll(): Promise<Condutor[]> {
-        try {
-            return (await this.axiosClient.get<Condutor[]>('/lista')).data;
-        } catch (error: any) {
-            return Promise.reject(error.response);
-        }
+  public async editarCondutor(condutor: Condutor): Promise<Condutor> {
+    try {
+      const response = await this.axiosClient.put<Condutor>(
+        `/condutor?id=${condutor.id}`,
+        condutor
+      )
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
+  }
 
-    public async newCondutor(condutor: Condutor): Promise<void> {
-        try {
-            return (await this.axiosClient.post('', condutor));
-        } catch (error: any) {
-            return Promise.reject(error.response);
-        }
+  public async desativarCondutor(id: number): Promise<Condutor> {
+    try {
+      const response = await this.axiosClient.delete<Condutor>(
+        `/condutor?id=${id}`
+      )
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
-
-    public async upDate(id: Number, condutor:Condutor): Promise<void>{
-        try{
-            return(await this.axiosClient.put(`/${condutor.id}`, condutor)).data;
-        } catch(error: any) {
-            return Promise.reject(error.response);
-        }
-    }
-    public async excluir(id: number): Promise<string> {
-        try {
-            return (await this.axiosClient.delete<string>(`/${id}`)).data
-        } catch (error:any) {
-            return Promise.reject(error.response)
-        }
-    }
+  }
 }

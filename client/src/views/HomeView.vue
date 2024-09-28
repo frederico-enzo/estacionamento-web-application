@@ -1,238 +1,149 @@
 <template>
-  <NavBar />
-  <div class="table-tape">
-    <div class="marca">
-      <router-link
-        :to="{ name: 'formulario-marca' }"
-        type="button"
-        class="btn btn-warning"
-        >Cadastrar</router-link
-      >
+  <div class="d-flex flex-column container mt-5">
+    <div class="d-flex justify-content-center">
+      <router-link type="button" class="btn btn-primary w-25 fs-5" to="/movimentacao/formulario">Registrar Entrada
+      </router-link>
     </div>
-    <table class="table table-bordered shadow">
-      <thead>
+    <table class="mt-5 table w-25 align-self-center">
+      <thead class="table-secondary">
         <tr>
-          <th scope="col">Condutor - CPF</th>
-          <th scope="col">Veiculo - Placa</th>
-          <th scope="col">Entrada</th>
-          <th scope="col">Status</th>
-          <th scope="col">Ações</th>
+          <th class="text-center col-md-1">Carro</th>
+          <th class="text-center col-md-2">Moto</th>
+          <th class="text-center col-md-2">Van</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="entradas in MovimentacaoList" :key="entradas.id">
-          <td>
-            <select
-              v-if="entradas.editMode"
-              v-model="entradas.condutor"
-              class="form-control"
-            >
-              <option
-                v-for="condutor in condutorList"
-                :key="condutor.id"
-                :value="condutor"
-              >
-                Nome: {{ condutor.nome }} CPF: {{ condutor.cpf }}
-              </option>
-            </select>
-            <span v-else>{{ entradas.condutor.cpf }}</span>
-          </td>
-          <td>
-            <select
-              v-if="entradas.editMode"
-              v-model="entradas.veiculo"
-              class="form-control"
-            >
-              <option
-                v-for="veiculo in veiculoList"
-                :key="veiculo.id"
-                :value="veiculo"
-              >
-                Placa: {{ veiculo.placa }}
-              </option>
-            </select>
-            <span v-else>{{ entradas.veiculo.placa }}</span>
-          </td>
-          <td>{{ entradas.entrada }}</td>
-          <td v-if="entradas.ativo">
-            <span class="btn btn-success">...</span>
-          </td>
-          <td v-if="!entradas.ativo">
-            <span class="btn btn-danger">...</span>
-          </td>
-
-          <td>
-            <button
-              @click="salvarEdicao(entradas)"
-              v-if="entradas.editMode"
-              type="button"
-              class="btn btn-success"
-            >
-              Salvar
-            </button>
-            <button
-              @click="onClickEditar(entradas.id)"
-              v-else
-              type="button"
-              class="btn btn-warning"
-            >
-              Editar
-            </button>
-            -
-            <button type="button" class="btn btn-secondary">Finalizar</button>
-          </td>
+        <tr>
+          <td class="text-center align-middle col-md-1">{{ carro }}</td>
+          <td class="text-center align-middle col-md-2">{{ moto }}</td>
+          <td class="text-center align-middle col-md-2">{{ van }}</td>
         </tr>
       </tbody>
     </table>
-    <footer>©Frederico 2023</footer>
-    <div v-if="mensagem.show" :class="mensagem.css" id="alert">
-      {{ mensagem.mensagem }}
+    <div class="row mt-3">
+      <div class="col-md-10 text-start">
+        <p class="fs-5">Movimentações Abertas</p>
+      </div>
+    </div>
+    <table class="table">
+      <thead class="table-dark">
+        <tr>
+          <th class="text-center col-md-1">ID</th>
+          <th class="text-center col-md-2">Vaga</th>
+          <th class="text-center col-md-2">Placa</th>
+          <th class="text-center col-md-3">Condutor</th>
+          <th class="text-center col-md-2">Data Entrada</th>
+          <th class="text-center col-md-3">Opções</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in movimentacoesList" :key="item.id">
+          <th class="align-middle text-center col-md-1">{{ item.id }}</th>
+          <th class="align-middle text-center col-md-1">{{ item.veiculo.tipo }}</th>
+          <th class="align-middle col-md-2 text-center">{{ item.veiculo.placa }} <span v-if="!item.veiculo.ativo"
+              class="badge text-bg-danger">Desativado</span>
+          </th>
+          <th class="align-middle col-md-3 text-center">{{ item.condutor.nome }} <span v-if="!item.condutor.ativo"
+              class="badge text-bg-danger">Desativado</span>
+          </th>
+          <th class="align-middle col-md-2 text-center">
+            {{ formatDate(item.dataEntrada) }}
+          </th>
+          <th class="align-middle text-center col-md-3">
+            <BotoesAcoes confirmarRoute="movimentacao.form.confirmar" listarRoute="movimentacao.listar" :id="item.id">
+            </BotoesAcoes>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+    <div v-if="movimentacoesList.length == 0" class="alert alert-secondary" role="alert">
+      Nenhuma vaga ocupada no momento
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import NavBar from "../components/NavBar.vue";
-import { Movimentacao } from "@/Model/Movimentacao";
-import { MovimentacaoClient } from "@/client/Movimentacao.client";
-import { defineComponent } from "vue";
-import { CondutorClient } from "@/client/Condutor.client";
-import { VeiculoCliente } from "@/client/Veiculo.client";
-import { Veiculo } from "@/Model/Veiculo";
-import { Condutor } from "@/Model/Condutor";
-
+import BotoesAcoes from '@/components/BotoesAcoes.vue'
+import { defineComponent } from 'vue'
+import { Movimentacao } from '@/model/movimentacao'
+import { MovimentacaoClient } from '@/client/movimentacao.client'
+import { Tipo } from '@/model/tipo'
+import { ConfiguracaoClient } from '@/client/configuracao.client'
+import { Configuracao } from '@/model/configuracao'
 export default defineComponent({
-  components: { NavBar },
-  name: "TableMovimentacao",
+  name: 'HomeView',
   data() {
     return {
-      condutorList: new Array<Condutor>(),
-      veiculoList: new Array<Veiculo>(),
-      MovimentacaoList: new Array<Movimentacao>(),
-      mensagem: {
-        show: false,
-        mensagem: "",
-        css: "",
-      },
-    };
+      movimentacoesList: new Array<Movimentacao>(),
+      carro: 0 as number,
+      moto: 0 as number,
+      van: 0 as number,
+      configs: new Configuracao
+    }
   },
   mounted() {
-    this.findAll();
-    this.findCondutor();
-    this.findVeiculo();
+    this.findAll()
+    this.getVagas()
+  },
+  components: {
+    BotoesAcoes
   },
   methods: {
+    getVagas() {
+      const configClient = new ConfiguracaoClient()
+      const movsClient = new MovimentacaoClient()
+      configClient.getConfiguracao().then(sucess => {
+        this.carro = sucess.qntdCarro
+        this.moto = sucess.qntdMoto
+        this.van = sucess.qntdVan
+
+        movsClient.getVagas(Tipo.CARRO).then(sucTipo =>{
+          this.carro -= sucTipo.length
+        })
+        movsClient.getVagas(Tipo.MOTO).then(sucTipo =>{
+          this.moto -= sucTipo.length
+        })
+        movsClient.getVagas(Tipo.VAN).then(sucTipo =>{
+          this.van -= sucTipo.length
+        })
+      }).catch(err => {
+          this.carro=0
+          this.van=0
+          this.moto=0
+        })
+    },
     findAll() {
-      const movimentacaoClient = new MovimentacaoClient();
+      const movimentacaoClient = new MovimentacaoClient()
       movimentacaoClient
-        .findAll()
-        .then((data: Movimentacao[]) => {
-          this.MovimentacaoList = data;
+        .listarAbertas()
+        .then(sucess => {
+          this.movimentacoesList = sucess
         })
-        .catch((error: Error) => {
-          console.log(error);
-        });
-    },
-    findCondutor() {
-      const condutorClient = new CondutorClient();
-      condutorClient
-        .findAll()
-        .then((data) => {
-          this.condutorList = data;
+        .catch(error => {
+          
         })
-        .catch((error) => {
-          console.log(error);
-        });
     },
-    onClickEditar(id: number) {
-      const movimentacao = this.MovimentacaoList.find(
-        (movimentacao) => movimentacao.id === id
-      );
-      if (movimentacao) {
-        movimentacao.editMode = true;
-      }
-    },
-    async salvarEdicao(entradas: Movimentacao) {
-      if (!entradas) {
-        return;
-      }
-      const movimentacaoClient = new MovimentacaoClient();
-      try {
-        await movimentacaoClient.upDate(entradas.id, entradas);
-        entradas.editMode = false;
-        this.mensagem.show = true;
-        this.mensagem.css = "alert alert-success fade show";
-        this.mensagem.mensagem = "Movimentação atualizada com sucesso.";
-        setTimeout(() => {
-          this.mensagem.show = false;
-        }, 5000);
-      } catch (error) {
-        console.log(error);
-        this.mensagem.show = true;
-        this.mensagem.css = "alert alert-danger fade show";
-        this.mensagem.mensagem = "Não foi possível atualizar a Movimentação.";
-        setTimeout(() => {
-          this.mensagem.show = false;
-        }, 5000);
-      }
-    },
-
-    findVeiculo() {
-      const veiculoClient = new VeiculoCliente();
-      veiculoClient
-        .findAll()
-        .then((data) => {
-          this.veiculoList = data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-  },
-});
+    formatDate(dateString: string | number | Date) {
+      const dateTime = new Date(dateString)
+      const formattedDate = dateTime.toLocaleDateString()
+      const formattedTime = dateTime.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+      return `${formattedDate} ${formattedTime}`
+    }
+  }
+})
 </script>
-
-<style scoped>
-#alert {
-  margin: 15px 15px 15px 0px;
-  width: 350px;
-  height: 60px;
-}
-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  background: rgb(52, 108, 212);
-  color: white;
-  border-radius: 0px 0px 10px 10px;
-}
-thead :nth-child(1) {
-  border-radius: 10px 0px 0 0;
-}
-thead :nth-child(5) {
-  border-radius: 0px 10px 0 0;
-}
-.marca {
-  margin: 15px 0px 15px 15px;
-  display: flex;
-  justify-content: end;
-}
-thead th {
-  background: rgb(52, 108, 212);
-  color: white;
-  text-align: center;
-  vertical-align: middle;
-}
-.table-tape td {
-  text-align: center;
-  vertical-align: middle;
-}
-
-.table-tape {
-  padding-top: 5vw;
-
-  padding-left: 25vw;
-  padding-right: 25vw;
-}
+<style lang="scss">
+$theme-colors: (
+  'dark': #111111,
+  'primary': #2b2727,
+  'secondary': #5c5757,
+  'info': #a4a4a4,
+  'success': #198754,
+  'warning': #ffc107,
+  'danger': #dc3545
+);
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
 </style>

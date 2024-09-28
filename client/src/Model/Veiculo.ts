@@ -1,14 +1,12 @@
-import { Cor } from "./Cor";
-import { Modelo } from "./Modelo";
-import { Tipo } from "./Tipo";
-import { AbstractEntity } from "./abstract-entity";
+import { AbstractEntity } from './abstract-entity'
+import { Cor } from './cor'
+import { Modelo } from './modelo'
+import { Tipo } from './tipo'
 
-export class Veiculo extends AbstractEntity{
-
-    placa!: String
-    ano!: Number
-    modeloId!: Modelo
-    cor!: Cor
-    tipo!: Tipo
-    editMode?: boolean;
+export class Veiculo extends AbstractEntity {
+  placa!: string
+  ano!: number
+  cor!: Cor
+  tipo!: Tipo
+  modelo!: Modelo
 }

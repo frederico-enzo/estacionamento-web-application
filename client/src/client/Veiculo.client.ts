@@ -1,61 +1,82 @@
-import { Veiculo } from "@/Model/Veiculo";
-import axios, { AxiosInstance } from "axios";
+import { Veiculo } from '@/model/veiculo'
+import axios, { AxiosInstance } from 'axios'
 
-export class VeiculoCliente{
+export class VeiculoClient {
+  private axiosClient: AxiosInstance
 
-    private axiosClient: AxiosInstance;
-    
-    constructor() {
-        this.axiosClient = axios.create({
-            baseURL: 'http://localhost:8080/api/veiculo',
-            headers: {'Content-type' : 'application/json'}
-        });
-    }
+  constructor() {
+    this.axiosClient = axios.create({
+      baseURL: `${process.env.VUE_APP_BACKEND_URL}`,
+      headers: { 'Content-type': 'application/json' }
+    })
+  }
 
-    public async findById(id: number) : Promise<Veiculo> {
-        try{
-            return ( await this.axiosClient.get<Veiculo>(`${id}`)).data;
-        } catch (error:any){
-            return Promise.reject(error.response);
-        }
+  public async findById(id: number): Promise<Veiculo> {
+    try {
+      const response = await this.axiosClient.get<Veiculo>(`/veiculo?id=${id}`)
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
+  }
 
-    public async ativos() : Promise<Veiculo[]>{
-        try{
-            return ( await this.axiosClient.get<Veiculo[]>('/ativos')).data;
-        } catch (error:any){
-            return Promise.reject(error.response);
-        }
+  public async listarAll(): Promise<Veiculo[]> {
+    try {
+      const response = await this.axiosClient.get<Veiculo[]>('/veiculo/lista')
+      return response.data
+    } catch (error) {
+      console.error(error)
+      return []
     }
+  }
+  public async findByPlaca(placa: string): Promise<Veiculo[]> {
+    try {
+      const response = await this.axiosClient.get<Veiculo[]>(`/veiculo/placa?placa=${placa}`)
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
 
-    public async findAll(): Promise<Veiculo[]>{
-        try{
-            return( await this.axiosClient.get<Veiculo[]>('/lista')).data;
-        } catch (error:any){
-            return Promise.reject(error.response);
-        }
+  public async listarAllAtivos(): Promise<Veiculo[]> {
+    try {
+      const response = await this.axiosClient.get<Veiculo[]>('/veiculo/lista/ativos')
+      return response.data
+    } catch (error) {
+      console.error(error)
+      return []
     }
+  }
 
-    public async newVeiculo(veiculo : Veiculo) : Promise<void>{
-        try{
-            return (await this.axiosClient.post('', veiculo));
-        } catch(error: any){
-            return Promise.reject(error.response);
-        }
+  public async cadastrar(veiculo: Veiculo): Promise<Veiculo> {
+    try {
+      const response = await this.axiosClient.post<Veiculo>('/veiculo', veiculo)
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
-    
-    public async upDate (id: Number, veiculo: Veiculo):Promise<void>{
-        try{
-            return(await this.axiosClient.put(`/${veiculo.id}`, veiculo)).data;
-        } catch ( error:any){
-            return Promise.reject(error.response);
-        }
+  }
+
+  public async atualizar(veiculo: Veiculo): Promise<Veiculo> {
+    try {
+      const response = await this.axiosClient.put<Veiculo>(
+        `/veiculo?id=${veiculo.id}`,
+        veiculo
+      )
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
-    public async excluir(id: number): Promise<string> {
-        try {
-            return (await this.axiosClient.delete<string>(`/${id}`)).data
-        } catch (error:any) {
-            return Promise.reject(error.response)
-        }
+  }
+
+  public async desativar(id: number): Promise<Veiculo> {
+    try {
+      const response = await this.axiosClient.delete<Veiculo>(
+        `/veiculo?id=${id}`
+      )
+      return response.data
+    } catch (error) {
+      return Promise.reject(error)
     }
+  }
 }
