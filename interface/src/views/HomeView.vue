@@ -63,13 +63,15 @@
 </template>
 
 <script lang="ts">
+
 import BotoesAcoes from '@/components/BotoesAcoes.vue'
 import { defineComponent } from 'vue'
-import { Movimentacao } from '@/model/movimentacao'
-import { MovimentacaoClient } from '@/client/movimentacao.client'
-import { Tipo } from '@/model/tipo'
-import { ConfiguracaoClient } from '@/client/configuracao.client'
-import { Configuracao } from '@/model/configuracao'
+import { Movimentacao } from '@/model/Movimentacao'
+import { MovimentacaoClient } from '@/service/Movimentacao.client'
+import { Tipo } from '@/model/Tipo'
+import { ConfiguracaoClient } from '@/service/Configuracao.client'
+import { Configuracao } from '@/model/Configuracao'
+
 export default defineComponent({
   name: 'HomeView',
   data() {
@@ -97,20 +99,20 @@ export default defineComponent({
         this.moto = sucess.qntdMoto
         this.van = sucess.qntdVan
 
-        movsClient.getVagas(Tipo.CARRO).then(sucTipo =>{
+        movsClient.getVagas(Tipo.CARRO).then(sucTipo => {
           this.carro -= sucTipo.length
         })
-        movsClient.getVagas(Tipo.MOTO).then(sucTipo =>{
+        movsClient.getVagas(Tipo.MOTO).then(sucTipo => {
           this.moto -= sucTipo.length
         })
-        movsClient.getVagas(Tipo.VAN).then(sucTipo =>{
+        movsClient.getVagas(Tipo.VAN).then(sucTipo => {
           this.van -= sucTipo.length
         })
-      }).catch(err => {
-          this.carro=0
-          this.van=0
-          this.moto=0
-        })
+      }).catch(error => {
+        this.carro = 0
+        this.van = 0
+        this.moto = 0
+      })
     },
     findAll() {
       const movimentacaoClient = new MovimentacaoClient()
@@ -120,8 +122,8 @@ export default defineComponent({
           this.movimentacoesList = sucess
         })
         .catch(error => {
-          
-        })
+          console.error("Erro ao listar movimentações:", error);
+        });
     },
     formatDate(dateString: string | number | Date) {
       const dateTime = new Date(dateString)
@@ -135,6 +137,7 @@ export default defineComponent({
   }
 })
 </script>
+
 <style lang="scss">
 $theme-colors: (
   'dark': #111111,
@@ -145,5 +148,5 @@ $theme-colors: (
   'warning': #ffc107,
   'danger': #dc3545
 );
-@import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import '~bootstrap/scss/bootstrap.scss';
 </style>
