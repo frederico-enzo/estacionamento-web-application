@@ -193,7 +193,7 @@ $theme-colors: (
   'primary': #515151,
   'secondary': #c8c8c8,
   'info': #a4a4a4,
-  'success': #198754,
+  'success': #198754, 
   'warning': #ffc107,
   'danger': #dc3545
 );
