@@ -7,15 +7,21 @@ const routes: Array<RouteRecordRaw> = [
     name: 'home',
     component: () => import('../views/HomeView.vue')
   },
+
+  {
+    path: '/condutores',
+    name: 'condutores',
+    component: () => import( '../views/condutor/CondutoresView.vue')
+  },
   {
     path: '/condutor',
     name: 'condutor.listar',
-    component: () => import('../views/condutor/CondutorInfoView.vue')
+    component: () => import( '../views/condutor/CondutorInfoView.vue')
   },
   {
     path: '/condutor/formulario',
     name: 'condutor.form',
-    component: () => import('../views/condutor/CondutoresFormView.vue'),
+    component: () => import( '../views/condutor/CondutoresFormView.vue'),
     children: [
     {
       path: '/condutor/formulario',
@@ -25,9 +31,9 @@ const routes: Array<RouteRecordRaw> = [
     {
       path: '/condutor/formulario',
       name: 'condutor.form.toggle',
-      component: () => import('../views/condutor/CondutoresFormView.vue'),
+      component: () => import( '../views/condutor/CondutoresFormView.vue'),
     }]
-  }
+  },
 ]
 
 const router = createRouter({

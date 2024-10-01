@@ -74,7 +74,7 @@ export default defineComponent({
           this.condutoresList = sucess
         })
         .catch(error => {
-
+          console.log("erro");
         })
     }
   }
@@ -91,9 +91,10 @@ $theme-colors: (
   'warning': #ffc107,
   'danger': #dc3545
 );
-@import 'node_modules/bootstrap/scss/bootstrap.scss';
 
 .container {
   width: 70%;
 }
+@import '~bootstrap/scss/bootstrap.scss';
+
 </style>

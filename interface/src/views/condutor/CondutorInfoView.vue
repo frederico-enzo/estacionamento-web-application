@@ -156,5 +156,5 @@ $theme-colors: (
   'warning': #ffc107,
   'danger': #dc3545
 );
-@import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import '~bootstrap/scss/bootstrap.scss';
 </style>
