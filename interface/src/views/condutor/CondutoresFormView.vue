@@ -2,10 +2,10 @@
   <div class="container w-50">
     <div class="row mt-5">
       <div class="col-md-12 text-center">
-        <p v-if="this.form == undefined" class="fs-5">Cadastrar Condutor</p>
-        <p v-if="this.form == 'editar'" class="fs-5">Editar Condutor</p>
-        <p v-if="this.form == 'toggle' && condutor.ativo" class="fs-5">Desativar Condutor</p>
-        <p v-if="this.form == 'toggle' && !condutor.ativo" class="fs-5">Ativar Condutor</p>      </div>
+        <p v-if="form == undefined" class="fs-5">Cadastrar Condutor</p>
+        <p v-if="form == 'editar'" class="fs-5">Editar Condutor</p>
+        <p v-if="form == 'toggle' && condutor.ativo" class="fs-5">Desativar Condutor</p>
+        <p v-if="form == 'toggle' && !condutor.ativo" class="fs-5">Ativar Condutor</p>      </div>
       <div class="col-md-2"></div>
     </div>
 
@@ -14,19 +14,19 @@
     <div class="row w-100 d-flex justify-content-center m-0 mb-2">
       <div class="mb-3 mt-3 w-50 text-start">
         <label for="nome" class="form-label">Nome do Condutor</label>
-        <input id="nome" type="text" :disabled="this.form === 'toggle' ? '' : disabled" class="form-control"
+        <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control"
           v-on:keyup.enter="onClickCadastrar()" v-model="condutor.nome" />
       </div>
       <div class="mb-3 mt-3 w-50 text-start">
         <label for="telefone" class="form-label">Telefone</label>
-        <input id="telefone" type="text" :disabled="this.form === 'toggle' ? '' : disabled" class="form-control" v-maska
+        <input id="telefone" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control" v-maska
           v-on:keyup.enter="onClickCadastrar()" data-maska="(##) # ####-####" v-model="condutor.telefone" />
       </div>
     </div>
     <div class="row w-100 d-flex justify-content-center m-0 mb-2">
       <div class="mb-3 mt-3 w-50 text-start">
         <label for="cpf" class="form-label">CPF do Condutor</label>
-        <input id="cpf" type="text" :disabled="this.form === 'toggle' ? '' : disabled" class="form-control" v-maska
+        <input id="cpf" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control" v-maska
           v-on:keyup.enter="onClickCadastrar()" data-maska="###.###.###-##" v-model="condutor.cpf" />
       </div>
     </div>
@@ -40,17 +40,17 @@
       </div>
       <div class="col-md-3">
         <div class="d-grid gap-2">
-          <button v-if="this.form === undefined" type="button" class="btn btn-primary" @click="onClickCadastrar()">
+          <button v-if="form === undefined" type="button" class="btn btn-primary" @click="onClickCadastrar()">
             Cadastrar
           </button>
-          <button v-if="this.form === 'editar'" type="button" class="btn btn-warning" @click="onClickEditar()">
+          <button v-if="form === 'editar'" type="button" class="btn btn-warning" @click="onClickEditar()">
             Editar
           </button>
-          <button v-if="this.form === 'toggle' && this.condutor.ativo === true" type="button" class="btn btn-danger"
+          <button v-if="form === 'toggle' && condutor.ativo === true" type="button" class="btn btn-danger"
             @click="onClickExcluir()">
             Excluir
           </button>
-          <button v-if="this.form === 'toggle' && this.condutor.ativo === false" type="button" class="btn btn-success"
+          <button v-if="form === 'toggle' && condutor.ativo === false" type="button" class="btn btn-success"
             @click="onClickAtivar()">
             Ativar
           </button>
@@ -60,14 +60,12 @@
   </div>
 </template>
 <script lang="ts">
-
 import { MaskInput, vMaska } from "maska"
 new MaskInput("[data-maska]")
 import AvisoComponent from '@/components/AvisoComponent.vue'
 import { defineComponent } from 'vue'
 import { Condutor } from "@/model/Condutor"
 import { CondutorClient } from "@/service/Condutor.client"
-
 export default defineComponent({
   name: 'CondutorFormulario',
   data(): any {
@@ -193,7 +191,7 @@ $theme-colors: (
   'primary': #515151,
   'secondary': #c8c8c8,
   'info': #a4a4a4,
-  'success': #198754, 
+  'success': #198754,
   'warning': #ffc107,
   'danger': #dc3545
 );

@@ -5,7 +5,28 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: () => import(/* webpackChunkName: "about" */ '../views/HomeView.vue')
+    component: () => import('../views/HomeView.vue')
+  },
+  {
+    path: '/condutor',
+    name: 'condutor.listar',
+    component: () => import('../views/condutor/CondutorInfoView.vue')
+  },
+  {
+    path: '/condutor/formulario',
+    name: 'condutor.form',
+    component: () => import('../views/condutor/CondutoresFormView.vue'),
+    children: [
+    {
+      path: '/condutor/formulario',
+      name: 'condutor.form.editar',
+      component: () => import( '../views/condutor/CondutoresFormView.vue'),
+    },
+    {
+      path: '/condutor/formulario',
+      name: 'condutor.form.toggle',
+      component: () => import('../views/condutor/CondutoresFormView.vue'),
+    }]
   }
 ]
 
