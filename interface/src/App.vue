@@ -50,6 +50,7 @@ $theme-colors: (
   font-weight: var(--font-weight-destaque) !important;
 }
 
+
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

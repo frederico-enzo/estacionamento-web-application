@@ -5,29 +5,27 @@
         <p v-if="form == undefined" class="fs-5">Cadastrar Condutor</p>
         <p v-if="form == 'editar'" class="fs-5">Editar Condutor</p>
         <p v-if="form == 'toggle' && condutor.ativo" class="fs-5">Desativar Condutor</p>
-        <p v-if="form == 'toggle' && !condutor.ativo" class="fs-5">Ativar Condutor</p>      </div>
+        <p v-if="form == 'toggle' && !condutor.ativo" class="fs-5">Ativar Condutor</p>
+      </div>
       <div class="col-md-2"></div>
     </div>
 
     <AvisoComponent :ativo="mensagem.ativo" :sucesso="mensagem.status" :mensagem="mensagem.mensagem"></AvisoComponent>
-
-    <div class="row w-100 d-flex justify-content-center m-0 mb-2">
-      <div class="mb-3 mt-3 w-50 text-start">
-        <label for="nome" class="form-label">Nome do Condutor</label>
-        <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control"
+    <div class="d-flex flex-column allien-center justify-content-center align-items-center gap-2">
+      <div class="form-floating mb-3 col-6 ">
+        <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark p-3"
           v-on:keyup.enter="onClickCadastrar()" v-model="condutor.nome" />
+        <label for="nome" class="form-label">Nome do Condutor</label>
       </div>
-      <div class="mb-3 mt-3 w-50 text-start">
-        <label for="telefone" class="form-label">Telefone</label>
-        <input id="telefone" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control" v-maska
+      <div class="form-floating mb-3 col-6">
+        <input id="telefone" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark p-3" v-maska
           v-on:keyup.enter="onClickCadastrar()" data-maska="(##) # ####-####" v-model="condutor.telefone" />
+        <label for="telefone" class="form-label">Telefone</label>
       </div>
-    </div>
-    <div class="row w-100 d-flex justify-content-center m-0 mb-2">
-      <div class="mb-3 mt-3 w-50 text-start">
-        <label for="cpf" class="form-label">CPF do Condutor</label>
-        <input id="cpf" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control" v-maska
+      <div class="form-floating  mb-3 col-6">
+        <input id="cpf" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark p-3" v-maska
           v-on:keyup.enter="onClickCadastrar()" data-maska="###.###.###-##" v-model="condutor.cpf" />
+        <label for="cpf" class="form-label">CPF do Condutor</label>
       </div>
     </div>
 
