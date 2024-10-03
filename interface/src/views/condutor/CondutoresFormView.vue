@@ -13,17 +13,17 @@
     <AvisoComponent :ativo="mensagem.ativo" :sucesso="mensagem.status" :mensagem="mensagem.mensagem"></AvisoComponent>
     <div class="d-flex flex-column allien-center justify-content-center align-items-center gap-2">
       <div class="form-floating mb-3 col-6 ">
-        <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark p-3"
+        <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark"
           v-on:keyup.enter="onClickCadastrar()" v-model="condutor.nome" />
         <label for="nome" class="form-label">Nome do Condutor</label>
       </div>
       <div class="form-floating mb-3 col-6">
-        <input id="telefone" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark p-3" v-maska
+        <input id="telefone" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark " v-maska
           v-on:keyup.enter="onClickCadastrar()" data-maska="(##) # ####-####" v-model="condutor.telefone" />
         <label for="telefone" class="form-label">Telefone</label>
       </div>
       <div class="form-floating  mb-3 col-6">
-        <input id="cpf" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark p-3" v-maska
+        <input id="cpf" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark " v-maska
           v-on:keyup.enter="onClickCadastrar()" data-maska="###.###.###-##" v-model="condutor.cpf" />
         <label for="cpf" class="form-label">CPF do Condutor</label>
       </div>
@@ -193,5 +193,6 @@ $theme-colors: (
   'warning': #ffc107,
   'danger': #dc3545
 );
+
 @import '~bootstrap/scss/bootstrap.scss';
 </style>
