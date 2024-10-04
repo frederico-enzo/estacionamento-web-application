@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -34,6 +33,36 @@ const routes: Array<RouteRecordRaw> = [
       component: () => import( '../views/condutor/CondutoresFormView.vue'),
     }]
   },
+
+  {
+    path: '/veiculos',
+    name: 'veiculos',
+    component: () => import( '../views/veiculo/VeiculosView.vue')
+  },
+  {
+    path: '/veiculo',
+    name: 'veiculo.listar',
+    component: () => import( '../views/veiculo/VeiculoInfoView.vue')
+  },
+  {
+    path: '/veiculo/formulario',
+    name: 'veiculo.form',
+    component: () => import( '../views/veiculo/VeiculosFormView.vue'),
+    children: [
+      {
+        path: '/veiculo/formulario',
+        name: 'veiculo.form.editar',
+        component: () => import( '../views/veiculo/VeiculosFormView.vue'),
+      },
+      {
+        path: '/veiculo/formulario',
+        name: 'veiculo.form.toggle',
+        component: () => import( '../views/veiculo/VeiculosFormView.vue'),
+      }
+    ]
+  },
+
+  
 ]
 
 const router = createRouter({
