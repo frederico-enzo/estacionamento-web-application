@@ -1,3 +1,4 @@
+
 <template>
   <div class="container w-50">
     <div class="row mt-5">
@@ -7,56 +8,56 @@
         <p v-if="form == 'toggle' && condutor.ativo" class="fs-5">Desativar Condutor</p>
         <p v-if="form == 'toggle' && !condutor.ativo" class="fs-5">Ativar Condutor</p>
       </div>
-      <div class="col-md-2"></div>
     </div>
 
     <AvisoComponent :ativo="mensagem.ativo" :sucesso="mensagem.status" :mensagem="mensagem.mensagem"></AvisoComponent>
-    <div class="d-flex flex-column allien-center justify-content-center align-items-center gap-2">
-      <div class="form-floating mb-3 col-6 ">
-        <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark"
+
+    <div class="d-flex flex-column align-items-center justify-content-center gap-3">
+      <!-- Nome do Condutor -->
+      <div class="form-floating mb-3 col-8">
+        <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control rounded-3 input-interativo"
           v-on:keyup.enter="onClickCadastrar()" v-model="condutor.nome" />
         <label for="nome" class="form-label">Nome do Condutor</label>
       </div>
-      <div class="form-floating mb-3 col-6">
-        <input id="telefone" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark " v-maska
-          v-on:keyup.enter="onClickCadastrar()" data-maska="(##) # ####-####" v-model="condutor.telefone" />
+
+      <!-- Telefone -->
+      <div class="form-floating mb-3 col-8">
+        <input id="telefone" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control rounded-3 input-interativo"
+          v-maska v-on:keyup.enter="onClickCadastrar()" data-maska="(##) # ####-####" v-model="condutor.telefone" />
         <label for="telefone" class="form-label">Telefone</label>
       </div>
-      <div class="form-floating  mb-3 col-6">
-        <input id="cpf" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control border border-dark " v-maska
-          v-on:keyup.enter="onClickCadastrar()" data-maska="###.###.###-##" v-model="condutor.cpf" />
+
+      <!-- CPF -->
+      <div class="form-floating mb-3 col-8">
+        <input id="cpf" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control rounded-3 input-interativo"
+          v-maska v-on:keyup.enter="onClickCadastrar()" data-maska="###.###.###-##" v-model="condutor.cpf" />
         <label for="cpf" class="form-label">CPF do Condutor</label>
       </div>
     </div>
 
-    <div class="row d-flex justify-content-center">
+    <!-- Ações -->
+    <div class="row d-flex justify-content-center gap-3">
       <div class="col-md-3">
         <div class="d-grid gap-2">
-          <router-link type="button" class="btn btn-secondary" to="/condutores">Voltar
-          </router-link>
+          <router-link type="button" class="btn btn-secondary btn-lg rounded-3 btn-interativo" to="/condutores">Voltar</router-link>
         </div>
       </div>
       <div class="col-md-3">
         <div class="d-grid gap-2">
-          <button v-if="form === undefined" type="button" class="btn btn-primary" @click="onClickCadastrar()">
-            Cadastrar
-          </button>
-          <button v-if="form === 'editar'" type="button" class="btn btn-warning" @click="onClickEditar()">
-            Editar
-          </button>
-          <button v-if="form === 'toggle' && condutor.ativo === true" type="button" class="btn btn-danger"
-            @click="onClickExcluir()">
-            Excluir
-          </button>
-          <button v-if="form === 'toggle' && condutor.ativo === false" type="button" class="btn btn-success"
-            @click="onClickAtivar()">
-            Ativar
-          </button>
+          <button v-if="form === undefined" type="button" class="btn btn-primary btn-lg rounded-3 btn-interativo"
+            @click="onClickCadastrar()">Cadastrar</button>
+          <button v-if="form === 'editar'" type="button" class="btn btn-warning btn-lg rounded-3 btn-interativo"
+            @click="onClickEditar()">Editar</button>
+          <button v-if="form === 'toggle' && condutor.ativo === true" type="button" class="btn btn-danger btn-lg rounded-3 btn-interativo"
+            @click="onClickExcluir()">Excluir</button>
+          <button v-if="form === 'toggle' && condutor.ativo === false" type="button" class="btn btn-success btn-lg rounded-3 btn-interativo"
+            @click="onClickAtivar()">Ativar</button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script lang="ts">
 import { MaskInput, vMaska } from "maska"
 new MaskInput("[data-maska]")
@@ -183,16 +184,42 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-$theme-colors: (
-  'dark': #111111,
-  'primary': #515151,
-  'secondary': #c8c8c8,
-  'info': #a4a4a4,
-  'success': #198754,
-  'warning': #ffc107,
-  'danger': #dc3545
-);
+<style scoped>
+/* Estilos para Inputs interativos */
+.input-interativo {
+  transition: all 0.3s ease;
+}
 
-@import '~bootstrap/scss/bootstrap.scss';
+.input-interativo:focus {
+  border-color: #0078d4;
+  box-shadow: 0 0 5px rgba(0, 120, 212, 0.7);
+  transform: scale(1.05);
+}
+
+/* Efeito Hover nos botões */
+.btn-interativo {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-interativo:hover {
+  border-radius: none;
+  background-color: #005a9c;
+  transform: scale(1.05);
+}
+
+/* Efeito de transição suave para a exibição do aviso */
+.v-mensagem {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Configuração para as colunas do layout */
+.col-md-8 {
+  width: 100%;
+}
+
+/* Ajustes gerais de margens e padding */
+.mt-5 {
+  margin-top: 2rem;
+}
 </style>
