@@ -1,123 +1,133 @@
 <template>
-  <div class="d-flex">
-    <div class="sidebar shadow vh-100 p-3">
-      <ul class="nav flex-column">
-        <li class="nav-item mb-2" :class="{'active-item': isActive('/')}">
-          <router-link class="nav-link d-flex align-items-center sidebar-link" to="/" @click="setActive('/')">
-            <font-awesome-icon icon="home" class="me-2" />
-            <span>Início</span>
-          </router-link>
-        </li>
-        <li class="nav-item mb-2" :class="{'active-item': isActive('/condutores')}">
-          <router-link class="nav-link d-flex align-items-center sidebar-link" to="/condutores" @click="setActive('/condutores')">
-            <font-awesome-icon icon="user" class="me-2" />
-            <span>Condutor</span>
-          </router-link>
-        </li>
-        <li class="nav-item mb-2" :class="{'active-item': isActive('/veiculos')}">
-          <router-link class="nav-link d-flex align-items-center sidebar-link" to="/veiculos" @click="setActive('/veiculos')">
-            <font-awesome-icon icon="car" class="me-2" />
-            <span>Veículos</span>
-          </router-link>
-        </li>
-        <li class="nav-item mb-2" :class="{'active-item': isActive('/movimentacoes')}">
-          <router-link class="nav-link d-flex align-items-center sidebar-link" to="/movimentacoes" @click="setActive('/movimentacoes')">
-            <font-awesome-icon icon="exchange-alt" class="me-2" />
-            <span>Movimentações</span>
-          </router-link>
-        </li>
-        <li class="nav-item mb-2" :class="{'active-item': isActive('/modelos')}">
-          <router-link class="nav-link d-flex align-items-center sidebar-link" to="/modelos" @click="setActive('/modelos')">
-            <font-awesome-icon icon="list" class="me-2" />
-            <span>Modelos</span>
-          </router-link>
-        </li>
-        <li class="nav-item mb-2" :class="{'active-item': isActive('/marcas')}">
-          <router-link class="nav-link d-flex align-items-center sidebar-link" to="/marcas" @click="setActive('/marcas')">
-            <font-awesome-icon icon="tags" class="me-2" />
-            <span>Marcas</span>
-          </router-link>
-        </li>
-        <li class="nav-item" :class="{'active-item': isActive('/configs')}">
-          <router-link class="nav-link d-flex align-items-center sidebar-link" to="/configs" @click="setActive('/configs')">
-            <font-awesome-icon icon="cog" class="me-2" />
-            <span>Configuração</span>
-          </router-link>
-        </li>
+  <div id="app">
+    <div class="sidebar">
+      <ul>
+        <li :class="{ 'active-item': isActive('/') }" @click="setActive('/')"><router-link to="/"><i
+              class="fas fa-home"></i></router-link></li>
+        <li :class="{ 'active-item': isActive('/condutores') }" @click="setActive('/condutores')"><router-link
+            to="/condutores"><i class="fas fa-user"></i></router-link></li>
+        <li :class="{ 'active-item': isActive('/veiculos') }" @click="setActive('/veiculos')"><router-link
+            to="/veiculos"><i class="fas fa-car"></i></router-link></li>
+        <li :class="{ 'active-item': isActive('/movimentacoes') }" @click="setActive('/movimentacoes')"><router-link
+            to="/movimentacoes"><i class="fas fa-exchange-alt"></i></router-link></li>
+        <li :class="{ 'active-item': isActive('/modelos') }" @click="setActive('/modelos')"><router-link to="/modelos"><i
+              class="fas fa-list"></i></router-link></li>
+        <li :class="{ 'active-item': isActive('/marcas') }" @click="setActive('/marcas')"><router-link to="/marcas"><i
+              class="fas fa-tags"></i></router-link></li>
+        <li :class="{ 'active-item': isActive('/configs') }" @click="setActive('/configs')"><router-link to="/configs"><i
+              class="fas fa-cog"></i></router-link></li>
       </ul>
     </div>
-    <div class="content flex-grow-1 p-3">
-      <router-view />
+    <div class="content ">
+      <div class="content-inner">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 export default defineComponent({
   name: 'NavbarComponent',
+
   setup() {
-    const activeLink = ref<string>('/'); // Link ativo inicial
+    const route = useRoute();
+    const activeLink = ref<string>(route.path);
 
     const setActive = (link: string) => {
       activeLink.value = link;
     };
+
     const isActive = (link: string) => activeLink.value === link;
+
+    onMounted(() => {
+      activeLink.value = route.path;
+    });
+
     return { setActive, isActive };
   },
 });
 </script>
 
 <style scoped>
+body,
+html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
 .sidebar {
-  width: 280px;
+  height: calc(100vh - 20px);
+  width: 80px;
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.8); 
-  backdrop-filter: blur(10px); 
-  border-right: 1px solid rgba(0, 0, 0, 0.1); 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  top: 10px;
+  left: 10px;
+  background-color: #3b82f6;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 15px;
 }
 
-.sidebar .nav-link {
-  color: #000; 
-  font-size: 1rem;
-  padding: 10px 15px;
-  border-radius: 6px;
-  transition: all 0.3s ease-in-out;
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.sidebar .nav-link:hover {
-  background: rgba(0, 120, 212, 0.2); 
-  transform: translateX(5px); 
-  color: #0057d8; 
+.sidebar li {
+  width: 60px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.sidebar .nav-link.active {
-  background: rgba(0, 120, 212, 0.5); 
-  font-weight: bold;
+.sidebar li a {
+  display: block;
+  padding: 10px;
+  font-size: 25px;
   color: white;
+  text-decoration: none;
+  border-radius: 15px;
+  transition: background-color 0.3s, color 0.3s, padding 0.3s;
 }
 
-.active-item .nav-link {
-  background: rgba(0, 120, 212, 0.865); 
-  color: white;
-  font-weight: bold;
+.sidebar li a:hover {
+  background-color: white;
+  color: black;
+  padding: 10px;
 }
 
-.nav-item {
-  text-align: left;
-  margin-bottom: 0.5rem;
+.sidebar li.active-item a {
+  background-color: white;
+  color: black;
 }
 
-/* Ajustes para o conteúdo principal */
 .content {
-  margin-left: 280px;
+  height: calc(100vh - 20px);
+  margin-left: 110px;
+  margin-right: 20px;
+  margin-top: 10px;
   padding: 20px;
-  background-color: #f3f4f6; /* Fundo claro para o conteúdo */
-  min-height: 100vh;
+  background-color: #95959a82;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);  /* Horizontal, vertical, desfoque e cor */
+
+}
+
+.content-inner {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.sidebar .spacer {
+  flex-grow: 1;
 }
 </style>
