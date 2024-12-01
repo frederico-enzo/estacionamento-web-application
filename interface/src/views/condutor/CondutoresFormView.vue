@@ -1,6 +1,5 @@
-
 <template>
-  <div class="container w-50">
+  <div class="container-fluid p-4">
     <div class="row mt-5">
       <div class="col-md-12 text-center">
         <p v-if="form == undefined" class="fs-5">Cadastrar Condutor</p>
@@ -13,33 +12,30 @@
     <AvisoComponent :ativo="mensagem.ativo" :sucesso="mensagem.status" :mensagem="mensagem.mensagem"></AvisoComponent>
 
     <div class="d-flex flex-column align-items-center justify-content-center gap-3">
-      <!-- Nome do Condutor -->
       <div class="form-floating mb-3 col-8">
-        <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control rounded-3 input-interativo"
-          v-on:keyup.enter="onClickCadastrar()" v-model="condutor.nome" />
+        <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled"
+          class="form-control rounded-3 input-interativo" v-on:keyup.enter="onClickCadastrar()"
+          v-model="condutor.nome" />
         <label for="nome" class="form-label">Nome do Condutor</label>
       </div>
-
-      <!-- Telefone -->
       <div class="form-floating mb-3 col-8">
-        <input id="telefone" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control rounded-3 input-interativo"
-          v-maska v-on:keyup.enter="onClickCadastrar()" data-maska="(##) # ####-####" v-model="condutor.telefone" />
+        <input id="telefone" type="text" :disabled="form === 'toggle' ? '' : disabled"
+          class="form-control rounded-3 input-interativo" v-maska v-on:keyup.enter="onClickCadastrar()"
+          data-maska="(##) # ####-####" v-model="condutor.telefone" />
         <label for="telefone" class="form-label">Telefone</label>
       </div>
-
-      <!-- CPF -->
       <div class="form-floating mb-3 col-8">
-        <input id="cpf" type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control rounded-3 input-interativo"
-          v-maska v-on:keyup.enter="onClickCadastrar()" data-maska="###.###.###-##" v-model="condutor.cpf" />
+        <input id="cpf" type="text" :disabled="form === 'toggle' ? '' : disabled"
+          class="form-control rounded-3 input-interativo" v-maska v-on:keyup.enter="onClickCadastrar()"
+          data-maska="###.###.###-##" v-model="condutor.cpf" />
         <label for="cpf" class="form-label">CPF do Condutor</label>
       </div>
     </div>
-
-    <!-- Ações -->
     <div class="row d-flex justify-content-center gap-3">
       <div class="col-md-3">
         <div class="d-grid gap-2">
-          <router-link type="button" class="btn btn-secondary btn-lg rounded-3 btn-interativo" to="/condutores">Voltar</router-link>
+          <router-link type="button" class="btn btn-secondary btn-lg rounded-3 btn-back-interativo"
+            to="/condutores">Voltar</router-link>
         </div>
       </div>
       <div class="col-md-3">
@@ -48,10 +44,10 @@
             @click="onClickCadastrar()">Cadastrar</button>
           <button v-if="form === 'editar'" type="button" class="btn btn-warning btn-lg rounded-3 btn-interativo"
             @click="onClickEditar()">Editar</button>
-          <button v-if="form === 'toggle' && condutor.ativo === true" type="button" class="btn btn-danger btn-lg rounded-3 btn-interativo"
-            @click="onClickExcluir()">Excluir</button>
-          <button v-if="form === 'toggle' && condutor.ativo === false" type="button" class="btn btn-success btn-lg rounded-3 btn-interativo"
-            @click="onClickAtivar()">Ativar</button>
+          <button v-if="form === 'toggle' && condutor.ativo === true" type="button"
+            class="btn btn-danger btn-lg rounded-3 btn-interativo" @click="onClickExcluir()">Excluir</button>
+          <button v-if="form === 'toggle' && condutor.ativo === false" type="button"
+            class="btn btn-success btn-lg rounded-3 btn-interativo" @click="onClickAtivar()">Ativar</button>
         </div>
       </div>
     </div>
@@ -185,7 +181,16 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Estilos para Inputs interativos */
+.container-fluid {
+  margin-top: 15vh;
+  width: 50vw;
+  height: 50vh;
+  background-color: #f7f7f8;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .input-interativo {
   transition: all 0.3s ease;
 }
@@ -196,29 +201,42 @@ export default defineComponent({
   transform: scale(1.05);
 }
 
-/* Efeito Hover nos botões */
+.btn-back-interativo {
+  border: none;
+  border-radius: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-back-interativo:hover {
+  border-radius: none;
+  background-color: #0078d4;;
+  transform: scale(1.05);
+}
+
+
+
 .btn-interativo {
+  border: none;
+  border-radius: none;
   border-radius: 8px;
   transition: all 0.3s ease;
 }
 
 .btn-interativo:hover {
   border-radius: none;
-  background-color: #005a9c;
+  background-color: #009c56;
   transform: scale(1.05);
 }
 
-/* Efeito de transição suave para a exibição do aviso */
 .v-mensagem {
   transition: opacity 0.3s ease-in-out;
 }
 
-/* Configuração para as colunas do layout */
 .col-md-8 {
   width: 100%;
 }
 
-/* Ajustes gerais de margens e padding */
 .mt-5 {
   margin-top: 2rem;
 }
