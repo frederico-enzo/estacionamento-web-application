@@ -6,7 +6,6 @@ const routes: Array<RouteRecordRaw> = [
     name: 'home',
     component: () => import('../views/HomeView.vue')
   },
-
   {
     path: '/condutores',
     name: 'condutores',
@@ -62,7 +61,33 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
 
-  
+  {
+    path: '/marcas',
+    name: 'marcas',
+    component: () => import( '../views/marca/MarcasView.vue')
+  },
+  {
+    path: '/marcas',
+    name: 'marcas.listar',
+    component: () => import( '../views/marca/MarcaInfoView.vue')
+  },
+  {
+    path: '/marcas/formulario',
+    name: 'marcas.form',
+    component: () => import( '../views/marca/MarcasFormView.vue'),
+    children: [
+      {
+        path: '/marcas/formulario',
+        name: 'marcas.form.editar',
+        component: () => import( '../views/marca/MarcasFormView.vue'),
+      },
+      {
+        path: '/marcas/formulario',
+        name: 'veiculo.form.toggle',
+        component: () => import( '../views/marca/MarcasFormView.vue'),
+      }
+    ]
+  },
 ]
 
 const router = createRouter({
