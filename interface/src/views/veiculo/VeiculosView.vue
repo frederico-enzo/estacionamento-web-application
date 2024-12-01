@@ -1,59 +1,23 @@
 <template>
-  <div class="container">
-    <div class="row mt-5">
+  <div class="container-fluid p-4">
+    <div class="row mb-4">
       <div class="col-md-10 text-start">
-        <p class="fs-5">Veículos</p>
+        <p class="fs-4 fw-semibold">Veiculo</p>
       </div>
-      <div class="col-md-2 col-md-2 align-self-center">
+      <div class="col-md-2 align-self-center">
         <div class="d-grid gap-2">
-          <router-link type="button" class="btn btn-success" to="/veiculo/formulario">Cadastrar
-          </router-link>
+          <router-link type="button" class="btn btn-primary" to="/veiculo/formulario">Cadastrar</router-link>
         </div>
       </div>
     </div>
-    <table class="table">
-      <thead class="table-dark">
-        <tr>
-          <th class="text-center">ID</th>
-          <th class="text-center">Placa</th>
-          <th class="text-center">Tipo</th>
-          <th class="text-center">Modelo</th>
-          <th class="text-center">Status</th>
-          <th class="text-center">Opções</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in veiculosList" :key="item.id">
-          <th class="align-middle text-center col-md-1">{{ item.id }}</th>
-          <th class="align-middle text-center col-md-2">{{ item.placa }}</th>
-          <th class="align-middle text-center col-md-2">{{ item.tipo }}</th>
-          <th class="align-middle text-center col-md-3">
-            {{ item.modelo.marca.nome }} - {{ item.modelo.nome }}
-            <span v-if="!item.modelo.ativo" class="badge text-bg-danger">Desativado</span>
-          </th>
-          <th class="align-middle text-center col-md-2">
-            <span v-if="item.ativo" class="badge text-bg-success"> Ativo </span>
-            <span v-if="!item.ativo" class="badge text-bg-danger">
-              Inativo
-            </span>
-          </th>
-          <th class="align-middle text-center col-md-2">
-            <BotoesAcoes listarRoute="veiculo.listar" editarRoute="veiculo.form.editar" toggleRoute="veiculo.form.toggle"
-              :id="item.id" :isAtivo="item.ativo">
-            </BotoesAcoes>
-          </th>
-        </tr>
-      </tbody>
-    </table>
-    <div v-if="veiculosList.length == 0" class="alert alert-secondary" role="alert">
-      Nenhum veículo encontrado
+    <div v-if="List.length == 0" class="alert alert-secondary" role="alert">
+      Nenhuma Veiculo encontrada
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import BotoesAcoes from '@/components/BotoesAcoes.vue'
 import { Veiculo } from '@/model/Veiculo'
 import { VeiculoClient } from '@/service/Veiculo.client'
 
@@ -61,22 +25,19 @@ export default defineComponent({
   name: 'VeiculosView',
   data() {
     return {
-      veiculosList: new Array<Veiculo>()
+      List: new Array<Veiculo>()
     }
-  },
-  components: {
-    BotoesAcoes
   },
   mounted() {
     this.findAll()
   },
   methods: {
     findAll() {
-      const veiculoClient = new VeiculoClient()
-      veiculoClient
+      const client = new VeiculoClient()
+      client
         .listarAll()
         .then(sucess => {
-          this.veiculosList = sucess
+          this.List = sucess
         })
         .catch(error => {
           console.log("Error!!")
@@ -87,18 +48,21 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-$theme-colors: (
-  'dark': #111111,
-  'primary': #515151,
-  'secondary': #c8c8c8,
-  'info': #a4a4a4,
-  'success': #198754,
-  'warning': #ffc107,
-  'danger': #dc3545
-);
-@import '~bootstrap/scss/bootstrap.scss';
+.container-fluid {
+  background-color: #f7f7f8;
+  border-radius: 10px;
+  padding: 2rem;
+}
 
-.container {
-  width: 100%;
+.btn-primary {
+  background-color: #0078d4;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #005a9e;
 }
 </style>

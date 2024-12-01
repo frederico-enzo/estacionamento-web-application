@@ -6,7 +6,7 @@
             </div>
             <div class="col-md-2 align-self-center">
                 <div class="d-grid gap-2">
-                    <router-link type="button" class="btn btn-primary" to="/mascas/formulario">Cadastrar</router-link>
+                    <router-link type="button" class="btn btn-primary" to="/marca/formulario">Cadastrar</router-link>
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@ import { Marca } from '@/model/Marca'
 import { MarcaClient } from '@/service/Marca.client'
 
 export default defineComponent({
-    name: 'MarcasView',
+    name: 'VeiculosView',
     data() {
         return {
             List: new Array<Marca>()
@@ -40,7 +40,7 @@ export default defineComponent({
                     this.List = sucess
                 })
                 .catch(error => {
-                    console.log("erro");
+                    console.log("Error!!")
                 })
         }
     }
@@ -52,5 +52,17 @@ export default defineComponent({
     background-color: #f7f7f8;
     border-radius: 10px;
     padding: 2rem;
+}
+
+.btn-primary {
+    background-color: #0078d4;
+    border: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #005a9e;
 }
 </style>

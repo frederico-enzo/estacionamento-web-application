@@ -20,7 +20,7 @@ export class ModeloClient {
     }
   }
 
-  public async listaCompleta(): Promise<Modelo[]> {
+  public async findAll(): Promise<Modelo[]> {
     try {
       const response = await this.axiosClient.get<Modelo[]>('/modelo/lista')
       return response.data
