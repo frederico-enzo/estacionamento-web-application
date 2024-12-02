@@ -13,6 +13,33 @@
         <div v-if="List.length == 0" class="alert alert-secondary" role="alert">
             Nenhuma Marca encontrada
         </div>
+        <div v-else>
+            <table class="table table-striped table-hover rounded-3 shadow-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Nome</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Opções</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in List" :key="item.id" class="hover-shadow">
+                        <td class="align-middle text-center">{{ item.id }}</td>
+                        <td class="align-middle text-center">{{ item.nome }}</td>
+                        <td class="align-middle text-center">
+                            <span v-if="item.ativo" class="badge bg-success">Ativo</span>
+                            <span v-if="!item.ativo" class="badge bg-danger">Inativo</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <BotoesAcoes listarRoute="marca.listar" editarRoute="marca.form.editar"
+                                toggleRoute="marca.form.toggle" :isAtivo="item.ativo" :id="item.id">
+                            </BotoesAcoes>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -20,6 +47,7 @@
 import { defineComponent } from 'vue'
 import { Marca } from '@/model/Marca'
 import { MarcaClient } from '@/service/Marca.client'
+import BotoesAcoes from '@/components/BotoesAcoes.vue'
 
 export default defineComponent({
     name: 'VeiculosView',
@@ -27,6 +55,9 @@ export default defineComponent({
         return {
             List: new Array<Marca>()
         }
+    },
+    components: {
+        BotoesAcoes
     },
     mounted() {
         this.findAll()
