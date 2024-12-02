@@ -34,13 +34,8 @@
               <span v-if="!item.ativo" class="badge bg-danger">Inativo</span>
             </td>
             <td class="align-middle text-center">
-              <BotoesAcoes 
-                listarRoute="condutor.listar" 
-                editarRoute="condutor.form.editar"
-                toggleRoute="condutor.form.toggle" 
-                :isAtivo="item.ativo" 
-                :id="item.id">
-              </BotoesAcoes>
+              <BotoesAcoes listarRoute="condutor.listar" editarRoute="condutor.form.editar"
+                toggleRoute="condutor.form.toggle" :isAtivo="item.ativo" :id="item.id"></BotoesAcoes>
             </td>
           </tr>
         </tbody>

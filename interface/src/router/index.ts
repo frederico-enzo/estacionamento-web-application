@@ -62,28 +62,28 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
-    path: '/marcas',
-    name: 'marcas',
+    path: '/marca',
+    name: 'marca',
     component: () => import('../views/marca/MarcasView.vue')
   },
   {
-    path: '/marcas',
-    name: 'marcas.listar',
+    path: '/marca',
+    name: 'marca.listar',
     component: () => import('../views/marca/MarcaInfoView.vue')
   },
   {
-    path: '/marcas/formulario',
-    name: 'marcas.form',
+    path: '/marca/formulario',
+    name: 'marca.form',
     component: () => import('../views/marca/MarcasFormView.vue'),
     children: [
       {
-        path: '/marcas/formulario',
-        name: 'marcas.form.editar',
+        path: '/marca/formulario',
+        name: 'marca.form.editar',
         component: () => import('../views/marca/MarcasFormView.vue'),
       },
       {
-        path: '/marcas/formulario',
-        name: 'veiculo.form.toggle',
+        path: '/marca/formulario',
+        name: 'marca.form.toggle',
         component: () => import('../views/marca/MarcasFormView.vue'),
       }
     ]

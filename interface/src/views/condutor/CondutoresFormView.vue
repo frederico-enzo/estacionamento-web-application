@@ -210,7 +210,8 @@ export default defineComponent({
 
 .btn-back-interativo:hover {
   border-radius: none;
-  background-color: #0078d4;;
+  background-color: #0078d4;
+  ;
   transform: scale(1.05);
 }
 

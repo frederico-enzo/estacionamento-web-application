@@ -12,7 +12,7 @@
             to="/movimentacoes"><i class="fas fa-exchange-alt"></i></router-link></li>
         <li :class="{ 'active-item': isActive('/modelos') }" @click="setActive('/modelos')"><router-link to="/modelos"><i
               class="fas fa-list"></i></router-link></li>
-        <li :class="{ 'active-item': isActive('/marcas') }" @click="setActive('/marcas')"><router-link to="/marcas"><i
+        <li :class="{ 'active-item': isActive('/marca') }" @click="setActive('/marcas')"><router-link to="/marca"><i
               class="fas fa-tags"></i></router-link></li>
         <li :class="{ 'active-item': isActive('/configs') }" @click="setActive('/configs')"><router-link to="/configs"><i
               class="fas fa-cog"></i></router-link></li>
