@@ -116,6 +116,29 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
+
+  {
+    path: '/movimentacoes',
+    name: 'movimentacoes',
+    component: () => import('../views/movimentacao/MovimentacoesView.vue')
+  },
+  {
+    path: '/movimentacoes/formulario',
+    name: 'movimentacoes.form',
+    component: () => import('../views/movimentacao/MovimentacoesFormView.vue'),
+    children: [
+      {
+        path: '/movimentacoes/formulario',
+        name: 'movimentacoes.form.editar',
+        component: () => import('../views/movimentacao/MovimentacoesFormView.vue'),
+      },
+      {
+        path: '/movimentacoes/formulario',
+        name: 'movimentacoes.form.toggle',
+        component: () => import('../views/movimentacao/MovimentacoesFormView.vue'),
+      }
+    ]
+  },
 ]
 
 const router = createRouter({
