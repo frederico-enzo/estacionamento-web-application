@@ -5,7 +5,7 @@ export class CondutorClient {
 
   constructor() {
     this.axiosClient = axios.create({
-      baseURL: `http://localhost:9000/estacionamento/api`,
+      baseURL: `http://localhost:8081/api`,
       headers: { 'Content-type': 'application/json' }
     })
   }
@@ -63,7 +63,7 @@ export class CondutorClient {
       return Promise.reject(error)
     }
   }
-
+  
   public async editarCondutor(condutor: Condutor): Promise<Condutor> {
     try {
       const response = await this.axiosClient.put<Condutor>(

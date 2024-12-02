@@ -60,7 +60,6 @@ public class CondutorController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
     @PutMapping
     public ResponseEntity<?> editarCondutor(
             @RequestParam("id") final Long id,
