@@ -22,7 +22,7 @@ export class MovimentacaoClient {
     }
   }
 
-  public async listarAll(): Promise<Movimentacao[]> {
+  public async findAll(): Promise<Movimentacao[]> {
     try {
       const response = await this.axiosClient.get<Movimentacao[]>('/movimentacao/lista')
       return response.data
