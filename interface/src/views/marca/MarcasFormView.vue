@@ -1,49 +1,59 @@
 <template>
-    <div class="container-fluid p-4">
-        <div class="row mt-5">
-            <div class="col-md-12 text-center">
-                <p v-if="form == undefined" class="fs-5">Cadastrar Marca</p>
-                <p v-if="form == 'editar'" class="fs-5">Editar Marca</p>
-                <p v-if="form == 'toggle' && condutor.ativo" class="fs-5">Desativar Marca</p>
-                <p v-if="form == 'toggle' && !condutor.ativo" class="fs-5">Ativar Marca</p>
-            </div>
+    <div class="container-form">
+      <div class="header text-center">
+        <h2>{{ tituloFormulario }}</h2>
+      </div>
+  
+      <AvisoComponent :ativo="mensagem.ativo" :sucesso="mensagem.status" :mensagem="mensagem.mensagem" />
+  
+      <div class="form-section">
+        <div class="form-floating mb-3">
+          <input 
+            id="nome" 
+            type="text" 
+            :disabled="form === 'toggle'" 
+            class="form-control" 
+            v-on:keyup.enter="onSubmit" 
+            v-model="marca.nome" 
+          />
+          <label for="nome">Nome da Marca</label>
         </div>
-
-        <AvisoComponent :ativo="mensagem.ativo" :sucesso="mensagem.status" :mensagem="mensagem.mensagem">
-        </AvisoComponent>
-
-        <div class="d-flex flex-column align-items-center justify-content-center gap-3">
-            <div class="form-floating mb-3 col-8">
-                <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled"
-                    class="form-control rounded-3 input-interativo" v-on:keyup.enter="onClickCadastrar()"
-                    v-model="marca.nome" />
-                <label for="nome" class="form-label">Nome da Marca</label>
-            </div>
-        </div>
-        <div class="row d-flex justify-content-center gap-3">
-            <div class="col-md-3">
-                <div class="d-grid gap-2">
-                    <router-link type="button" class="btn btn-secondary btn-lg rounded-3 btn-back-interativo"
-                        to="/marca">Voltar</router-link>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="d-grid gap-2">
-                    <button v-if="form === undefined" type="button"
-                        class="btn btn-primary btn-lg rounded-3 btn-interativo"
-                        @click="onClickCadastrar()">Cadastrar</button>
-                    <button v-if="form === 'editar'" type="button"
-                        class="btn btn-warning btn-lg rounded-3 btn-interativo" @click="onClickEditar()">Editar</button>
-                    <button v-if="form === 'toggle' && marca.ativo === true" type="button"
-                        class="btn btn-danger btn-lg rounded-3 btn-interativo"
-                        @click="onClickExcluir()">Excluir</button>
-                    <button v-if="form === 'toggle' && marca.ativo === false" type="button"
-                        class="btn btn-success btn-lg rounded-3 btn-interativo" @click="onClickAtivar()">Ativar</button>
-                </div>
-            </div>
-        </div>
+      </div>
+  
+      <div class="actions d-flex justify-content-center gap-3">
+        <router-link class="btn btn-secondary" to="/marca">Voltar</router-link>
+        <button
+          v-if="form === undefined"
+          class="btn btn-primary"
+          @click="onClickCadastrar"
+        >
+          Cadastrar
+        </button>
+        <button
+          v-if="form === 'editar'"
+          class="btn btn-warning"
+          @click="onClickEditar"
+        >
+          Editar
+        </button>
+        <button
+          v-if="form === 'toggle' && marca.ativo"
+          class="btn btn-danger"
+          @click="onClickExcluir"
+        >
+          Desativar
+        </button>
+        <button
+          v-if="form === 'toggle' && !marca.ativo"
+          class="btn btn-success"
+          @click="onClickAtivar"
+        >
+          Ativar
+        </button>
+      </div>
     </div>
-</template>
+  </template>
+  
 
 <script lang="ts">
 
@@ -147,64 +157,30 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.container-fluid {
-    margin-top: 15vh;
-    width: 50vw;
-    height: 50vh;
-    background-color: #f7f7f8;
-    border-radius: 10px;
-    padding: 2rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.container-form {
+  margin: 10vh auto;
+  padding: 2rem;
+  max-width: 600px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.input-interativo {
-    transition: all 0.3s ease;
+.header h2 {
+  margin-bottom: 2rem;
+  color: #333;
 }
 
-.input-interativo:focus {
-    border-color: #0078d4;
-    box-shadow: 0 0 5px rgba(0, 120, 212, 0.7);
-    transform: scale(1.05);
+.form-section {
+  margin-bottom: 2rem;
 }
 
-.btn-back-interativo {
-    border: none;
-    border-radius: none;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+.btn {
+  transition: all 0.3s ease-in-out;
 }
 
-.btn-back-interativo:hover {
-    border-radius: none;
-    background-color: #0078d4;
-    ;
-    transform: scale(1.05);
-}
-
-
-
-.btn-interativo {
-    border: none;
-    border-radius: none;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.btn-interativo:hover {
-    border-radius: none;
-    background-color: #009c56;
-    transform: scale(1.05);
-}
-
-.v-mensagem {
-    transition: opacity 0.3s ease-in-out;
-}
-
-.col-md-8 {
-    width: 100%;
-}
-
-.mt-5 {
-    margin-top: 2rem;
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 </style>
