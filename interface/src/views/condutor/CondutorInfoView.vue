@@ -1,160 +1,161 @@
 <template>
-  <div class="container w-50">
-    <div class="row mt-5">
-      <div class="col-md-12 text-start">
-        <p class="fs-5">Detalhes do Condutor</p>
+  <div class="container w-75 p-4 rounded shadow-sm bg-light">
+    <!-- Título -->
+    <div class="row mb-4">
+      <div class="col text-start">
+        <h4 class="text-primary">Detalhes do Condutor</h4>
       </div>
-      <div class="col-md-2"></div>
     </div>
 
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="mt-3 w-100 text-start">
-        <p class="fs-6 m-0"><span class="dado">Nome: </span> {{ condutor.nome }} </p>
+    <!-- Informações do condutor -->
+    <div class="row mb-3">
+      <div class="col">
+        <p class="fw-bold text-secondary">Nome: <span class="fw-normal text-dark">{{ condutor.nome }}</span></p>
+      </div>
+      <div class="col">
+        <p class="fw-bold text-secondary">Telefone: <span class="fw-normal text-dark">{{ condutor.telefone }}</span></p>
       </div>
     </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="mt-3 w-100 text-start">
-        <p class="fs-6 m-0"><span class="dado">Telefone: </span> {{ condutor.telefone }} </p>
+    <div class="row mb-3">
+      <div class="col">
+        <p class="fw-bold text-secondary">CPF: <span class="fw-normal text-dark">{{ condutor.cpf }}</span></p>
       </div>
     </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="mt-3 w-100 text-start">
-        <p class="fs-6"><span class="dado">CPF: </span> {{ condutor.cpf }} </p>
+    <div class="row mb-3">
+      <div class="col">
+        <p class="fw-bold text-secondary">Total Tempo Pago: <span class="fw-normal text-dark">{{ segundosParaHoras(condutor.tempoPagoSegundos) }}h</span></p>
+      </div>
+      <div class="col">
+        <p class="fw-bold text-secondary">Tempo de Desconto Disponível: <span class="fw-normal text-dark">{{ segundosParaHoras(condutor.tempoDescontoSegundos) }}h</span></p>
       </div>
     </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="w-100 text-start">
-        <p class="fs-6"><span class="dado">Total Tempo Pago: </span> {{
-          segundosParaHoras(condutor.tempoPagoSegundos) }}h</p>
+    <div class="row mb-3">
+      <div class="col">
+        <p class="fw-bold text-secondary">Tempo de Desconto Usado: <span class="fw-normal text-dark">{{ segundosParaHoras(condutor.tempoDescontoUsadoSegundos) }}h</span></p>
+      </div>
+      <div class="col">
+        <p class="fw-bold text-secondary">Total Tempo Estacionado: <span class="fw-normal text-dark">{{ segundosParaHoras(condutor.tempoDescontoUsadoSegundos + condutor.tempoPagoSegundos) }}h</span></p>
       </div>
     </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="w-100 text-start">
-        <p class="fs-6"><span class="dado">Tempo de Desconto Disponível: </span> {{
-          segundosParaHoras(condutor.tempoDescontoSegundos) }}h</p>
-      </div>
-    </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="w-100 text-start">
-        <p class="fs-6"><span class="dado">Tempo de Desconto Usado: </span> {{
-          segundosParaHoras(condutor.tempoDescontoUsadoSegundos) }}h</p>
-      </div>
-    </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="w-100 text-start">
-        <p class="fs-6"><span class="dado">Total Tempo Estacionado: </span> {{
-          segundosParaHoras(condutor.tempoDescontoUsadoSegundos + condutor.tempoPagoSegundos) }}h</p>
-      </div>
-    </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="w-100 text-start">
-        <p class="fs-6"><span class="dado"> Status: </span>
-          <span v-if="condutor.ativo" class="badge text-bg-success">
-            Ativo
-          </span>
-          <span v-if="!condutor.ativo" class="badge text-bg-danger">
-            Desativado
-          </span>
+    <div class="row mb-4">
+      <div class="col">
+        <p class="fw-bold text-secondary">Status:
+          <span v-if="condutor.ativo" class="badge bg-success">Ativo</span>
+          <span v-if="!condutor.ativo" class="badge bg-danger">Desativado</span>
         </p>
       </div>
     </div>
-    <hr>
-    <div class="row mt-5">
-      <div class="col-md-12 text-start">
-        <p class="fs-5">Histórico</p>
+
+    <!-- Separador -->
+    <hr class="my-4">
+
+    <!-- Histórico -->
+    <div class="row mb-4">
+      <div class="col text-start">
+        <h5 class="text-primary">Histórico</h5>
       </div>
     </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="w-100 text-start">
-        <p class="fs-6"><span class="dado">Data do Cadastro: </span>{{ formatDate(condutor.cadastro) }}</p>
+    <div class="row mb-3">
+      <div class="col">
+        <p class="fw-bold text-secondary">Data do Cadastro: <span class="fw-normal text-dark">{{ formatDate(condutor.cadastro) }}</span></p>
       </div>
-    </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="w-100 text-start">
-        <p class="fs-6"><span class="dado">Última edição: </span> {{ formatDate(condutor.edicao) }}</p>
+      <div class="col">
+        <p class="fw-bold text-secondary">Última Edição: <span class="fw-normal text-dark">{{ formatDate(condutor.edicao) }}</span></p>
       </div>
     </div>
 
-    <div class="row d-flex justify-content-center mt-3 mb-5">
-      <div class="col-md-3">
-        <div class="d-grid gap-2">
-          <router-link type="button" class="btn btn-secondary" to="/condutores">Voltar
-          </router-link>
-        </div>
+    <!-- Botão de retorno -->
+    <div class="row">
+      <div class="col d-flex justify-content-end">
+        <router-link class="btn btn-secondary" to="/condutores">Voltar</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Condutor } from "@/model/Condutor"
-import { CondutorClient } from "@/service/Condutor.client"
-import { defineComponent } from 'vue'
+import { Condutor } from "@/model/Condutor";
+import { CondutorClient } from "@/service/Condutor.client";
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'VeiculoInfo',
-  data(): any {
+  name: "VeiculoInfo",
+  data() {
     return {
       condutor: new Condutor(),
-    }
+    };
   },
   computed: {
-    id(): any {
-      return this.$route.query.id
-    }
+    id() {
+      return this.$route.query.id;
+    },
   },
   mounted() {
     if (this.id !== undefined) {
-      this.findById(Number(this.id))
+      this.findById(Number(this.id));
     }
   },
   methods: {
     segundosParaHoras(segundos: number) {
       const horas = Math.floor(segundos / 3600);
       const minutos = Math.floor((segundos % 3600) / 60);
-      const horasFormatadas = horas.toString().padStart(2, '0');
-      const minutosFormatados = minutos.toString().padStart(2, '0');
-      return `${horasFormatadas}:${minutosFormatados}`;
+      return `${horas.toString().padStart(2, "0")}:${minutos.toString().padStart(2, "0")}`;
     },
     formatDate(dateString: string | number | Date) {
-      if (dateString != null) {
-        const dateTime = new Date(dateString)
-        const formattedDate = dateTime.toLocaleDateString()
-        const formattedTime = dateTime.toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit'
-        })
-        return `${formattedDate} ${formattedTime}`
+      if (dateString) {
+        const dateTime = new Date(dateString);
+        return `${dateTime.toLocaleDateString()} ${dateTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}`;
       } else {
-        return '---'
+        return "---";
       }
     },
     findById(id: number) {
-      const condutorClient = new CondutorClient()
+      const condutorClient = new CondutorClient();
       condutorClient
         .findById(id)
-        .then(sucess => {
-          this.condutor = sucess
+        .then((sucess) => {
+          this.condutor = sucess;
         })
-        .catch(error => {
-          this.mensagem.mensagem = error.response.data
-          this.mensagem.status = false
-          this.mensagem.ativo = true
-        })
-    }
-  }
-})
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+  },
+});
 </script>
 
 <style scoped lang="scss">
 $theme-colors: (
-  'dark': #111111,
-  'primary': #515151,
-  'secondary': #c8c8c8,
-  'info': #a4a4a4,
-  'success': #198754,
-  'warning': #ffc107,
-  'danger': #dc3545
+  "dark": #111111,
+  "primary": #0d6efd,
+  "secondary": #6c757d,
+  "info": #0dcaf0,
+  "success": #198754,
+  "warning": #ffc107,
+  "danger": #dc3545
 );
-@import '~bootstrap/scss/bootstrap.scss';
+
+.container {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+}
+
+h4, h5 {
+  font-weight: bold;
+}
+
+p {
+  margin-bottom: 0.5rem;
+}
+
+.badge {
+  font-size: 1rem;
+}
+
+hr {
+  border-top: 2px solid #dee2e6;
+}
 </style>
