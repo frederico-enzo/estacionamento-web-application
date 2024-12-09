@@ -6,16 +6,18 @@
       </div>
       <div class="col-md-2 align-self-center">
         <div class="d-grid gap-2">
-          <router-link type="button" class="btn btn-primary" to="/condutor/formulario">Cadastrar</router-link>
+          <router-link type="button" class="btn btn-primary" to="/condutores/formulario">Cadastrar</router-link>
         </div>
       </div>
     </div>
-    <div v-if="condutoresList.length == 0" class="alert alert-secondary" role="alert">
+
+    <div v-if="List.length === 0" class="alert alert-secondary" role="alert">
       Nenhum condutor encontrado
     </div>
+
     <div v-else>
       <table class="table table-striped table-hover rounded-3 shadow-sm">
-        <thead class="table-light">
+        <thead class="table-light sticky-top shadow">
           <tr>
             <th class="text-center">ID</th>
             <th class="text-center">Nome</th>
@@ -25,17 +27,22 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in condutoresList" :key="item.id" class="hover-shadow">
-            <td class="align-middle text-center">{{ item.id }}</td>
-            <td class="align-middle text-center">{{ item.nome }}</td>
+          <tr v-for="item in List" :key="item.id" class="align-middle">
+            <td class="text-center fw-semibold">{{ item.id }}</td>
+            <td class="text-center">{{ item.nome }}</td>
             <td class="align-middle text-center">{{ item.cpf }}</td>
-            <td class="align-middle text-center">
-              <span v-if="item.ativo" class="badge bg-success">Ativo</span>
-              <span v-if="!item.ativo" class="badge bg-danger">Inativo</span>
+            <td class="text-center">
+              <span v-if="item.ativo" class="badge bg-success">
+                <i class="bi bi-check-circle-fill me-1"></i> Ativo
+              </span>
+              <span v-if="!item.ativo" class="badge bg-danger">
+                <i class="bi bi-x-circle-fill me-1"></i> Inativo
+              </span>
             </td>
-            <td class="align-middle text-center">
-              <BotoesAcoes listarRoute="condutor.listar" editarRoute="condutor.form.editar"
-                toggleRoute="condutor.form.toggle" :isAtivo="item.ativo" :id="item.id"></BotoesAcoes>
+            <td class="text-center">
+              <BotoesAcoes listarRoute="condutor.listar" editarRoute="condutor.form.editar" toggleRoute="condutor.form.toggle"
+                :isAtivo="item.ativo" :id="item.id">
+              </BotoesAcoes>
             </td>
           </tr>
         </tbody>
@@ -43,7 +50,6 @@
     </div>
   </div>
 </template>
-
 
 <script lang="ts">
 import { defineComponent } from 'vue'
@@ -55,7 +61,7 @@ export default defineComponent({
   name: 'CondutoresView',
   data() {
     return {
-      condutoresList: new Array<Condutor>()
+      List: new Array<Condutor>()
     }
   },
   mounted() {
@@ -70,7 +76,7 @@ export default defineComponent({
       condutorClient
         .lista()
         .then(sucess => {
-          this.condutoresList = sucess
+          this.List = sucess
         })
         .catch(error => {
           console.log("erro");
@@ -82,76 +88,57 @@ export default defineComponent({
 
 <style scoped>
 .container-fluid {
-  background-color: #f7f7f8;
-  border-radius: 10px;
+  background-color: #f9fafb;
+  border-radius: 12px;
   padding: 2rem;
 }
 
+.fs-4 {
+  color: #0d6efd;
+  font-weight: bold;
+}
+
 .table {
-  border-radius: 12px;
-  background-color: #fff;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.table-light {
-  background-color: #f5f5f5;
-}
-
-.table-striped tbody tr:nth-child(odd) {
-  background-color: #f9f9f9;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .table-hover tbody tr:hover {
-  background-color: #eef1f7;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f1f5f9;
+  transition: background-color 0.3s ease;
 }
 
-.table th {
-  border-bottom: 2px solid #ccc;
+.table-light {
+  background-color: #f8f9fa;
+  font-weight: bold;
 }
 
-.alert-secondary {
-  background-color: #e4e6eb;
-  border-radius: 8px;
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.badge {
   font-size: 0.9rem;
+  padding: 0.4em 0.6em;
+  border-radius: 6px;
+}
+
+.badge .bi {
+  vertical-align: -0.125em;
+  margin-right: 0.25rem;
 }
 
 .btn-primary {
-  background-color: #0078d4;
+  background-color: #0d6efd;
   border: none;
-  border-radius: 5px;
-  font-weight: 500;
+  border-radius: 8px;
+  font-weight: bold;
   transition: all 0.3s ease-in-out;
 }
 
 .btn-primary:hover {
-  background-color: #005a9e;
-}
-
-.badge {
-  font-size: 0.875rem;
-  font-weight: 500;
-  padding: 0.4rem 0.6rem;
-  border-radius: 12px;
-}
-
-.badge.bg-success {
-  background-color: #4CAF50;
-}
-
-.badge.bg-danger {
-  background-color: #f44336;
-}
-
-.hover-shadow:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.fs-4 {
-  font-size: 1.25rem;
-}
-
-.fw-semibold {
-  font-weight: 600;
+  background-color: #0a58ca;
 }
 </style>
