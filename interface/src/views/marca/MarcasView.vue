@@ -15,7 +15,7 @@
         </div>
         <div v-else>
             <table class="table table-striped table-hover rounded-3 shadow-sm">
-                <thead class="table-light">
+                <thead class="table-light sticky-top shadow">
                     <tr>
                         <th class="text-center">ID</th>
                         <th class="text-center">Nome</th>
@@ -25,11 +25,15 @@
                 </thead>
                 <tbody>
                     <tr v-for="item in List" :key="item.id" class="align-middle">
-                        <td class="text-center">{{ item.id }}</td>
+                        <td class="text-center fw-semibold">{{ item.id }}</td>
                         <td class="text-center">{{ item.nome }}</td>
                         <td class="text-center">
-                            <span v-if="item.ativo" class="badge bg-success">Ativo</span>
-                            <span v-if="!item.ativo" class="badge bg-danger">Inativo</span>
+                            <span v-if="item.ativo" class="badge bg-success">
+                                <i class="bi bi-check-circle-fill me-1"></i> Ativo
+                            </span>
+                            <span v-if="!item.ativo" class="badge bg-danger">
+                                <i class="bi bi-x-circle-fill me-1"></i> Inativo
+                            </span>
                         </td>
                         <td class="text-center">
                             <BotoesAcoes 
@@ -81,7 +85,6 @@ export default defineComponent({
     }
 });
 </script>
-
 <style scoped>
 .container-fluid {
     background-color: #f9fafb;
@@ -104,6 +107,28 @@ export default defineComponent({
     transition: background-color 0.3s ease;
 }
 
+.table-light {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.4em 0.6em;
+    border-radius: 6px;
+}
+
+.badge .bi {
+    vertical-align: -0.125em;
+    margin-right: 0.25rem;
+}
+
 .btn-primary {
     background-color: #0d6efd;
     border: none;
@@ -114,11 +139,5 @@ export default defineComponent({
 
 .btn-primary:hover {
     background-color: #0a58ca;
-}
-
-.badge {
-    font-size: 0.9rem;
-    padding: 0.4em 0.6em;
-    border-radius: 6px;
 }
 </style>
