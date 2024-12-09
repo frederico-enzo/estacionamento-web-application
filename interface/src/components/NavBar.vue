@@ -4,15 +4,15 @@
       <ul>
         <li :class="{ 'active-item': isActive('/') }" @click="setActive('/')"><router-link to="/"><i
               class="fas fa-home"></i></router-link></li>
-        <li :class="{ 'active-item': isActive('/condutores') }" @click="setActive('/condutores')"><router-link
-            to="/condutores"><i class="fas fa-user"></i></router-link></li>
-        <li :class="{ 'active-item': isActive('/veiculos') }" @click="setActive('/veiculos')"><router-link
-            to="/veiculos"><i class="fas fa-car"></i></router-link></li>
+        <li :class="{ 'active-item': isActive('/condutor') }" @click="setActive('/condutor')"><router-link
+            to="/condutor"><i class="fas fa-user"></i></router-link></li>
+        <li :class="{ 'active-item': isActive('/veiculo') }" @click="setActive('/veiculo')"><router-link
+            to="/veiculo"><i class="fas fa-car"></i></router-link></li>
         <li :class="{ 'active-item': isActive('/movimentacoes') }" @click="setActive('/movimentacoes')"><router-link
             to="/movimentacoes"><i class="fas fa-exchange-alt"></i></router-link></li>
-        <li :class="{ 'active-item': isActive('/modelos') }" @click="setActive('/modelos')"><router-link to="/modelos"><i
+        <li :class="{ 'active-item': isActive('/modelo') }" @click="setActive('/modelo')"><router-link to="/modelo"><i
               class="fas fa-list"></i></router-link></li>
-        <li :class="{ 'active-item': isActive('/marca') }" @click="setActive('/marcas')"><router-link to="/marca"><i
+        <li :class="{ 'active-item': isActive('/marca') }" @click="setActive('/marca')"><router-link to="/marca"><i
               class="fas fa-tags"></i></router-link></li>
         <li :class="{ 'active-item': isActive('/configs') }" @click="setActive('/configs')"><router-link to="/configs"><i
               class="fas fa-cog"></i></router-link></li>

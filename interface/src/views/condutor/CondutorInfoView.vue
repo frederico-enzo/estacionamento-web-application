@@ -1,13 +1,11 @@
 <template>
   <div class="container w-75 p-4 rounded shadow-sm bg-light">
-    <!-- Título -->
     <div class="row mb-4">
       <div class="col text-start">
         <h4 class="text-primary">Detalhes do Condutor</h4>
       </div>
     </div>
 
-    <!-- Informações do condutor -->
     <div class="row mb-3">
       <div class="col">
         <p class="fw-bold text-secondary">Nome: <span class="fw-normal text-dark">{{ condutor.nome }}</span></p>
@@ -46,10 +44,8 @@
       </div>
     </div>
 
-    <!-- Separador -->
     <hr class="my-4">
 
-    <!-- Histórico -->
     <div class="row mb-4">
       <div class="col text-start">
         <h5 class="text-primary">Histórico</h5>
@@ -64,10 +60,9 @@
       </div>
     </div>
 
-    <!-- Botão de retorno -->
     <div class="row">
       <div class="col d-flex justify-content-end">
-        <router-link class="btn btn-secondary" to="/condutores">Voltar</router-link>
+        <router-link class="btn btn-secondary" to="/condutor">Voltar</router-link>
       </div>
     </div>
   </div>
@@ -128,16 +123,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-$theme-colors: (
-  "dark": #111111,
-  "primary": #0d6efd,
-  "secondary": #6c757d,
-  "info": #0dcaf0,
-  "success": #198754,
-  "warning": #ffc107,
-  "danger": #dc3545
-);
-
 .container {
   background-color: #ffffff;
   border: 1px solid #dee2e6;

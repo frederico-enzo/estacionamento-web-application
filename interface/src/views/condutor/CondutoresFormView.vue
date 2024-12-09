@@ -35,7 +35,7 @@
       <div class="col-md-3">
         <div class="d-grid gap-2">
           <router-link type="button" class="btn btn-secondary btn-lg rounded-3 btn-back-interativo"
-            to="/condutores">Voltar</router-link>
+            to="/condutor">Voltar</router-link>
         </div>
       </div>
       <div class="col-md-3">

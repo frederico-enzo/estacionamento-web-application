@@ -7,8 +7,8 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/HomeView.vue')
   },
   {
-    path: '/condutores',
-    name: 'condutores',
+    path: '/condutor',
+    name: 'condutor',
     component: () => import('../views/condutor/CondutoresView.vue')
   },
   {
@@ -34,8 +34,8 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
-    path: '/veiculos',
-    name: 'veiculos',
+    path: '/veiculo',
+    name: 'veiculo',
     component: () => import('../views/veiculo/VeiculosView.vue')
   },
   {
@@ -90,28 +90,28 @@ const routes: Array<RouteRecordRaw> = [
   },
 
   {
-    path: '/modelos',
-    name: 'modelos',
+    path: '/modelo',
+    name: 'modelo',
     component: () => import('../views/modelo/ModelosView.vue')
   },
   {
-    path: '/modelos',
-    name: 'modelos.listar',
+    path: '/modelo',
+    name: 'modelo.listar',
     component: () => import('../views/modelo/ModeloInfoView.vue')
   },
   {
-    path: '/modelos/formulario',
-    name: 'modelos.form',
+    path: '/modelo/formulario',
+    name: 'modelo.form',
     component: () => import('../views/modelo/ModelosFormView.vue'),
     children: [
       {
-        path: '/modelos/formulario',
-        name: 'modelos.form.editar',
+        path: '/modelo/formulario',
+        name: 'modelo.form.editar',
         component: () => import('../views/modelo/ModelosFormView.vue'),
       },
       {
-        path: '/modelos/formulario',
-        name: 'modelos.form.toggle',
+        path: '/modelo/formulario',
+        name: 'modelo.form.toggle',
         component: () => import('../views/modelo/ModelosFormView.vue'),
       }
     ]
