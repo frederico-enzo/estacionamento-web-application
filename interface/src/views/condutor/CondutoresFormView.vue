@@ -8,9 +8,7 @@
         <p v-if="form == 'toggle' && !condutor.ativo" class="fs-5">Ativar Condutor</p>
       </div>
     </div>
-
     <AvisoComponent :ativo="mensagem.ativo" :sucesso="mensagem.status" :mensagem="mensagem.mensagem"></AvisoComponent>
-
     <div class="d-flex flex-column align-items-center justify-content-center gap-3">
       <div class="form-floating mb-3 col-8">
         <input id="nome" type="text" :disabled="form === 'toggle' ? '' : disabled"
@@ -214,8 +212,6 @@ export default defineComponent({
   ;
   transform: scale(1.05);
 }
-
-
 
 .btn-interativo {
   border: none;

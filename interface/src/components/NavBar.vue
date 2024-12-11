@@ -116,7 +116,7 @@ html {
   margin-right: 20px;
   margin-top: 10px;
   padding: 20px;
-  background-color: #95959a82;
+  background-color: #b4b4b482;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);  /* Horizontal, vertical, desfoque e cor */
 

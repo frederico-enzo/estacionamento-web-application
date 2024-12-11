@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-2 align-self-center">
         <div class="d-grid gap-2">
-          <router-link type="button" class="btn btn-primary" to="/condutores/formulario">Cadastrar</router-link>
+          <router-link type="button" class="btn btn-primary" to="/condutor/formulario">Cadastrar</router-link>
         </div>
       </div>
     </div>

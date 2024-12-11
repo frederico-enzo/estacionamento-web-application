@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column container mt-5">
     <div class="d-flex justify-content-center">
-      <router-link type="button" class="btn btn-primary w-25 fs-5" to="/movimentacao/formulario">Registrar Entrada
+      <router-link type="button" class="btn btn-primary w-25 fs-5" to="/movimentacoes/formulario">Registrar Entrada
       </router-link>
     </div>
     <table class="mt-5 table w-25 align-self-center">
