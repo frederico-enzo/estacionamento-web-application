@@ -1,33 +1,34 @@
 <template>
-  <div class="container w-50">
-    <div class="row mt-5">
-      <div class="col-md-12 text-start">
-        <p class="fs-5">Detalhes do Veiculo</p>
+  <div class="container p-4 rounded shadow-sm bg-light">
+    <div class="row mb-4">
+      <div class="col text-start">
+        <h4 class="text-primary">Detalhes do Condutor</h4>
       </div>
     </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="mt-3 w-100 text-start">
-        <p class="fs-6 m-0"><span class="dado">Placa: </span> {{ veiculo.placa }} </p>
+
+    <div class="row mb-3">
+      <div class="col-12 col-md-6">
+        <p class="fw-bold text-secondary"><span class="dado">Placa: </span> {{ veiculo.placa }} </p>
       </div>
     </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="mt-3 w-100 text-start">
-        <p class="fs-6 m-0"><span class="dado">Modelo: </span> {{ modelo.nome }} - {{ marca.nome }} </p>
+    <div class="row mb-3">
+      <div class="col-12 col-md-6">
+        <p class="fw-bold text-secondary"><span class="dado">Modelo: </span> {{ modelo.nome }} - {{ marca.nome }} </p>
       </div>
     </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="mt-3 w-100 text-start">
-        <p class="fs-6 m-0"><span class="dado">Tipo: </span> {{ veiculo.tipo }}</p>
+    <div class="row mb-3">
+      <div class="col-12 col-md-6">
+        <p class="fw-bold text-secondary"><span class="dado">Tipo: </span> {{ veiculo.tipo }}</p>
       </div>
     </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="mt-3 w-100 text-start">
-        <p class="fs-6"><span class="dado">Cor: </span> {{ veiculo.cor }}</p>
+    <div class="row mb-3">
+      <div class="col-12 col-md-6">
+        <p class="fw-bold text-secondary"><span class="dado">Cor: </span> {{ veiculo.cor }}</p>
       </div>
     </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="w-100 text-start">
-        <p class="fs-6"><span class="dado"> Status: </span>
+    <div class="row mb-3">
+      <div class="col-12">
+        <p class="fw-bold text-secondary"><span class="dado"> Status: </span>
           <span v-if="veiculo.ativo" class="badge text-bg-success">
             Ativo
           </span>
@@ -37,29 +38,27 @@
         </p>
       </div>
     </div>
-    <hr>
-    <div class="row mt-5">
-      <div class="col-md-12 text-start">
-        <p class="fs-5">Histórico</p>
-      </div>
-    </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="w-100 text-start">
-        <p class="fs-6"><span class="dado">Data do Cadastro: </span>{{ formatDate(veiculo.cadastro) }}</p>
-      </div>
-    </div>
-    <div class="row w-100 d-flex justify-content-center m-0">
-      <div class="w-100 text-start">
-        <p class="fs-6"><span class="dado">Última edição: </span> {{ formatDate(veiculo.edicao) }}</p>
+
+    <hr class="my-4">
+
+    <div class="row mb-4">
+      <div class="col text-start">
+        <h5 class="text-primary">Histórico</h5>
       </div>
     </div>
 
-    <div class="row d-flex justify-content-center mt-3">
-      <div class="col-md-3">
-        <div class="d-grid gap-2">
-          <router-link type="button" class="btn btn-secondary" to="/veiculos">Voltar
-          </router-link>
-        </div>
+    <div class="row mb-3">
+      <div class="col-12 col-md-6">
+        <p class="fw-bold text-secondary">Data do Cadastro: <span class="fw-normal text-dark">{{ formatDate(veiculo.cadastro) }}</span></p>
+      </div>
+      <div class="col-12 col-md-6">
+        <p class="fw-bold text-secondary">Última Edição: <span class="fw-normal text-dark">{{ formatDate(veiculo.edicao) }}</span></p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col d-flex justify-content-end">
+        <router-link class="btn btn-secondary" to="/veiculo">Voltar</router-link>
       </div>
     </div>
   </div>
@@ -125,14 +124,39 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-$theme-colors: (
-  'dark': #111111,
-  'primary': #515151,
-  'secondary': #c8c8c8,
-  'info': #a4a4a4,
-  'success': #198754,
-  'warning': #ffc107,
-  'danger': #dc3545
-);
-@import '~bootstrap/scss/bootstrap.scss';
+.container {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+}
+
+h4,
+h5 {
+  font-weight: bold;
+}
+
+p {
+  margin-bottom: 0.5rem;
+}
+
+.badge {
+  font-size: 1rem;
+}
+
+hr {
+  border-top: 2px solid #dee2e6;
+}
+
+@media (max-width: 767px) {
+  .container {
+    padding: 1rem;
+  }
+
+  h4, h5 {
+    font-size: 1.1rem;
+  }
+
+  .badge {
+    font-size: 0.9rem;
+  }
+}
 </style>
