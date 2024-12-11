@@ -94,7 +94,7 @@ export default defineComponent({
     onClickCadastrar() {
       const condutorClient = new CondutorClient()
       condutorClient
-        .cadastrarCondutor(this.condutor)
+        .addCondutor(this.condutor)
         .then(sucess => {
           this.condutor = new Condutor()
           this.mensagem.mensagem = sucess
@@ -114,7 +114,7 @@ export default defineComponent({
     findById(id: number) {
       const condutorClient = new CondutorClient()
       condutorClient
-        .findById(id)
+        .getCondutorById(id)
         .then(sucess => {
           this.condutor = sucess
         })
@@ -127,7 +127,7 @@ export default defineComponent({
     onClickEditar() {
       const condutorClient = new CondutorClient()
       condutorClient
-        .editarCondutor(this.condutor)
+        .updateCondutor(this.condutor)
         .then(sucess => {
           this.mensagem.mensagem = sucess
           this.mensagem.status = true
@@ -145,7 +145,7 @@ export default defineComponent({
         this.condutor.ativo = true
         const condutorClient = new CondutorClient()
         condutorClient
-          .editarCondutor(this.condutor)
+          .updateCondutor(this.condutor)
           .then(sucess => {
             this.mensagem.mensagem = "Condutor reativado com sucesso!"
             this.mensagem.status = true
@@ -162,7 +162,7 @@ export default defineComponent({
       if (confirm("Tem certeza que deseja desativar esse condutor?")) {
         const condutorClient = new CondutorClient()
         condutorClient
-          .desativarCondutor(this.condutor.id)
+          .deactivateCondutor(this.condutor.id)
           .then(sucess => {
             this.condutor.ativo = false
             this.mensagem.mensagem = sucess

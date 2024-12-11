@@ -74,7 +74,7 @@ export default defineComponent({
     findAll() {
       const condutorClient = new CondutorClient()
       condutorClient
-        .lista()
+        .getAllCondutores()
         .then(sucess => {
           this.List = sucess
         })

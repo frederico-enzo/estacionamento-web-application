@@ -110,7 +110,7 @@ export default defineComponent({
     findById(id: number) {
       const condutorClient = new CondutorClient();
       condutorClient
-        .findById(id)
+        .getCondutorById(id)
         .then((sucess) => {
           this.condutor = sucess;
         })
