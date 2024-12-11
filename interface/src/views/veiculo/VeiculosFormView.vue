@@ -1,90 +1,124 @@
 <template>
-  <div class="container w-50">
+  <div class="container-fluid p-4">
     <div class="row mt-5">
-      <div class="col-md-12 text-center">
-        <p v-if="form == undefined" class="fs-5">Cadastro de Veículo</p>
+      <div class="col-12 text-center">
+        <p v-if="form == undefined" class="fs-5">Cadastrar Veículo</p>
         <p v-if="form == 'editar'" class="fs-5">Editar Veículo</p>
         <p v-if="form == 'toggle' && veiculo.ativo" class="fs-5">Desativar Veículo</p>
         <p v-if="form == 'toggle' && !veiculo.ativo" class="fs-5">Ativar Veículo</p>
-        <div class="col-md-2"></div>
+      </div>
+    </div>
+
+    <AvisoComponent :ativo="mensagem.ativo" :sucesso="mensagem.status" :mensagem="mensagem.mensagem" />
+
+    <div class="d-flex flex-column align-items-center justify-content-center gap-3">
+      <div class="form-floating mb-3 col-12 col-md-8">
+        <input id="placa" type="text" :disabled="form === 'toggle' ? '' : disabled"
+          class="form-control rounded-3 input-interativo" v-maska v-model="veiculo.placa"
+          data-maska="***-****" @change="formataPlaca()" v-on:keyup.enter="onClickCadastrar()" />
+        <label for="placa" class="form-label">Placa do Veículo</label>
       </div>
 
-      <AvisoComponent :ativo="mensagem.ativo" :sucesso="mensagem.status" :mensagem="mensagem.mensagem"></AvisoComponent>
-
-      <div class="row w-100 d-flex justify-content-center m-0 mb-2">
-        <div class="mb-3 mt-3 w-50 text-start">
-          <label for="placa" class="form-label">Placa do Veiculo</label>
-          <input type="text" :disabled="form === 'toggle' ? '' : disabled" class="form-control" id="placa" v-maska
-            v-on:keyup.enter="onClickCadastrar()" data-maska="***-****" v-model="veiculo.placa"
-            v-on:change="formataPlaca()" />
-        </div>
-        <div class="mb-3 mt-3 w-50 text-start">
-          <label for="categoria" class="form-label">Modelo</label>
-          <select :disabled="form === 'toggle' ? '' : disabled" class="form-select" id="categoria"
-            v-model="veiculo.modelo">
-            <option value="" selected>Selecione um modelo</option>
-            <option v-for="modelo in modelos" :value="modelo" :key="modelo.id">
-              {{ modelo.nome }} - {{ modelo.marca.nome }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="row w-100 d-flex justify-content-center m-0 mb-2">
-        <div class="mb-3 mt-3 w-25 text-start">
-          <label for="ano" class="form-label">Ano</label>
-          <input type="number" id="ano" :disabled="form === 'toggle' ? '' : disabled" class="form-control"
-            v-model="veiculo.ano" v-on:keyup.enter="onClickCadastrar()" />
-        </div>
-        <div class="mb-3 mt-3 w-25 text-start">
-          <label for="categoria" class="form-label">Cor</label>
-          <select :disabled="form === 'toggle' ? '' : disabled" class="form-select" id="categoria"
-            v-model="veiculo.cor">
-            <option value="" selected>Selecione uma cor</option>
-            <option v-for="cor in cores" :value="cor" :key="cor.id">
-              {{ cor }}
-            </option>
-          </select>
-        </div>
-        <div class="mb-3 mt-3 w-25 text-start">
-          <label for="tipo" class="form-label">Tipo</label>
-          <select :disabled="form === 'toggle' ? '' : disabled" class="form-select" id="tipo" v-model="veiculo.tipo">
-            <option value="" selected>Selecione um tipo</option>
-            <option v-for="tipo in tipos" :value="tipo" :key="tipo.id">
-              {{ tipo  }}
-            </option>
-          </select>
-        </div>
+      <div class="form-floating mb-3 col-12 col-md-8">
+        <select id="modelo" :disabled="form === 'toggle' ? '' : disabled"
+          class="form-select rounded-3 input-interativo" v-model="veiculo.modelo">
+          <option value="" selected>Selecione um modelo</option>
+          <option v-for="modelo in modelos" :value="modelo" :key="modelo.id">
+            {{ modelo.nome }} - {{ modelo.marca.nome }}
+          </option>
+        </select>
+        <label for="modelo" class="form-label">Modelo</label>
       </div>
 
-      <div class="row d-flex justify-content-center">
-        <div class="col-md-3">
-          <div class="d-grid gap-2">
-            <router-link type="button" class="btn btn-secondary" to="/veiculos">Voltar
-            </router-link>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="d-grid gap-2">
-            <button v-if="form === undefined" type="button" class="btn btn-primary" @click="onClickCadastrar()">
-              Cadastrar
-            </button>
-            <button v-if="form === 'editar'" type="button" class="btn btn-warning" @click="onClickEditar()">
-              Editar
-            </button>
-            <button v-if="form === 'toggle' && veiculo.ativo === true" type="button" class="btn btn-danger"
-              @click="onClickExcluir()">
-              Excluir
-            </button>
-            <button v-if="form === 'toggle' && veiculo.ativo === false" type="button" class="btn btn-success"
-              @click="onClickAtivar()">
-              Ativar
-            </button>
-          </div>
-        </div>
+      <div class="form-floating mb-3 col-12 col-md-8">
+        <input id="ano" type="number" :disabled="form === 'toggle' ? '' : disabled"
+          class="form-control rounded-3 input-interativo" v-model="veiculo.ano"
+          v-on:keyup.enter="onClickCadastrar()" />
+        <label for="ano" class="form-label">Ano</label>
       </div>
+
+      <div class="form-floating mb-3 col-12 col-md-8">
+        <select id="cor" :disabled="form === 'toggle' ? '' : disabled"
+          class="form-select rounded-3 input-interativo" v-model="veiculo.cor">
+          <option value="" selected>Selecione uma cor</option>
+          <option v-for="cor in cores" :value="cor" :key="cor.id">{{ cor }}</option>
+        </select>
+        <label for="cor" class="form-label">Cor</label>
+      </div>
+
+      <div class="form-floating mb-3 col-12 col-md-8">
+        <select id="tipo" :disabled="form === 'toggle' ? '' : disabled"
+          class="form-select rounded-3 input-interativo" v-model="veiculo.tipo">
+          <option value="" selected>Selecione um tipo</option>
+          <option v-for="tipo in tipos" :value="tipo" :key="tipo.id">{{ tipo }}</option>
+        </select>
+        <label for="tipo" class="form-label">Tipo</label>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+      <router-link type="button" class="btn btn-secondary" to="/veiculo">Voltar</router-link>
+      <button v-if="form === undefined" class="btn btn-primary" @click="onClickCadastrar()">Cadastrar</button>
+      <button v-if="form === 'editar'" class="btn btn-warning" @click="onClickEditar()">Editar</button>
+      <button v-if="form === 'toggle' && veiculo.ativo" class="btn btn-danger" @click="onClickExcluir()">Desativar</button>
+      <button v-if="form === 'toggle' && !veiculo.ativo" class="btn btn-success" @click="onClickAtivar()">Ativar</button>
     </div>
   </div>
 </template>
+
+<style scoped>
+.container-fluid {
+  margin-top: 5vh;
+  width: 100%;
+  max-width: 600px;
+  background-color: #f7f7f8;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.input-interativo {
+  transition: all 0.3s ease;
+}
+
+.input-interativo:focus {
+  border-color: #0078d4;
+  box-shadow: 0 0 5px rgba(0, 120, 212, 0.7);
+  transform: scale(1.05);
+}
+
+.btn-back-interativo {
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-back-interativo:hover {
+  background-color: #0078d4;
+  transform: scale(1.05);
+}
+
+.btn-interativo {
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-interativo:hover {
+  background-color: #009c56;
+  transform: scale(1.05);
+}
+
+.v-mensagem {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.mt-5 {
+  margin-top: 2rem;
+}
+</style>
+
+
 <script lang="ts">
 import { MaskInput, vMaska } from "maska"
 import AvisoComponent from '@/components/AvisoComponent.vue'
@@ -238,15 +272,3 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-$theme-colors: (
-  'dark': #111111,
-  'primary': #515151,
-  'secondary': #c8c8c8,
-  'info': #a4a4a4,
-  'success': #198754,
-  'warning': #ffc107,
-  'danger': #dc3545
-);
-@import '~bootstrap/scss/bootstrap.scss';
-</style>
