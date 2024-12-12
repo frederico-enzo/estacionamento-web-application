@@ -34,7 +34,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-md-3">
                 <div class="d-grid gap-2">
-                    <router-link type="button" class="btn btn-secondary" to="/modelos">Voltar
+                    <router-link type="button" class="btn btn-secondary" to="/modelo">Voltar
                     </router-link>
                 </div>
             </div>

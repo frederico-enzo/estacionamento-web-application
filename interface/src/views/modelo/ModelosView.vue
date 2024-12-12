@@ -7,7 +7,7 @@
             <div class="col-md-2">
                 <div class="d-grid">
                     <router-link type="button" class="btn btn-primary btn-sm"
-                        to="/modelos/formulario">Cadastrar</router-link>
+                        to="/modelo/formulario">Cadastrar</router-link>
                 </div>
             </div>
         </div>

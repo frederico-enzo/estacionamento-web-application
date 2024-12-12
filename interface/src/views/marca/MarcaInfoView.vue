@@ -1,57 +1,52 @@
 <template>
-    <div class="container w-50">
-      <div class="row mt-5">
-        <div class="col-md-12 text-start">
-          <p class="fs-5">Detalhes da Marca</p>
-        </div>
-        <div class="col-md-2"></div>
-      </div>
-  
-      <div class="row w-100 d-flex justify-content-center m-0">
-        <div class="mt-3 w-100 text-start">
-          <p class="fs-6"><span class="dado">Nome: </span> {{ marca.nome }} </p>
-        </div>
-      </div>
-      <div class="row w-100 d-flex justify-content-center m-0">
-        <div class="w-100 text-start">
-          <p class="fs-6"><span class="dado"> Status: </span>
-            <span v-if="marca.ativo" class="badge text-bg-success">
-              Ativo
-            </span>
-            <span v-if="!marca.ativo" class="badge text-bg-danger">
-              Desativado
-            </span>
-          </p>
-        </div>
-      </div>
-      <hr>
-      <div class="row mt-5">
-        <div class="col-md-12 text-start">
-          <p class="fs-5">Histórico</p>
-        </div>
-      </div>
-      <div class="row w-100 d-flex justify-content-center m-0">
-        <div class="w-100 text-start">
-          <p class="fs-6"><span class="dado">Data do Cadastro: </span>{{ formatDate(marca.cadastro) }}</p>
-        </div>
-      </div>
-      <div class="row w-100 d-flex justify-content-center m-0">
-        <div class="w-100 text-start">
-          <p class="fs-6"><span class="dado">Última edição: </span> {{ formatDate(marca.edicao) }}</p>
-        </div>
-      </div>
-  
-      <div class="row d-flex justify-content-center mt-3">
-        <div class="col-md-3">
-          <div class="d-grid gap-2">
-            <router-link type="button" class="btn btn-secondary" to="/marca">Voltar
-            </router-link>
+  <div class="container w-75 p-4 rounded shadow-sm bg-light">
+      <div class="row mb-4">
+          <div class="col text-start">
+              <h4 class="text-primary">Detalhes do Marca</h4>
           </div>
-        </div>
       </div>
-    </div>
-  </template>
-  
+
+      <div class="row mb-3">
+          <div class="col">
+              <p class="fw-bold text-secondary">Nome: <span class="fw-normal text-dark">{{ marca.nome }}</span></p>
+          </div>
+     
+      </div>
+      <div class="row mb-4">
+          <div class="col">
+              <p class="fw-bold text-secondary">Status:
+                  <span v-if="marca.ativo" class="badge bg-success">Ativo</span>
+                  <span v-else class="badge bg-danger">Desativado</span>
+              </p>
+          </div>
+      </div>
+
+      <hr class="my-4">
+
+      <div class="row mb-4">
+          <div class="col text-start">
+              <h5 class="text-primary">Histórico</h5>
+          </div>
+      </div>
+      <div class="row mb-3">
+          <div class="col">
+              <p class="fw-bold text-secondary">Data do Cadastro: <span class="fw-normal text-dark">{{
+                  formatDate(marca.cadastro) }}</span></p>
+          </div>marca
+          <div class="col">
+              <p class="fw-bold text-secondary">Última Edição: <span class="fw-normal text-dark">{{
+                  formatDate(marca.edicao) }}</span></p>
+          </div>
+      </div>
+
+      <div class="row">
+          <div class="col d-flex justify-content-end">
+              <router-link class="btn btn-secondary" to="/marca">Voltar</router-link>
+          </div>
+      </div>
+  </div>
+</template>
+
   <script lang="ts">
   import { MarcaClient } from '@/service/Marca.client'
   import { Marca } from '@/model/Marca'
@@ -104,3 +99,28 @@
     }
   })
   </script>
+
+
+<style scoped lang="scss">
+.container {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+}
+
+h4,
+h5 {
+    font-weight: bold;
+}
+
+p {
+    margin-bottom: 0.5rem;
+}
+
+.badge {
+    font-size: 1rem;
+}
+
+hr {
+    border-top: 2px solid #dee2e6;
+}
+</style>
