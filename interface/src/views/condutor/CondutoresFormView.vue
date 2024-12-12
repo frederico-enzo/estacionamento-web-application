@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid p-4">
+  <div class="container-form ">
     <div class="row mt-5">
       <div class="col-md-12 text-center">
         <p v-if="form == undefined" class="fs-5">Cadastrar Condutor</p>
@@ -179,13 +179,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.container-fluid {
-  margin-top: 15vh;
-  width: 50vw;
-  height: 50vh;
-  background-color: #f7f7f8;
-  border-radius: 10px;
+.container-form {
+  margin: 10vh auto;
   padding: 2rem;
+  max-width: 600px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 

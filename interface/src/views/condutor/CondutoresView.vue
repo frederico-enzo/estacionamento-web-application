@@ -21,6 +21,7 @@
           <tr>
             <th class="text-center">ID</th>
             <th class="text-center">Nome</th>
+            <th class="text-center">Telefone</th>
             <th class="text-center">CPF</th>
             <th class="text-center">Status</th>
             <th class="text-center">Opções</th>
@@ -30,6 +31,7 @@
           <tr v-for="item in List" :key="item.id" class="align-middle">
             <td class="text-center fw-semibold">{{ item.id }}</td>
             <td class="text-center">{{ item.nome }}</td>
+            <td class="text-center">{{ item.telefone }}</td>
             <td class="align-middle text-center">{{ item.cpf }}</td>
             <td class="text-center">
               <span v-if="item.ativo" class="badge bg-success">
@@ -40,8 +42,8 @@
               </span>
             </td>
             <td class="text-center">
-              <BotoesAcoes listarRoute="condutor.listar" editarRoute="condutor.form.editar" toggleRoute="condutor.form.toggle"
-                :isAtivo="item.ativo" :id="item.id">
+              <BotoesAcoes listarRoute="condutor.listar" editarRoute="condutor.form.editar"
+                toggleRoute="condutor.form.toggle" :isAtivo="item.ativo" :id="item.id">
               </BotoesAcoes>
             </td>
           </tr>
