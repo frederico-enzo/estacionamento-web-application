@@ -14,7 +14,7 @@
               class="fas fa-list"></i></router-link></li>
         <li :class="{ 'active-item': isActive('/marca') }" @click="setActive('/marca')"><router-link to="/marca"><i
               class="fas fa-tags"></i></router-link></li>
-        <li :class="{ 'active-item': isActive('/configs') }" @click="setActive('/configs')"><router-link to="/configs"><i
+        <li :class="{ 'active-item': isActive('/configuracao') }" @click="setActive('/configuracao')"><router-link to="/configuracao"><i
               class="fas fa-cog"></i></router-link></li>
       </ul>
     </div>
