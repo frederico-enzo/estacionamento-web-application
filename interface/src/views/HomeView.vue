@@ -50,7 +50,7 @@
             {{ formatDate(item.dataEntrada) }}
           </th>
           <th class="align-middle text-center col-md-3">
-            <BotoesAcoes confirmarRoute="movimentacao.form.confirmar" listarRoute="movimentacao.listar" :id="item.id">
+            <BotoesAcoes confirmarRoute="movimentacoes.form.confirmar" listarRoute="movimentacoes.listar" :id="item.id">
             </BotoesAcoes>
           </th>
         </tr>
@@ -138,15 +138,3 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
-$theme-colors: (
-  'dark': #111111,
-  'primary': #2b2727,
-  'secondary': #5c5757,
-  'info': #a4a4a4,
-  'success': #198754,
-  'warning': #ffc107,
-  'danger': #dc3545
-);
-@import '~bootstrap/scss/bootstrap.scss';
-</style>

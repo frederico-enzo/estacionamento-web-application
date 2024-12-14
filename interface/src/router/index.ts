@@ -37,7 +37,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/condutor/CondutoresFormView.vue'),
       }]
   },
-
   {
     path: '/veiculo',
     name: 'veiculo',
@@ -65,7 +64,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/marca',
     name: 'marca',
@@ -93,7 +91,6 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/modelo',
     name: 'modelo',
@@ -121,10 +118,14 @@ const routes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: '/movimentacoes',
     name: 'movimentacoes',
+    component: () => import('../views/movimentacao/MovimentacoesView.vue')
+  },
+  {
+    path: '/movimentacoes',
+    name: 'movimentacoes.listar',
     component: () => import('../views/movimentacao/MovimentacoesView.vue')
   },
   {
@@ -135,6 +136,11 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/movimentacoes/formulario',
         name: 'movimentacoes.form.editar',
+        component: () => import('../views/movimentacao/MovimentacoesFormView.vue'),
+      },
+      {
+        path: '/movimentacoes/formulario/confirmar',
+        name: 'movimentacoes.form.confirmar',
         component: () => import('../views/movimentacao/MovimentacoesFormView.vue'),
       },
       {
