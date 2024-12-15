@@ -47,24 +47,21 @@
             </div>
             <div class="col-md-3">
                 <div class="d-grid gap-2">
-                    <button v-if="form === undefined" type="button" class="btn btn-primary"
-                        @click="onClickCadastrar()">
+                    <button v-if="form === undefined" type="button" class="btn btn-primary" @click="onClickCadastrar()">
                         Abrir
                     </button>
-                    <button v-if="form === 'editar'" type="button" class="btn btn-warning"
-                        @click="onClickEditar()">
+                    <button v-if="form === 'editar'" type="button" class="btn btn-warning" @click="onClickEditar()">
                         Editar
                     </button>
-                    <button v-if="form === 'toggle' && movimentacao.ativo === true" type="button"
-                        class="btn btn-danger" @click="onClickExcluir()">
+                    <button v-if="form === 'toggle' && movimentacao.ativo === true" type="button" class="btn btn-danger"
+                        @click="onClickExcluir()">
                         Cancelar
                     </button>
                     <button v-if="form === 'toggle' && movimentacao.ativo === false" type="button"
                         class="btn btn-success" @click="onClickAtivar()">
                         Ativar
                     </button>
-                    <button v-if="form === 'confirmar'" type="button" class="btn btn-success"
-                        @click="onClickEditar()">
+                    <button v-if="form === 'confirmar'" type="button" class="btn btn-success" @click="onClickEditar()">
                         Concluir
                     </button>
                 </div>
@@ -101,11 +98,11 @@ export default defineComponent({
         AvisoComponent
     },
     computed: {
-        id() {
-            return this.$route.query.id
+        id(): string | undefined {
+            return this.$route.query.id as string | undefined; // Casting para adequar o tipo
         },
-        form(): any {
-            return this.$route.query.form
+        form(): string | undefined {
+            return this.$route.query.form as string | undefined; // Casting para adequar o tipo
         }
     },
     mounted() {
