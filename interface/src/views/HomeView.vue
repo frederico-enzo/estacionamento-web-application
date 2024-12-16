@@ -1,66 +1,71 @@
 <template>
-  <div class="d-flex flex-column container mt-5">
-    <div class="d-flex justify-content-center">
-      <router-link type="button" class="btn btn-primary w-25 fs-5" to="/movimentacoes/formulario">Registrar Entrada
+  <div class="container mt-5">
+    <h1 class="text-center display-6">Gestão de Estacionamento</h1>
+    <div class="text-center my-4">
+      <router-link class="btn btn-primary fs-5" to="/movimentacoes/formulario">
+        Registrar Entrada
       </router-link>
     </div>
-    <table class="mt-5 table w-25 align-self-center">
-      <thead class="table-secondary">
-        <tr>
-          <th class="text-center col-md-1">Carro</th>
-          <th class="text-center col-md-2">Moto</th>
-          <th class="text-center col-md-2">Van</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="text-center align-middle col-md-1">{{ carro }}</td>
-          <td class="text-center align-middle col-md-2">{{ moto }}</td>
-          <td class="text-center align-middle col-md-2">{{ van }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="row mt-3">
-      <div class="col-md-10 text-start">
-        <p class="fs-5">Movimentações Abertas</p>
-      </div>
+    <div class="table-responsive w-50 mx-auto">
+      <table class="table table-bordered text-center">
+        <thead class="table-secondary">
+          <tr>
+            <th>Carro</th>
+            <th>Moto</th>
+            <th>Van</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ carro }}</td>
+            <td>{{ moto }}</td>
+            <td>{{ van }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <table class="table">
-      <thead class="table-dark">
-        <tr>
-          <th class="text-center col-md-1">ID</th>
-          <th class="text-center col-md-2">Vaga</th>
-          <th class="text-center col-md-2">Placa</th>
-          <th class="text-center col-md-3">Condutor</th>
-          <th class="text-center col-md-2">Data Entrada</th>
-          <th class="text-center col-md-3">Opções</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="item in movimentacoesList" :key="item.id">
-          <th class="align-middle text-center col-md-1">{{ item.id }}</th>
-          <th class="align-middle text-center col-md-1">{{ item.veiculo.tipo }}</th>
-          <th class="align-middle col-md-2 text-center">{{ item.veiculo.placa }} <span v-if="!item.veiculo.ativo"
-              class="badge text-bg-danger">Desativado</span>
-          </th>
-          <th class="align-middle col-md-3 text-center">{{ item.condutor.nome }} <span v-if="!item.condutor.ativo"
-              class="badge text-bg-danger">Desativado</span>
-          </th>
-          <th class="align-middle col-md-2 text-center">
-            {{ formatDate(item.dataEntrada) }}
-          </th>
-          <th class="align-middle text-center col-md-3">
-            <BotoesAcoes confirmarRoute="movimentacoes.form.confirmar" listarRoute="movimentacoes.listar" :id="item.id">
-            </BotoesAcoes>
-          </th>
-        </tr>
-      </tbody>
-    </table>
-    <div v-if="movimentacoesList.length == 0" class="alert alert-secondary" role="alert">
-      Nenhuma vaga ocupada no momento
+
+    <div class="mt-4">
+      <h2 class="fs-5">Movimentações Abertas</h2>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Vaga</th>
+              <th>Placa</th>
+              <th>Condutor</th>
+              <th>Data Entrada</th>
+              <th>Opções</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in movimentacoesList" :key="item.id">
+              <td>{{ item.id }}</td>
+              <td>{{ item.veiculo.tipo }}</td>
+              <td>
+                {{ item.veiculo.placa }}
+                <span v-if="!item.veiculo.ativo" class="badge bg-danger">Desativado</span>
+              </td>
+              <td>
+                {{ item.condutor.nome }}
+                <span v-if="!item.condutor.ativo" class="badge bg-danger">Desativado</span>
+              </td>
+              <td>{{ formatDate(item.dataEntrada) }}</td>
+              <td>
+                <BotoesAcoes :id="item.id" confirmarRoute="movimentacoes.form.confirmar" listarRoute="movimentacoes.listar" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-if="movimentacoesList.length === 0" class="alert alert-secondary">
+          Nenhuma vaga ocupada no momento.
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
 
 <script lang="ts">
 
@@ -138,3 +143,22 @@ export default defineComponent({
 })
 </script>
 
+<style>
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #ddd;
+
+  th, td {
+    vertical-align: middle;
+  }
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.alert {
+  text-align: center;
+}
+</style>
