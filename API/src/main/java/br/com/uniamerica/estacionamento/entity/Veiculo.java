@@ -11,6 +11,12 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @Table(name="veiculos", schema = "public")
 public class Veiculo extends AbstractEntity {
+
+    @Id
+    @Getter @Setter
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id",nullable = false, unique = true)
+    private Long id;
     @NotNull(message = "A placa do Veiculo deve ser informada!")
     @NotBlank(message = "A placa do Veiculo foi informada vazia!")
     @Length(min=5, max = 10, message = "A placa deve conter entre 5 e 10 caracteres!")

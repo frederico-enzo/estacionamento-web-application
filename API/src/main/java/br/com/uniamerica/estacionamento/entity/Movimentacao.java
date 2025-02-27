@@ -12,6 +12,13 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "movimentacoes", schema = "public")
 public class Movimentacao extends AbstractEntity {
+
+    @Id
+    @Getter @Setter
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id",nullable = false, unique = true)
+    private Long id;
+
     @Getter @Setter
     @NotNull(message = "Informe a Data de Entrada")
     @Column(name = "data_entrada", nullable = false)
