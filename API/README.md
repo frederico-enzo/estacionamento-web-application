@@ -25,4 +25,6 @@ Spring Security Test: Para testes de segurança.
 Hibernate Envers: Para auditoria e controle de versão de entidades do Hibernate.
 
 Annotations: Para suporte a anotações do IntelliJ IDEA.
+
+docker-compose up --build
 	
