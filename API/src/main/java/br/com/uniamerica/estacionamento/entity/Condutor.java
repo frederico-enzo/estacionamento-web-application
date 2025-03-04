@@ -1,8 +1,6 @@
 package br.com.uniamerica.estacionamento.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -16,6 +14,12 @@ import java.time.Duration;
 @Entity
 @Table(name = "condutores", schema = "public")
 public class Condutor extends AbstractEntity {
+
+    @Id
+    @Getter @Setter
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id",nullable = false, unique = true)
+    private Long id;
     @NotNull(message = "Nome do condutor precisa ser informado")
     @NotBlank(message = "Campo do nome do condutor foi informado vazio")
     @Length(min = 2, max = 50, message = "O nome do condutor precisa conter entre 2 e 50 caracteres")

@@ -10,6 +10,12 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @Table(name = "modelos", schema = "public")
 public class Modelo extends AbstractEntity {
+
+    @Id
+    @Getter @Setter
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id",nullable = false, unique = true)
+    private Long id;
     @NotNull(message = "Nome do modelo deve ser informado!")
     @NotBlank(message = "Nome do modelo foi informado vazio!")
     @Length(min = 2, max = 20, message = "Nome do modelo deve conter entre 2 e 20 caracteres!")
