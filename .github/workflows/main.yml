@@ -16,28 +16,35 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v3
 
+      # Instala o Docker Compose, caso não esteja disponível no PATH
+      - name: Instalar Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.17.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
       - name: Configurar Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Build das Imagens Docker
-        run: docker compose build
+        run: docker-compose build
 
       - name: Levantar Containers para Testes
-        run: docker compose up -d
+        run: docker-compose up -d
 
       - name: Aguardar Inicialização dos Serviços
         run: sleep 15
 
       - name: Executar Testes do Backend
-        run: docker compose exec backend npm test
-        # Substitua "npm test" pelo comando de teste do backend, se necessário
+        run: docker-compose exec backend npm test
+        # Altere "npm test" conforme o comando de teste do backend, se necessário
 
       - name: Executar Testes do Frontend
-        run: docker compose exec frontend npm test
-        # Substitua "npm test" pelo comando de teste do frontend, se necessário
+        run: docker-compose exec frontend npm test
+        # Altere "npm test" conforme o comando de teste do frontend, se necessário
 
       - name: Parar e Remover Containers de Teste
-        run: docker compose down
+        run: docker-compose down
 
   deploy:
     needs: build_and_test
@@ -47,11 +54,18 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v3
 
+      # Instala o Docker Compose, caso não esteja disponível no PATH
+      - name: Instalar Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.17.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version
+
       - name: Configurar Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Build das Imagens para Deploy
-        run: docker compose build
+        run: docker-compose build
 
       - name: Deploy da Aplicação
-        run: docker compose up -d
+        run: docker-compose up -d
