@@ -1,34 +1,69 @@
-name: CI Estacionamento Web App
+# .github/workflows/ci-cd.yml
+
+name: CI/CD Pipeline - Frontend e Backend
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build:
+  build_and_test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # 1. Checkout do repositório
+      - name: Checkout do Código
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.x'
+      # 2. Configurar Docker Buildx (opcional, mas útil para builds avançados)
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Install dependencies
-        run: npm install
-        working-directory: interface
+      # 3. Build das imagens usando Docker Compose
+      - name: Build das Imagens Docker
+        run: docker-compose build
 
-      - name: Run tests
-        run: npm test
-        working-directory: interface
+      # 4. Levantar os containers em background
+      - name: Levantar Containers para Testes
+        run: docker-compose up -d
 
-      - name: Build project
-        run: npm run build
-        working-directory: interface
+      # 5. Aguarda alguns segundos para que os serviços fiquem prontos
+      - name: Aguardar Inicialização dos Serviços
+        run: sleep 15
+
+      # 6. Executa testes do Backend
+      - name: Executar Testes do Backend
+        run: docker-compose exec backend npm test
+        # Substitua "npm test" pelo comando correto dos testes do backend se necessário
+
+      # 7. Executa testes do Frontend
+      - name: Executar Testes do Frontend
+        run: docker-compose exec frontend npm test
+        # Substitua "npm test" pelo comando correto dos testes do frontend se necessário
+
+      # 8. Para e remove os containers criados após os testes
+      - name: Parar e Remover Containers de Teste
+        run: docker-compose down
+
+  deploy:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout do repositório
+      - name: Checkout do Código
+        uses: actions/checkout@v3
+
+      # 2. Configurar Docker Buildx
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 3. Build das imagens para deploy (pode ser reutilizado o mesmo docker-compose.yml)
+      - name: Build das Imagens para Deploy
+        run: docker-compose build
+
+      # 4. Subir os containers para deploy (infraestrutura local)
+      - name: Deploy da Aplicação
+        run: docker-compose up -d
