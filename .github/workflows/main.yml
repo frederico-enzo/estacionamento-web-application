@@ -6,15 +6,11 @@ on:
   pull_request:
     branches: [ feat/docker ]
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME_BACK: ${{ github.repository }}-backend
-  IMAGE_NAME_FRONT: ${{ github.repository }}-frontend
-
 jobs:
   backend:
     name: Build e Teste do Backend
     runs-on: ubuntu-latest
+    
     services:
       postgres:
         image: postgres:13
@@ -51,8 +47,21 @@ jobs:
           restore-keys: ${{ runner.os }}-maven-
 
       - name: Build e Test backend
-        working-directory: API  # Ajuste para o diretório onde seu pom.xml está localizado
+        working-directory: API
         run: mvn clean verify
+
+      - name: Logar no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Construir e Enviar Imagem Docker do Backend
+        uses: docker/build-push-action@v4
+        with:
+          context: ./API
+          push: true
+          tags: ghcr.io/devops-uniamerica/estacionamento-web-application-backend:feat-docker
 
   frontend:
     name: Build e Teste do Frontend
@@ -64,7 +73,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # ou '18', conforme a necessidade do seu projeto
+          node-version: '16'
 
       - name: Cache de dependências Node
         uses: actions/cache@v3
@@ -81,52 +90,15 @@ jobs:
         working-directory: interface
         run: npm run test:unit
 
-  deploy:
-    name: Deploy e Publicação das Imagens Docker
-    runs-on: ubuntu-latest
-    needs: [ backend, frontend ]
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - name: Checkout do código
-        uses: actions/checkout@v3
-
-      - name: Login no Container Registry
-        uses: docker/login-action@v2
+      - name: Logar no Docker Hub
+        uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Build e push da imagem do Backend
-      - name: Extrair metadata para imagem backend
-        id: meta-back
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACK }}
-
-      - name: Build e push da imagem do Backend
+      - name: Construir e Enviar Imagem Docker do Frontend
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: API/Dockerfile
+          context: ./interface
           push: true
-          tags: ${{ steps.meta-back.outputs.tags }}
-          labels: ${{ steps.meta-back.outputs.labels }}
-
-      # Build e push da imagem do Frontend
-      - name: Extrair metadata para imagem frontend
-        id: meta-front
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONT }}
-
-      - name: Build e push da imagem do Frontend
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          file: interface/Dockerfile
-          push: true
-          tags: ${{ steps.meta-front.outputs.tags }}
-          labels: ${{ steps.meta-front.outputs.labels }}
+          tags: ghcr.io/devops-uniamerica/estacionamento-web-application-frontend:feat-docker
