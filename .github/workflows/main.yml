@@ -110,7 +110,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: Dockerfile-back
+          file: API/Dockerfile
           push: true
           tags: ${{ steps.meta-back.outputs.tags }}
           labels: ${{ steps.meta-back.outputs.labels }}
@@ -126,7 +126,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: Dockerfile-front
+          file: interface/Dockerfile
           push: true
           tags: ${{ steps.meta-front.outputs.tags }}
           labels: ${{ steps.meta-front.outputs.labels }}
