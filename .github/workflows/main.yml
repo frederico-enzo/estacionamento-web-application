@@ -1,6 +1,4 @@
-# .github/workflows/ci-cd.yml
-
-name: CI/CD Pipeline - Frontend e Backend
+name: CI Pipeline
 
 on:
   push:
@@ -8,35 +6,127 @@ on:
   pull_request:
     branches: [ feat/docker ]
 
-jobs:
-  build_and_test:
-    runs-on: ubuntu-latest
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME_BACK: ${{ github.repository }}-backend
+  IMAGE_NAME_FRONT: ${{ github.repository }}-frontend
 
+jobs:
+  backend:
+    name: Build e Teste do Backend
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
+      SPRING_DATASOURCE_USERNAME: testuser
+      SPRING_DATASOURCE_PASSWORD: testpass
     steps:
-      - name: Checkout do Código
+      - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Configurar Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Configurar JDK 20
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '20'
 
-      - name: Build das Imagens Docker
-        run: docker-compose build
+      - name: Cache do Maven
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
 
-      - name: Levantar Containers para Testes
-        run: docker-compose up -d
+      - name: Build e Test backend
+        working-directory: API  # Ajuste para o diretório onde seu pom.xml está localizado
+        run: mvn clean verify
 
-      - name: Aguardar Inicialização dos Serviços
-        run: sleep 15
+  frontend:
+    name: Build e Teste do Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
 
-      - name: Executar Testes do Backend
-        run: docker-compose exec backend npm test
-        # Altere "npm test" conforme o comando de teste do backend, se necessário
+      - name: Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # ou '18', conforme a necessidade do seu projeto
 
-      - name: Executar Testes do Frontend
-        run: docker-compose exec frontend npm test
-        # Altere "npm test" conforme o comando de teste do frontend, se necessário
+      - name: Cache de dependências Node
+        uses: actions/cache@v3
+        with:
+          path: interface/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('interface/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
 
-      - name: Parar e Remover Containers de Teste
-        run: docker-compose down
+      - name: Instalar dependências do frontend
+        working-directory: interface
+        run: npm i --force
 
- 
+      - name: Executar testes do frontend
+        working-directory: interface
+        run: npm run test:unit
+
+  deploy:
+    name: Deploy e Publicação das Imagens Docker
+    runs-on: ubuntu-latest
+    needs: [ backend, frontend ]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Login no Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build e push da imagem do Backend
+      - name: Extrair metadata para imagem backend
+        id: meta-back
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACK }}
+
+      - name: Build e push da imagem do Backend
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile-back
+          push: true
+          tags: ${{ steps.meta-back.outputs.tags }}
+          labels: ${{ steps.meta-back.outputs.labels }}
+
+      # Build e push da imagem do Frontend
+      - name: Extrair metadata para imagem frontend
+        id: meta-front
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONT }}
+
+      - name: Build e push da imagem do Frontend
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile-front
+          push: true
+          tags: ${{ steps.meta-front.outputs.tags }}
+          labels: ${{ steps.meta-front.outputs.labels }}
