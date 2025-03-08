@@ -58,7 +58,7 @@ jobs:
 
       - name: Build e Push da Imagem Docker do Backend
         run: |
-          docker buildx build --file API/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/estacionamento-web-application-backend:feat-docker --push .
+          docker buildx build --file API/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/estacionamento-web-application-backend:feat-docker --push API/
 
   frontend:
     name: Build e Teste do Frontend
@@ -95,4 +95,4 @@ jobs:
 
       - name: Build e Push da Imagem Docker do Frontend
         run: |
-          docker buildx build --file interface/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/estacionamento-web-application-frontend:feat-docker --push .
+          docker buildx build --file interface/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/estacionamento-web-application-frontend:feat-docker --push interface/
